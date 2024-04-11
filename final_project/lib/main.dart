@@ -1,7 +1,10 @@
-import "package:final_project/authentication/ui/login/bloc/login_bloc.dart";
-import "package:final_project/authentication/ui/login/login.dart";
-import "package:final_project/authentication/ui/signup/bloc/signup_bloc.dart";
-import "package:final_project/authentication/ui/signup/signup.dart";
+import "package:final_project/controller/bloc/login/login_bloc.dart";
+import "package:final_project/view/authentication/login.dart";
+import "package:final_project/controller/bloc/signup/signup_bloc.dart";
+import "package:final_project/view/authentication/signup.dart";
+import "package:final_project/view/bottom_navigtion_bar.dart";
+import "package:final_project/view/screens/homescreen.dart";
+import "package:final_project/view/screens/splashscreen.dart";
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";

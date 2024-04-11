@@ -1,4 +1,4 @@
-import 'package:final_project/onboardingscreen/onbardingscreen.dart';
+import 'package:final_project/view/screens/onboardingscreen/onbardingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';

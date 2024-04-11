@@ -1,5 +1,5 @@
-import 'package:final_project/custom_button.dart';
-import 'package:final_project/custom_text_field.dart';
+import 'package:final_project/widgets/custom_button.dart';
+import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:final_project/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

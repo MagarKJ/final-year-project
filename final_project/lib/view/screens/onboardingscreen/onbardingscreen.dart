@@ -1,8 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:final_project/authentication/ui/login/login.dart';
-import 'package:final_project/onboardingscreen/page1.dart';
-import 'package:final_project/onboardingscreen/page2.dart';
-import 'package:final_project/onboardingscreen/page3.dart';
+import 'package:final_project/view/authentication/login.dart';
+import 'package:final_project/view/screens/onboardingscreen/page1.dart';
+import 'package:final_project/view/screens/onboardingscreen/page2.dart';
+import 'package:final_project/view/screens/onboardingscreen/page3.dart';
 import 'package:final_project/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,6 +1,7 @@
-import 'package:final_project/authentication/ui/signup/bloc/signup_bloc.dart';
-import 'package:final_project/custom_button.dart';
-import 'package:final_project/custom_text_field.dart';
+import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
+import 'package:final_project/widgets/custom_button.dart';
+import 'package:final_project/widgets/custom_text_field.dart';
+import 'package:final_project/widgets/dropdownfield.dart';
 import 'package:final_project/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -20,6 +21,11 @@ class _CreateAccountState extends State<CreateAccount> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phonenoController = TextEditingController();
+  final ageController = TextEditingController();
+  final weightController = TextEditingController();
+  final bpController = TextEditingController();
+  final sugarController = TextEditingController();
+  final sexController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -67,12 +73,11 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ),
                 SizedBox(
-                  height: Get.height * 0.04,
+                  height: Get.height * 0.02,
                 ),
                 Form(
                   key: formKey,
                   child: SizedBox(
-                    height: Get.height * 0.5,
                     width: Get.width * 0.831,
                     child: Column(
                       children: [
@@ -81,20 +86,97 @@ class _CreateAccountState extends State<CreateAccount> {
                           prefixIcon: Icons.person,
                           hintText: "Full Name",
                         ),
-                        SizedBox(height: Get.height * 0.04),
+                        SizedBox(height: Get.height * 0.02),
                         CustomTextField(
                           prefixIcon: Icons.mail,
                           hintText: "Email",
                           obscureText: false,
                           controller: emailController,
                         ),
-                        SizedBox(height: Get.height * 0.04),
+                        SizedBox(height: Get.height * 0.02),
                         CustomTextField(
                           controller: phonenoController,
                           prefixIcon: Icons.call,
                           hintText: "Phone No",
+                          keyboardType: TextInputType.phone,
                         ),
-                        SizedBox(height: Get.height * 0.04),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomTextField(
+                          controller: ageController,
+                          prefixIcon: Icons.person,
+                          hintText: "Age",
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomTextField(
+                          controller: weightController,
+                          prefixIcon: Icons.monitor_weight,
+                          hintText: "Weight",
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomDropDownField(
+                          controller: sexController,
+                          hintText: 'Sex',
+                          prefixIcon: Icons.safety_check,
+                          selectSomething: 'Select Your Sex',
+                          option1: 'Male',
+                          option2: 'Female',
+                          option3: 'Others',
+                          option4: null,
+                          option5: null,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomTextField(
+                          controller: bpController,
+                          prefixIcon: Icons.bloodtype,
+                          hintText: "Blood Pressure",
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomTextField(
+                          controller: sugarController,
+                          prefixIcon: Icons.bloodtype,
+                          hintText: "Sugar Level",
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomDropDownField(
+                          controller: sexController,
+                          hintText: 'Ethnicity',
+                          prefixIcon: Icons.safety_check,
+                          selectSomething: 'Select Your Ethnicity',
+                          option1: 'Asian',
+                          option2: 'African',
+                          option3: 'Caucasian',
+                          option4: 'Hispanic',
+                          option5: 'Others',
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomDropDownField(
+                          controller: sexController,
+                          hintText: 'Body Type',
+                          prefixIcon: Icons.safety_check,
+                          selectSomething: 'Select Your BodyType',
+                          option1: 'Morbidly Obese',
+                          option2: 'Obese',
+                          option3: 'Over Weight',
+                          option4: 'Average',
+                          option5: 'Lean',
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        CustomDropDownField(
+                          controller: sexController,
+                          hintText: 'Body Goal',
+                          prefixIcon: Icons.safety_check,
+                          selectSomething: 'Select Your BodyGoal',
+                          option1: 'Lean',
+                          option2: 'Muscular',
+                          option3: 'Slim',
+                          option4: 'Fatloss',
+                          option5: null,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
                         CustomTextField(
                           prefixIcon: Icons.lock,
                           hintText: "Password",
@@ -107,7 +189,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           },
                           controller: passwordController,
                         ),
-                        SizedBox(height: Get.height * 0.04),
+                        SizedBox(height: Get.height * 0.02),
                         CustomTextField(
                           prefixIcon: Icons.lock,
                           hintText: "Confirm Password",
@@ -252,6 +334,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.04,
                     ),
                   ],
                 ),

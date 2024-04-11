@@ -1,4 +1,5 @@
-import 'package:final_project/homescreen.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:final_project/view/screens/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -23,19 +24,18 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       final phoneno = event.phoneno;
       final confirmPassword = event.confirmPassword;
 
-      if (email.isEmpty) {
-        emit(SignupFailurestate('Email cannot be empty'));
+//if any of these three is entered no need to check for the other two
+      if (email.isEmpty && name.isEmpty && phoneno.isEmpty) {
+        emit(SignupFailurestate('Email, phone or name cannot be empty'));
         return;
-      } else if (name.isEmpty) {
-        emit(SignupFailurestate('Name cannot be empty'));
-        return;
-      } else if (!email.contains('@')) {
+      }
+      //if email khali xa name ya phone hanyo vane email ko validity check garna parena
+      else if (email.isNotEmpty && EmailValidator.validate(email) == false) {
         emit(SignupFailurestate('Invalid email'));
         return;
-      } else if (phoneno.isEmpty) {
-        emit(SignupFailurestate('Phone number cannot be empty'));
-        return;
-      } else if (phoneno.length < 10) {
+      }
+      // if phoneno khali xa vane aaru 2 ta hanna parenaa tesai le validity check garna parena
+      else if (phoneno.isNotEmpty && phoneno.length < 10) {
         emit(SignupFailurestate(
             'Phone number must be at least 10 characters long'));
         return;

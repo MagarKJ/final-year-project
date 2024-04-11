@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'utils/colors.dart';
+import '../utils/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final bool? showPassword;
   final ValueChanged<bool>? onTogglePassword;
-
+  final TextInputType keyboardType;
   const CustomTextField({
     super.key,
     required this.controller,
@@ -20,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.showPassword,
     this.onTogglePassword,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -27,6 +28,7 @@ class CustomTextField extends StatelessWidget {
     return SizedBox(
       height: Get.height * 0.0645,
       child: TextFormField(
+        keyboardType: keyboardType,
         controller: controller,
         obscureText: obscureText && !(showPassword ?? false),
         decoration: InputDecoration(

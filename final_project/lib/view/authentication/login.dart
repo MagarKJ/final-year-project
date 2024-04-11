@@ -1,9 +1,10 @@
-import 'package:final_project/authentication/ui/login/bloc/login_bloc.dart';
-import 'package:final_project/authentication/ui/signup/forgotpas.dart';
-import 'package:final_project/authentication/ui/signup/signup.dart';
+import 'package:final_project/controller/bloc/login/login_bloc.dart';
+import 'package:final_project/view/authentication/forgotpas.dart';
+import 'package:final_project/view/authentication/signup.dart';
+import 'package:final_project/view/bottom_navigtion_bar.dart';
 
-import 'package:final_project/custom_button.dart';
-import 'package:final_project/custom_text_field.dart';
+import 'package:final_project/widgets/custom_button.dart';
+import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:final_project/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -43,9 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
-          // if (state is AuthSuccess) {
-          //   //auth bloc mai xaaa
-          // }
+          if (state is LoginSuccessstate) {
+            Get.offAll(() => const MyBottomNavigationBar());
+            //auth bloc mai xaaa
+          }
           if (state is LoginFailurestate) {
             Get.snackbar('Login Failed', state.error);
           }
