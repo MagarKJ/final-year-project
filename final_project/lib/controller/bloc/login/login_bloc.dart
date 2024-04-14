@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -30,6 +31,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginFailurestate('Password must be at least 6 characters long'));
         return;
       }
+
+      //Firebase Authentication
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
       await Future.delayed(const Duration(seconds: 1), () {
         Get.snackbar('Login Success', 'Welcome $email');
 

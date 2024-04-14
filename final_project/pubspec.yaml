@@ -38,9 +38,13 @@ dependencies:
   get: ^4.6.6
   transparent_image: ^2.0.1
   dots_indicator: ^3.0.0
-  google_fonts:
+  google_fonts: any
   flutter_bloc: ^8.1.5
-  email_validator:
+  email_validator: any
+  shared_preferences: ^2.2.3
+  cloud_firestore: ^4.16.1
+  firebase_auth: ^4.19.1
+  firebase_core: ^2.29.0
 
 dev_dependencies:
   flutter_test:

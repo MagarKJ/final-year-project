@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,8 +44,17 @@ class _LoginScreenState extends State<LoginScreen> {
       //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
 
       body: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccessstate) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
+            prefs.setBool('Login', true);
+            prefs.setString('email', emailController.text.trim());
+            prefs.setString('password', passwordController.text.trim());
+          
+            //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
+            //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login 
+            //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
             Get.offAll(() => const MyBottomNavigationBar());
             //auth bloc mai xaaa
           }
@@ -53,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
         builder: (context, state) {
+          //login loading state xa vane loading indicator dekhauxa
           if (state is LoginLoadingstate) {
             return const Center(
               child: CupertinoActivityIndicator(),

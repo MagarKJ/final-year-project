@@ -1,6 +1,8 @@
+import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/onboardingscreen/onbardingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,12 +13,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String keyLogin = "Login";
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Get.to(() => const OnBoardScreen());
-    });
+
+    whereToGo();
   }
 
   @override
@@ -34,5 +36,21 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> whereToGo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool(keyLogin) ?? false;
+
+    await Future.delayed(
+        const Duration(seconds: 2)); // Optional delay for splash screen
+
+//if value false xa vane onboard screen ma janxa else bottom navigation bar ma janxa.
+//Navigation bar vaneko home page ko bottom navigation bar homepage vanda hunxa
+    if (isLoggedIn) {
+      Get.offAll(() => const MyBottomNavigationBar());
+    } else {
+      Get.offAll(() => const OnBoardScreen());
+    }
   }
 }

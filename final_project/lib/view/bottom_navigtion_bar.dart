@@ -20,7 +20,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     const MedicalReport(),
     const AddFood(),
     const Analytics(),
-    const Profile(),
+    const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {

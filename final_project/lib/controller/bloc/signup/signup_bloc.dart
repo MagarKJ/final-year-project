@@ -1,5 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:final_project/view/screens/homescreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -49,9 +49,13 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         emit(SignupFailurestate('Passwords do not match'));
         return;
       }
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       await Future.delayed(const Duration(seconds: 1), () {
         Get.snackbar('Signup Success', 'Welcome $email');
-        Get.offAll(() => const HomeScreen());
+
         emit(SignupSuccessstate(uid: '$email-$password'));
       });
       emit(SignupInitial());

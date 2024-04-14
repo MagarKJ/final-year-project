@@ -1,4 +1,6 @@
+
 import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
+import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:final_project/widgets/dropdownfield.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -41,10 +44,27 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<SignupBloc, SignupState>(
-        listener: (context, state) {
+        listener: (context, state) async {
+          if (state is SignupSuccessstate) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('Login', true);
+            // yo haru le chai pref ma data store garxa taki user lai dekhauna milos vanera
+            
+            await prefs.setString('name', nameController.text.trim());
+            await prefs.setString('email', emailController.text.trim());
+            await prefs.setString('phone', phonenoController.text.trim());
+            await prefs.setString('age', ageController.text.trim());
+            await prefs.setString('weight', weightController.text.trim());
+            await prefs.setString('bp', bpController.text.trim());
+            await prefs.setString('sugar', sugarController.text.trim());
+
+
+            Get.offAll(() => const MyBottomNavigationBar());
+          }
           if (state is SignupFailurestate) {
             Get.snackbar('Signup Failed', state.error);
           }
