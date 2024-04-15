@@ -1,8 +1,10 @@
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/screens/addfood/addfood.dart';
 import 'package:final_project/view/screens/analytics/analytics.dart';
 import 'package:final_project/view/screens/homescreen.dart';
 import 'package:final_project/view/screens/medicalreport/medicalreport.dart';
 import 'package:final_project/view/screens/profile/profile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
@@ -45,7 +47,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             label: 'Report',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
+            icon: Icon(
+              Icons.add_circle_outline,
+            ),
             label: 'Add Food',
           ),
           BottomNavigationBarItem(

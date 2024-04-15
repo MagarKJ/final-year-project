@@ -1,7 +1,9 @@
-import 'package:final_project/controller/bloc/profile/bloc/profile_bloc.dart';
-import 'package:final_project/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/controller/bloc/profile/profile_bloc.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/login.dart';
 import 'package:final_project/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // switch ko lagi
   bool s1 = false;
   String? email = 'Not Set';
   String? name = 'Not Set';
@@ -26,14 +29,21 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadUserData();
   }
 
+//Firebase bata user ko data load garne
   Future<void> _loadUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
 
-    setState(() {
-      email = prefs.getString('email');
-      name = prefs.getString('name');
-      phone = prefs.getString('phone');
-    });
+      setState(() {
+        email = userData['email'];
+        name = userData['name'];
+        phone = userData['phoneno'];
+      });
+    }
   }
 
   @override
@@ -43,8 +53,8 @@ class _ProfilePageState extends State<ProfilePage> {
         if (state is ProfileLogoutState) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           //shared preferences ko value false gardeko kina ki pheri splash bata onboarding ma janee
-          //siddhai login rakhdim lagethyo pheri onboarding kati bela dekhaune tani banyo banyoo 
-          //value false vaye login ma janxa true vaye home so on boarding dekhauna paudenaa 
+          //siddhai login rakhdim lagethyo pheri onboarding kati bela dekhaune tani banyo banyoo
+          //value false vaye login ma janxa true vaye home so on boarding dekhauna paudenaa
           prefs.setBool('Login', false);
 
           Get.offAll(() => const LoginScreen());
@@ -192,14 +202,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             () {}),
                         _buildRowContent(
                             context,
-                            'Purchase History',
+                            'Food History',
                             Icons.history_outlined,
                             Icons.arrow_forward_ios,
                             () {}),
                         _buildRowContent(
                             context,
-                            'Manage Shiping Address',
-                            Icons.location_on_outlined,
+                            'Manage Your Goals',
+                            Icons.manage_search_outlined,
                             Icons.arrow_forward_ios,
                             () {}),
                         _buildRowContent(
@@ -225,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: Get.width * 0.03,
                                   ),
                                   Text(
-                                    'Newsletter Subscription',
+                                    'Enable Notification',
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14,

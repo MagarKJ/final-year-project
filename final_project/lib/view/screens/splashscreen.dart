@@ -1,3 +1,4 @@
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/onboardingscreen/onbardingscreen.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: FadeInImage(
             placeholder: MemoryImage(kTransparentImage),
             fadeOutDuration: const Duration(milliseconds: 200),
-            image: const AssetImage('assets/logo/logo.jpeg'),
+            image: const AssetImage(splashScreen),
           ),
         ),
       ),

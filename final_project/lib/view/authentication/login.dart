@@ -1,11 +1,12 @@
 import 'package:final_project/controller/bloc/login/login_bloc.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/forgotpas.dart';
 import 'package:final_project/view/authentication/signup.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
-import 'package:final_project/utils/colors.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
             prefs.setBool('Login', true);
             prefs.setString('email', emailController.text.trim());
             prefs.setString('password', passwordController.text.trim());
-          
+
             //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
-            //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login 
+            //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
             //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
             Get.offAll(() => const MyBottomNavigationBar());
             //auth bloc mai xaaa
@@ -174,21 +175,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                          child: Image.asset('assets/logo/google.png'),
+                          child: Image.asset(googleLogo),
                           onTap: () {},
                         ),
                         SizedBox(
                           width: Get.height * 0.02,
                         ),
                         GestureDetector(
-                          child: Image.asset('assets/logo/apple.png'),
+                          child: Image.asset(appleLogo),
                           onTap: () {},
                         ),
                         SizedBox(
                           width: Get.height * 0.02,
                         ),
                         GestureDetector(
-                          child: Image.asset('assets/logo/facebook.png'),
+                          child: Image.asset(facebookLogo),
                           onTap: () {},
                         ),
                       ],

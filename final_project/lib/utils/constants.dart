@@ -1,18 +1,20 @@
+import 'dart:ui';
 
-Map<String, String> getSignupDetails(
-  String name,
-  String email,
-  String password,
-  String confirmPassword,
-) {
-  return {
-    'name': name.trim(),
-    'email': email.trim(),
-    'password': password.trim(),
-    'confirmPassword': confirmPassword.trim(),
-  };
-}
+Color myBrownColor = const Color(0xFF59432B);
+Color myGrey = const Color(0xFFA8A8A9);
+Color myDarkGrey = const Color(0xFF676767);
+Color myRed = const Color(0xFFFF4B26);
+Color myBlue = const Color(0xff59C9ED);
+Color myStarColor = const Color(0xFFFFA903);
+Color myLightRed = const Color(0xFFEB5757);
+Color myGreen = const Color(0xFF4AC76D);
+Color myLightGrey = const Color(0xFFDDDDDD);
+Color myGold = const Color(0xFFF0A91D);
 
+const splashScreen = "assets/logo/splashscreen.png";
+const appleLogo = "assets/logo/apple.png";
+const googleLogo = "assets/logo/google.png";
+const facebookLogo = "assets/logo/facebook.png";
 // class Utils {
 //   static final messengerKey =
 //       GlobalKey<ScaffoldMessengerState>();

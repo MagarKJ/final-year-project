@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +22,10 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     emit(SignupLoadingstate());
     try {
       final email = event.email;
+
       final password = event.password;
       final name = event.name;
+      final age = event.age;
       final phoneno = event.phoneno;
       final confirmPassword = event.confirmPassword;
 
@@ -49,10 +54,24 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         emit(SignupFailurestate('Passwords do not match'));
         return;
       }
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'name': name,
+        'email': email,
+        'phoneno': phoneno,
+        'age': age,
+        'password': password,
+        'uid': userCredential.user!.uid,
+      });
+      log('Data Inserted');
       await Future.delayed(const Duration(seconds: 1), () {
         Get.snackbar('Signup Success', 'Welcome $email');
 

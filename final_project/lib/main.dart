@@ -1,6 +1,7 @@
-import "package:final_project/controller/bloc/fogrotpassword/bloc/forpas_bloc.dart";
+import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
 import "package:final_project/controller/bloc/login/login_bloc.dart";
-import "package:final_project/controller/bloc/profile/bloc/profile_bloc.dart";
+
+import "package:final_project/controller/bloc/profile/profile_bloc.dart";
 import "package:final_project/controller/bloc/signup/signup_bloc.dart";
 import "package:final_project/controller/bloc/home/home_page_bloc.dart";
 import "package:final_project/view/screens/splashscreen.dart";

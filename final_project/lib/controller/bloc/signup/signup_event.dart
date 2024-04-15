@@ -6,6 +6,7 @@ sealed class SignupEvent {}
 final class SignupRequestedEvent extends SignupEvent {
   final String email;
   final String name;
+  final String age;
   final String phoneno;
   final String password;
   final String confirmPassword;
@@ -14,6 +15,7 @@ final class SignupRequestedEvent extends SignupEvent {
     required this.email,
     required this.name,
     required this.phoneno,
+    required this.age,
     required this.password,
     required this.confirmPassword,
   });

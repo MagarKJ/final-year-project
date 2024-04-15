@@ -1,10 +1,10 @@
-
 import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:final_project/widgets/dropdownfield.dart';
-import 'package:final_project/utils/colors.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class _CreateAccountState extends State<CreateAccount> {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setBool('Login', true);
             // yo haru le chai pref ma data store garxa taki user lai dekhauna milos vanera
-            
+
             await prefs.setString('name', nameController.text.trim());
             await prefs.setString('email', emailController.text.trim());
             await prefs.setString('phone', phonenoController.text.trim());
@@ -61,7 +61,6 @@ class _CreateAccountState extends State<CreateAccount> {
             await prefs.setString('weight', weightController.text.trim());
             await prefs.setString('bp', bpController.text.trim());
             await prefs.setString('sugar', sugarController.text.trim());
-
 
             Get.offAll(() => const MyBottomNavigationBar());
           }
@@ -280,6 +279,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               password: passwordController.text.trim(),
                               confirmPassword:
                                   confirmPasswordController.text.trim(),
+                              age: ageController.text.trim(),
                             ),
                           );
                     }
@@ -310,21 +310,21 @@ class _CreateAccountState extends State<CreateAccount> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                          child: Image.asset('assets/logo/google.png'),
+                          child: Image.asset(appleLogo),
                           onTap: () {},
                         ),
                         SizedBox(
                           width: Get.height * 0.02,
                         ),
                         GestureDetector(
-                          child: Image.asset('assets/logo/apple.png'),
+                          child: Image.asset(googleLogo),
                           onTap: () {},
                         ),
                         SizedBox(
                           width: Get.height * 0.02,
                         ),
                         GestureDetector(
-                          child: Image.asset('assets/logo/facebook.png'),
+                          child: Image.asset(facebookLogo),
                           onTap: () {},
                         ),
                       ],

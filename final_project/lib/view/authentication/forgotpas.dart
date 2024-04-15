@@ -1,8 +1,9 @@
-import 'package:final_project/controller/bloc/fogrotpassword/bloc/forpas_bloc.dart';
+import 'package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/login.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
-import 'package:final_project/utils/colors.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
