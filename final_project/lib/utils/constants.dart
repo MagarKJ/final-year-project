@@ -15,6 +15,8 @@ const splashScreen = "assets/logo/splashscreen.png";
 const appleLogo = "assets/logo/apple.png";
 const googleLogo = "assets/logo/google.png";
 const facebookLogo = "assets/logo/facebook.png";
+const userProfile = "assets/logo/user.webp";
+
 // class Utils {
 //   static final messengerKey =
 //       GlobalKey<ScaffoldMessengerState>();

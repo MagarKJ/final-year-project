@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/controller/bloc/profile/profile_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/login.dart';
+import 'package:final_project/view/screens/profile/profile_editor.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +19,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // switch ko lagi
-  bool s1 = false;
   String? email = 'Not Set';
   String? name = 'Not Set';
   String? phone = 'Not Set';
+  String? profile = 'Not Set';
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadUserData();
+    _loadUserDataFromGoogle();
   }
 
 //Firebase bata user ko data load garne
@@ -37,12 +43,39 @@ class _ProfilePageState extends State<ProfilePage> {
           .collection('users')
           .doc(currentUser.uid)
           .get();
+      if (userData.exists) {
+        setState(() {
+          email = userData['email'];
+          name = userData['name'];
+          phone = userData['phoneno'];
+        });
+      } else {
+        email = 'Not Set';
+        name = 'Not Set';
+        phone = 'Not Set';
+      }
+    }
+  }
 
-      setState(() {
-        email = userData['email'];
-        name = userData['name'];
-        phone = userData['phoneno'];
-      });
+  //
+  Future<void> _loadUserDataFromGoogle() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      if (currentUser.displayName != null) {
+        setState(() {
+          email = currentUser.email;
+          name = currentUser.displayName;
+          // Google Sign-In doesn't provide phone number
+          // You might want to ask the user to enter it manually
+          phone = 'Not Set';
+          profile = currentUser.photoURL;
+        });
+      } else {
+        email = 'Not Set';
+        name = 'Not Set';
+        phone = 'Not Set';
+        profile = 'Not Set';
+      }
     }
   }
 
@@ -104,8 +137,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           Row(
                             children: [
                               CircleAvatar(
-                                backgroundImage:
-                                    const AssetImage('assets/logo/apple.png'),
+                                backgroundImage: profile != null &&
+                                        Uri.parse(profile!).isAbsolute
+                                    ? NetworkImage(profile!)
+                                    : const AssetImage(userProfile)
+                                        as ImageProvider<Object>?,
                                 radius: Get.width * 0.1,
                               ),
                               SizedBox(
@@ -196,10 +232,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         _buildRowContent(
                             context,
-                            'MyFavourite',
+                            'Edit Your Details',
                             Icons.favorite_outline,
-                            Icons.arrow_forward_ios,
-                            () {}),
+                            Icons.arrow_forward_ios, () {
+                          Get.to(() => const EditYourProfile());
+                        }),
                         _buildRowContent(
                             context,
                             'Food History',
@@ -218,46 +255,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icons.vpn_key_outlined,
                             Icons.arrow_forward_ios,
                             () {}),
-                        SizedBox(
-                          //   color: Colors.red,
-                          height: Get.height * 0.06,
-                          width: Get.width * 0.82,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.feed_outlined,
-                                    color: myBrownColor,
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.03,
-                                  ),
-                                  Text(
-                                    'Enable Notification',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Switch(
-                                value: s1,
-                                activeColor: Colors.white,
-                                activeTrackColor: myBrownColor,
-                                inactiveThumbColor: myBrownColor,
-                                inactiveTrackColor: Colors.white,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    s1 = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

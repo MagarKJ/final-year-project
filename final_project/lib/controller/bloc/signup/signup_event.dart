@@ -20,3 +20,7 @@ final class SignupRequestedEvent extends SignupEvent {
     required this.confirmPassword,
   });
 }
+
+final class GoogleSignupRequestedEvent extends SignupEvent {
+  
+}

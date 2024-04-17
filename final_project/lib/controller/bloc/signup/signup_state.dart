@@ -18,3 +18,17 @@ final class SignupFailurestate extends SignupState {
 
   SignupFailurestate(this.error);
 }
+
+final class GoogleSignupSuccessstate extends SignupState {
+  final String uid;
+
+  GoogleSignupSuccessstate({required this.uid});
+}
+
+final class GoogleSignupFailurestate extends SignupState {
+  final String error;
+
+  GoogleSignupFailurestate(this.error);
+}
+
+final class GoogleSignupLoadingState extends SignupState {}

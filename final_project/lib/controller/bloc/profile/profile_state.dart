@@ -16,4 +16,17 @@ final class ProfileErrorState extends ProfileState {
   final String message;
   ProfileErrorState({required this.message});
 }
+
 final class ProfileLogoutState extends ProfileState {}
+
+final class ProfileEditorLoadingState extends ProfileState {}
+
+final class ProfileEditorLoadedState extends ProfileState {
+  final String userData;
+  ProfileEditorLoadedState({required this.userData});
+}
+
+final class ProfileEditorErrorState extends ProfileState {
+  final String error;
+  ProfileEditorErrorState({required this.error});
+}

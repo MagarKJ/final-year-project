@@ -25,7 +25,6 @@ class ForgotPassword extends StatelessWidget {
               "Success",
               "Password reset link has been sent to your email",
             );
-            print('Reset button tichiyo');
             Get.offAll(() => const LoginScreen());
           }
           if (state is ForpasFailurestate) {

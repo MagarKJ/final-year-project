@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadUserName();
+    _loadUserNameFromGoogle();
   }
 
 //FIrebase bata user ko name load garne
@@ -29,9 +31,26 @@ class _HomeScreenState extends State<HomeScreen> {
           .collection('users')
           .doc(currenyUser.uid)
           .get();
-      setState(() {
-        name = userName['name'];
-      });
+      if (userName.exists) {
+        setState(() {
+          name = userName['name'];
+        });
+      } else {
+        name = '';
+      }
+    }
+  }
+
+  Future<void> _loadUserNameFromGoogle() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      if (currentUser.displayName != null) {
+        setState(() {
+          name = currentUser.displayName!;
+        });
+      } else {
+        name = '';
+      }
     }
   }
 
@@ -71,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const CircleAvatar(
                   radius: 22,
-                  backgroundImage: AssetImage('assets/logo/apple.png'),
+                  backgroundImage: AssetImage(userProfile),
                 ),
                 const SizedBox(width: 10),
                 Column(
