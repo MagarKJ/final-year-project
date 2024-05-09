@@ -31,6 +31,26 @@ class _EditYourProfileState extends State<EditYourProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: myBrownColor,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          title: Text(
+            'Edit Your Profile',
+            style: GoogleFonts.jost(
+              color: myBrownColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          )),
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileEditorLoadedState) {
@@ -42,20 +62,6 @@ class _EditYourProfileState extends State<EditYourProfile> {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: Get.height * 0.12,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.06,
-                    width: Get.width * 0.831,
-                    child: Text(
-                      "Edit Your Details",
-                      style: GoogleFonts.jost(
-                          fontSize: 21,
-                          color: myBrownColor,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
                   SizedBox(
                     height: Get.height * 0.02,
                   ),

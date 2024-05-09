@@ -4,7 +4,6 @@ import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:final_project/widgets/dropdownfield.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

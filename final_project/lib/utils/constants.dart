@@ -16,6 +16,9 @@ const appleLogo = "assets/logo/apple.png";
 const googleLogo = "assets/logo/google.png";
 const facebookLogo = "assets/logo/facebook.png";
 const userProfile = "assets/logo/user.webp";
+const goodMorning = "assets/animation/goodmorning.json";
+const goodAfternoon = "assets/animation/goodafternoon.json";
+const goodEvening = "assets/animation/goodevening.json";
 
 // class Utils {
 //   static final messengerKey =

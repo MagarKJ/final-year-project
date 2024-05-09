@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
-import '../../controller/bloc/home/home_page_bloc.dart';
+import '../../../controller/bloc/home/home_page_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,15 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
     final currentTime = DateTime.now();
     //greeting ma kei na aaye null aauxa
     String greeting = '';
+    String greetingAnimation;
 
 // time anusar greeting message display garne
     if (currentTime.hour < 12) {
+      LottieBuilder.asset(goodMorning);
       greeting = 'Good Morning';
-    } else if (currentTime.hour < 17) {
+      greetingAnimation = goodMorning;
+    } else if (currentTime.hour < 18) {
       greeting = 'Good Afternoon';
+      greetingAnimation = goodAfternoon;
     } else {
       greeting = 'Good Evening';
+      greetingAnimation = goodEvening;
     }
+
     return BlocBuilder<HomePageBloc, HomePageState>(builder: (context, state) {
       if (state is HomePageLoadingState) {
         return const Center(
@@ -88,9 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                const CircleAvatar(
-                  radius: 22,
-                  backgroundImage: AssetImage(userProfile),
+                LottieBuilder.asset(
+                  greetingAnimation,
+                   
                 ),
                 const SizedBox(width: 10),
                 Column(
@@ -114,7 +123,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        // baki code yeha lekhnee
+        body: SingleChildScrollView(
+          child: Container(
+            height: Get.height,
+            width: Get.width,
+            child: Column(
+              children: [
+                const Nutritions(),
+                Text('hello'),
+              ],
+            ),
+          ),
+        ),
       );
     });
   }

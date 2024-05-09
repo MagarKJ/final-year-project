@@ -1,6 +1,6 @@
 import 'package:final_project/view/screens/addfood/addfood.dart';
 import 'package:final_project/view/screens/analytics/analytics.dart';
-import 'package:final_project/view/screens/homescreen.dart';
+import 'package:final_project/view/screens/home/homescreen.dart';
 import 'package:final_project/view/screens/medicalreport/medicalreport.dart';
 import 'package:final_project/view/screens/profile/profile.dart';
 import 'package:flutter/material.dart';

@@ -101,15 +101,6 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: myBrownColor,
-              ),
-            ),
             title: Text(
               'Profile',
               style: GoogleFonts.poppins(
