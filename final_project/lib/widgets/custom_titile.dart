@@ -5,10 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomTitle extends StatelessWidget {
   final String title;
+  final bool isAppbar;
   final double fontSize;
 
   const CustomTitle({
     super.key,
+    this.isAppbar = false,
     required this.fontSize,
     required this.title,
   });
@@ -23,7 +25,9 @@ class CustomTitle extends StatelessWidget {
             Text(
               title,
               style: GoogleFonts.poppins(
-                  fontSize: fontSize, fontWeight: FontWeight.w600),
+                fontSize: fontSize,
+                fontWeight: isAppbar ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
           ],
         ),

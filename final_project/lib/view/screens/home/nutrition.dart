@@ -161,7 +161,7 @@ class _NutritionsState extends State<Nutritions> {
               mainAxisCellCount: 1.1,
               child: Container(
                 decoration: BoxDecoration(
-                  color: green,
+                  color: greenWithOpasity,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -201,7 +201,7 @@ class _NutritionsState extends State<Nutritions> {
               mainAxisCellCount: 1.1,
               child: Container(
                 decoration: BoxDecoration(
-                  color: sleepColor,
+                  color: sleepColor.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -216,7 +216,7 @@ class _NutritionsState extends State<Nutritions> {
                             SizedBox(
                               width: 5,
                             ),
-                            Icon(Icons.water_drop),
+                            Icon(Icons.bedtime),
                           ],
                         ),
                         const SizedBox(height: 15),

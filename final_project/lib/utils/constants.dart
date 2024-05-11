@@ -7,15 +7,18 @@ Color myRed = const Color(0xFFFF4B26);
 Color myBlue = const Color(0xff59C9ED);
 Color myStarColor = const Color(0xFFFFA903);
 Color myLightRed = const Color(0xFFEB5757);
-Color myGreen = const Color(0xFF4AC76D);
+Color green = const Color(0xFF4AC76D);
 Color myLightGrey = const Color(0xFFDDDDDD);
 Color myGold = const Color(0xFFF0A91D);
 Color waterColorWithOpacity = const Color(0xff59C9ED).withOpacity(0.3);
-Color green = const Color(0xff65EB59).withOpacity(0.3);
+Color greenWithOpasity = const Color(0xff65EB59).withOpacity(0.3);
 Color black = const Color(0xff000000);
 Color waterColor = const Color(0xff59C9ED);
+
 Color whiteColor = const Color(0xffFFFFFF);
-Color sleepColor = const Color(0xffE5B029);
+Color sleepColor = const Color(0xff8A2BE2);
+Color calorieColor = const Color(0xffFFA500);
+Color proteinColor = const Color(0xFFB0C4DE);
 
 const splashScreen = "assets/logo/splashscreen.png";
 const appleLogo = "assets/logo/apple.png";
