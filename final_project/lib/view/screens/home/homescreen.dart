@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
+import 'package:final_project/widgets/custom_titile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,7 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 LottieBuilder.asset(
                   greetingAnimation,
-                   
                 ),
                 const SizedBox(width: 10),
                 Column(
@@ -124,13 +124,53 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            height: Get.height,
-            width: Get.width,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const CustomTitle(
+                  title: 'Activity',
+                  fontSize: 30,
+                ),
                 const Nutritions(),
-                Text('hello'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomTitle(fontSize: 20, title: "Today's Food"),
+                    TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add),
+                      label: const Text("Add Meals"),
+                    ),
+                  ],
+                ),
+                ListTile(
+                  title: const Text('Breakfast'),
+                  subtitle: const Text('2 eggs, 1 bread, 1 cup of tea'),
+                  trailing: const Text('200 cal'),
+                ),
+                ListTile(
+                  title: const Text('Breakfast'),
+                  subtitle: const Text('2 eggs, 1 bread, 1 cup of tea'),
+                  trailing: const Text('200 cal'),
+                ),
+                ListTile(
+                  title: const Text('Breakfast'),
+                  subtitle: const Text('2 eggs, 1 bread, 1 cup of tea'),
+                  trailing: const Text('200 cal'),
+                ),
+                ListTile(
+                  title: const Text('Breakfast'),
+                  subtitle: const Text('2 eggs, 1 bread, 1 cup of tea'),
+                  trailing: const Text('200 cal'),
+                ),
+                ListTile(
+                  title: const Text('Breakfast'),
+                  subtitle: const Text('2 eggs, 1 bread, 1 cup of tea'),
+                  trailing: const Text('200 cal'),
+                ), 
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
@@ -106,6 +107,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(GoogleLoginSuccessstate(uid: googleUser.email));
       });
     } catch (e) {
+      log('google sign in error $e');
       emit(GoogleLoginFailurestate(e.toString()));
     }
   }
