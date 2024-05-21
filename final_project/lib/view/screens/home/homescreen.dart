@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/controller/apis/firebase_api.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
-import 'package:final_project/view/screens/home/step_counter.dart';
+import 'package:final_project/view/screens/home/step_counter2.dart';
 import 'package:final_project/widgets/custom_titile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +23,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String name = '';
 
+  FireBaseAPi fireBaseAPi = FireBaseAPi();
+
   @override
   void initState() {
     super.initState();
+    fireBaseAPi.requestNotificationPermission();
+    fireBaseAPi.getDeviceToken();
+    fireBaseAPi.isTokenRefresh();
+    fireBaseAPi.firebaseInit(context);
+    fireBaseAPi.setupInteractMessage(context);
     _loadUserName();
     _loadUserNameFromGoogle();
   }
@@ -96,8 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.notifications_active_outlined),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => const Notifications());
+                },
               ),
+              SizedBox(width: 10),
             ],
             leading: Padding(
               padding: const EdgeInsets.only(left: 15),
@@ -105,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   LottieBuilder.asset(
                     greetingAnimation,
+                    repeat: false,
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -144,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: 'Step Counter',
                     fontSize: 25,
                   ),
-                  StepCounter(),
+                  const StepCounter2(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

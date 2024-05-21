@@ -5,19 +5,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sensors/flutter_sensors.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speedometer_chart/speedometer_chart.dart';
 
-class StepCounter extends StatefulWidget {
-  const StepCounter({super.key});
+class StepCounter2 extends StatefulWidget {
+  const StepCounter2({super.key});
 
   @override
-  State<StepCounter> createState() => _StepCounterState();
+  State<StepCounter2> createState() => _StepCounterState();
 }
 
-class _StepCounterState extends State<StepCounter> {
+class _StepCounterState extends State<StepCounter2> {
   int _stepCount = 0;
   double _previousY = 0.0;
   double _filteredY = 0.0;
@@ -51,9 +53,9 @@ class _StepCounterState extends State<StepCounter> {
     // ...
 
     // AndroidAlarmManager.periodic(const Duration(minutes: 1), 0, countSteps);
-  // }
+    // }
 
-  // Future<void> countSteps() async {
+    // Future<void> countSteps() async {
     final permissionStatus = await Permission.activityRecognition.request();
     if (permissionStatus.isGranted) {
       final stream = await SensorManager().sensorUpdates(
