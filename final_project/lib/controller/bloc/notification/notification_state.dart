@@ -14,7 +14,7 @@ final class NotificationFailurestate extends NotificationState {
 }
 
 final class NotificationSuccessstate extends NotificationState {
-  final String messgae;
+  final List<Map<String, dynamic>> messgae;
 
   NotificationSuccessstate({required this.messgae});
 }

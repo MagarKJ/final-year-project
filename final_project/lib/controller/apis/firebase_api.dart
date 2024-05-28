@@ -99,7 +99,7 @@ class FireBaseAPi {
       channel.id.toString(),
       channel.name.toString(),
       channelDescription: 'This channel is used for important notifications',
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
     );

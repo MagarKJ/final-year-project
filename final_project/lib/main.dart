@@ -2,8 +2,10 @@
 import "dart:developer";
 
 import "package:final_project/controller/apis/firebase_api.dart";
+import "package:final_project/controller/bloc/addFood/add_food_bloc.dart";
 import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
 import "package:final_project/controller/bloc/login/login_bloc.dart";
+import "package:final_project/controller/bloc/notification/notification_bloc.dart";
 
 import "package:final_project/controller/bloc/profile/profile_bloc.dart";
 import "package:final_project/controller/bloc/signup/signup_bloc.dart";
@@ -58,6 +60,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ForpasBloc>(
           create: (context) => ForpasBloc(),
+        ),
+        BlocProvider<NotificationBloc>(create: (context) => NotificationBloc()
+            // ..add(NotificationLoadedEvent()
+            // ),
+            ),
+        BlocProvider<AddFoodBloc>(
+          create: (context) => AddFoodBloc(),
         ),
       ],
       child: GetMaterialApp(

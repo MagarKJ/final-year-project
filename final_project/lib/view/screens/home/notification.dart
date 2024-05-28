@@ -1,5 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../controller/bloc/notification/notification_bloc.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({
@@ -11,6 +15,12 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
+  @override
+  void initState() {
+    // context.read<NotificationBloc>().add(NotificationLoadedEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,32 +34,69 @@ class _NotificationsState extends State<Notifications> {
           },
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('messages').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Something went wrong');
+      body: BlocBuilder<NotificationBloc, NotificationState>(
+        builder: (context, state) {
+          if (state is NotificationInitial) {
+            log(state.toString());
+            BlocProvider.of<NotificationBloc>(context)
+                .add(NotificationLoadedEvent());
+          } else if (state is NotificationLoadingstate) {
+            log(state.toString());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+          if (state is NotificationSuccessstate) {
+            log(state.toString());
+            return ListView.builder(
+              itemCount: state.messgae.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    state.messgae[index]['notification']['title'],
+                  ),
+                  subtitle: Text(
+                    state.messgae[index]['notification']['body'],
+                  ),
+                );
+              },
+            );
           }
-
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              return ListTile(
-                title: Text(
-                  data['notification']['title'],
-                ),
-                subtitle: Text(
-                  data['notification']['body'],
-                ),
-              );
-            }).toList(),
-          );
+          if (state is NotificationFailurestate) {
+            log(state.toString());
+            return Center(
+              child: Text(state.error),
+            );
+          }
+          return Container();
         },
+        //  StreamBuilder<QuerySnapshot>(
+        //   stream: FirebaseFirestore.instance.collection('messages').snapshots(),
+        //   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        //     if (snapshot.hasError) {
+        //       return Text('Something went wrong');
+        //     }
+
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return Text("Loading");
+        //     }
+
+        //     return ListView(
+        //       children: snapshot.data!.docs.map((DocumentSnapshot document) {
+        //         Map<String, dynamic> data =
+        //             document.data() as Map<String, dynamic>;
+        //         return ListTile(
+        //           title: Text(
+        //             data['notification']['title'],
+        //           ),
+        //           subtitle: Text(
+        //             data['notification']['body'],
+        //           ),
+        //         );
+        //       }).toList(),
+        //     );
+        //   },
+        // ),
       ),
     );
   }

@@ -45,4 +45,17 @@ const goodEvening = "assets/animation/goodevening.json";
 //       ..removeCureentSnackBar()
 //       ..showSnackBar(snackBar);
 //   }
+
+
 // }
+
+String getFirstandLastNameInitals(String fullName) {
+  if (fullName.isEmpty) {
+    return 'N/A';
+  }
+  if (fullName.split(' ').length == 1) {
+    return fullName[0];
+  }
+  List<String> name = fullName.split(' ');
+  return name[0][0] + name[1][0];
+}

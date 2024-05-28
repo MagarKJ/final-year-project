@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<NotificationLoadedEvent>(_onNotificationLoadedEvent);
   }
 
-  FutureOr<void> _onNotificationLoadedEvent(
-      NotificationLoadedEvent event, Emitter<NotificationState> emit) async {
+  void _onNotificationLoadedEvent(
+    NotificationLoadedEvent event,
+    Emitter<NotificationState> emit,
+  ) async {
+    log('start bho bloc');
     emit(NotificationLoadingstate());
     try {
       QuerySnapshot querySnapshot =
@@ -22,7 +26,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       List<Map<String, dynamic>> messages = querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
-      emit(NotificationSuccessstate(messgae: messages.toString()));
+      emit(NotificationSuccessstate(messgae: messages));
+      log("Firebase bata aako notification${messages.toString()}");
     } catch (e) {
       emit(NotificationFailurestate('Error: $e'));
     }

@@ -1,35 +1,39 @@
-import 'package:final_project/controller/apis/all_product_repository.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../model/product_data_model.dart';
+import '../../apis/all_product_repository.dart';
 
-part 'home_page_event.dart';
-part 'home_page_state.dart';
+part 'add_food_event.dart';
+part 'add_food_state.dart';
 
-class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc() : super(HomePageInitial()) {
-    on<HomePageLoadEvent>(_onHomePageLoaded);
+class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
+  AddFoodBloc() : super(AddFoodInitial()) {
+    on<AddFoodLoadedEvent>(_onAddFoodLoadedEvent);
   }
 
-  void _onHomePageLoaded(
-    HomePageLoadEvent event,
-    Emitter<HomePageState> emit,
+  FutureOr<void> _onAddFoodLoadedEvent(
+    AddFoodLoadedEvent event,
+    Emitter<AddFoodState> emit,
   ) async {
     AllProductRepository allProductRepository = AllProductRepository();
-    emit(HomePageLoadingState());
+    emit(AddFoodLoadingState());
     try {
+      // Fetch all products
       dynamic allFood = await allProductRepository.fetchAllProduct();
       // Ensure allFood is a List of Maps
       if (allFood is List) {
         List<ProductDataModel> products = allFood
             .map((e) => ProductDataModel.fromJson(e as Map<String, dynamic>))
             .toList();
-        emit(HomePageLoadedState(allProduct: products));
+        emit(AddFoodLoadedState(allProduct: products));
       } else {
         throw Exception('Data format is not a list');
       }
     } catch (ex) {
-      emit(HomePageErrorState(message: ex.toString()));
+      emit(AddFoodErrorState(message: ex.toString()));
     }
   }
 }
