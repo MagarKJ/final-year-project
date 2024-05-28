@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.allProduct.length,
                       itemBuilder: (context, index) {
                         return ListTile(

@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'dart:developer';
 
 // import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sensors/flutter_sensors.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:speedometer_chart/speedometer_chart.dart';
 
 class StepCounter2 extends StatefulWidget {
   const StepCounter2({super.key});
@@ -32,7 +29,7 @@ class _StepCounterState extends State<StepCounter2> {
   final double stepThreshold = 0.35; // Adjusted step detection threshold
   final double alpha = 0.8; // Low-pass filter coefficient
   final Duration stepTimeInterval =
-      Duration(milliseconds: 250); // Minimum interval between steps
+      const Duration(milliseconds: 250); // Minimum interval between steps
 
   @override
   void initState() {
@@ -114,7 +111,7 @@ class _StepCounterState extends State<StepCounter2> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFADD8E6).withOpacity(.3),
+        color: const Color(0xFFADD8E6).withOpacity(.3),
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),

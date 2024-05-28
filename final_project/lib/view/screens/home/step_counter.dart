@@ -30,7 +30,7 @@ class _StepCounterState extends State<StepCounter> {
   final double stepThreshold = 0.35; // Adjusted step detection threshold
   final double alpha = 0.8; // Low-pass filter coefficient
   final Duration stepTimeInterval =
-      Duration(milliseconds: 250); // Minimum interval between steps
+      const Duration(milliseconds: 250); // Minimum interval between steps
 
   @override
   void initState() {
@@ -112,7 +112,7 @@ class _StepCounterState extends State<StepCounter> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFADD8E6).withOpacity(.3),
+        color: const Color(0xFFADD8E6).withOpacity(.3),
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),

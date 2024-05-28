@@ -2,7 +2,6 @@ import 'package:final_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class Nutritions extends StatefulWidget {
@@ -85,8 +84,8 @@ class _NutritionsState extends State<Nutritions> {
                           ),
                           circularStrokeCap: CircularStrokeCap.round,
                         ),
-                        SizedBox(width: 10),
-                        Container(
+                        const SizedBox(width: 10),
+                        SizedBox(
                           width: Get.width * 0.15,
                           // color: Colors.amber,
                           child: const Text(
@@ -115,7 +114,7 @@ class _NutritionsState extends State<Nutritions> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(
+                        SizedBox(
                           width: Get.width * 0.15,
                           child: const Text(
                             'Fats',
@@ -143,7 +142,7 @@ class _NutritionsState extends State<Nutritions> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(
+                        SizedBox(
                           width: Get.width * 0.15,
                           child: const Text(
                             'Carbs',
