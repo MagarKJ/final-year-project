@@ -1,9 +1,9 @@
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/login.dart';
 import 'package:final_project/view/screens/onboardingscreen/page1.dart';
 import 'package:final_project/view/screens/onboardingscreen/page2.dart';
 import 'package:final_project/view/screens/onboardingscreen/page3.dart';
-import 'package:final_project/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,6 +58,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                       ? Container()
                       : TextButton(
                           onPressed: () {
+                            //user page 1 rw 2 ma xa back button dine rw page 0 ma xa vane chai back button hide garne tesko thau ma khali container aauxa
                             if (currentPage == 1 || currentPage == 2) {
                               _pageController.previousPage(
                                 duration: const Duration(milliseconds: 100),
@@ -95,6 +96,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   width: Get.width * 0.25,
                   child: TextButton(
                     onPressed: () {
+                      //user page 0 rw 1 ma xa next button dine rw page 2 ma xa vane chai start button dine
                       if (currentPage == 0 || currentPage == 1) {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 100),

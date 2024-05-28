@@ -1,18 +1,36 @@
-import "package:final_project/controller/bloc/login/login_bloc.dart";
-import "package:final_project/view/authentication/login.dart";
-import "package:final_project/controller/bloc/signup/signup_bloc.dart";
-import "package:final_project/view/authentication/signup.dart";
-import "package:final_project/view/bottom_navigtion_bar.dart";
-import "package:final_project/view/screens/homescreen.dart";
-import "package:final_project/view/screens/splashscreen.dart";
+// import "package:android_alarm_manager_plus/android_alarm_manager_plus.dart";
+import "dart:developer";
 
+import "package:final_project/controller/apis/firebase_api.dart";
+import "package:final_project/controller/bloc/addFood/add_food_bloc.dart";
+import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
+import "package:final_project/controller/bloc/login/login_bloc.dart";
+import "package:final_project/controller/bloc/notification/notification_bloc.dart";
+
+import "package:final_project/controller/bloc/profile/profile_bloc.dart";
+import "package:final_project/controller/bloc/signup/signup_bloc.dart";
+import "package:final_project/controller/bloc/home/home_page_bloc.dart";
+import "package:final_project/view/screens/splashscreen.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:get/get.dart";
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await AndroidAlarmManager.initialize();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
+}
+
+//top level function huna parcaha kina ki background ma message aauda chai top level function ma nai handle garna parxa
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log("Handling a background message: ${message.messageId}");
 }
 
 class MyApp extends StatelessWidget {
@@ -20,10 +38,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //appbar mathi ko status bar lai transparent banauna
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
+    //MultiBlocProvider use gareko kina ki multiple bloc use garna lai
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginBloc>(
@@ -31,6 +51,22 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SignupBloc>(
           create: (context) => SignupBloc(),
+        ),
+        BlocProvider<HomePageBloc>(
+          create: (context) => HomePageBloc(),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (context) => ProfileBloc(),
+        ),
+        BlocProvider<ForpasBloc>(
+          create: (context) => ForpasBloc(),
+        ),
+        BlocProvider<NotificationBloc>(create: (context) => NotificationBloc()
+            // ..add(NotificationLoadedEvent()
+            // ),
+            ),
+        BlocProvider<AddFoodBloc>(
+          create: (context) => AddFoodBloc(),
         ),
       ],
       child: GetMaterialApp(
@@ -40,7 +76,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const Scaffold(
-          body: LoginScreen(),
+          body: SplashScreen(),
         ),
       ),
     );

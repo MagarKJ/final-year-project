@@ -13,3 +13,5 @@ final class LoginRequestedEvent extends LoginEvent {
   });
 }
 
+final class GoogleLoginRequestedEvent extends LoginEvent {}
+
