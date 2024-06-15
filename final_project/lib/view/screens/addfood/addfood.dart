@@ -1,4 +1,5 @@
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/addfood/food_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,27 +39,44 @@ class AddFood extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: state.allProduct.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: myBlue,
-                          child: Text(
-                            getFirstandLastNameInitals(state
-                                .allProduct[index].name
-                                .toString()
-                                .toUpperCase()),
-                            style: TextStyle(color: whiteColor, fontSize: 16),
+                      return GestureDetector(
+                        onTap: () {
+                          showFoodDesc(
+                            context: context,
+                            image: 'image',
+                            name: state.allProduct[index].name,
+                            ammount: 'per 100 grams',
+                            description: state.allProduct[index].description,
+                            calories: state.allProduct[index].calories,
+                            carbs: state.allProduct[index].carbs,
+                            protein: state.allProduct[index].protein,
+                            fat: state.allProduct[index].fats,
+                            sodium: state.allProduct[index].sodium,
+                          );
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.green,
+                            child: Text(
+                              getFirstandLastNameInitals(state
+                                  .allProduct[index].name
+                                  .toString()
+                                  .toUpperCase()),
+                              style: TextStyle(color: whiteColor, fontSize: 16),
+                            ),
                           ),
+                          title: Text(
+                            state.allProduct[index].name,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            'Calories: ${state.allProduct[index].calories.toString()}',
+                            style: TextStyle(fontSize: 14, color: calorieColor),
+                          ),
+                          trailing:
+                              Icon(Icons.add_circle_outline, color: myBlue),
                         ),
-                        title: Text(
-                          state.allProduct[index].name,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          'Calories: ${state.allProduct[index].calories.toString()}',
-                          style: TextStyle(fontSize: 14, color: calorieColor),
-                        ),
-                        trailing: Icon(Icons.add_circle_outline, color: myBlue),
                       );
                     },
                   );

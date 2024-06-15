@@ -104,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocProvider.of<HomePageBloc>(context).add(HomePageLoadEvent());
           },
           child: Scaffold(
+            backgroundColor: whiteColor,
             appBar: AppBar(
               leadingWidth: 200,
               backgroundColor: whiteColor,
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     LottieBuilder.asset(
                       greetingAnimation,
-                      repeat: false,
+                      // repeat: false,
                     ),
                     const SizedBox(width: 10),
                     Column(

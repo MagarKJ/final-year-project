@@ -23,15 +23,11 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
     try {
       // Fetch all products
       dynamic allFood = await allProductRepository.fetchAllProduct();
+      List<dynamic> meals = allFood['meals'];
       // Ensure allFood is a List of Maps
-      if (allFood is List) {
-        List<ProductDataModel> products = allFood
-            .map((e) => ProductDataModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-        emit(AddFoodLoadedState(allProduct: products));
-      } else {
-        throw Exception('Data format is not a list');
-      }
+      emit(AddFoodLoadedState(
+          allProduct:
+              meals.map((meals) => ProductDataModel.fromJson(meals)).toList()));
     } catch (ex) {
       emit(AddFoodErrorState(message: ex.toString()));
     }

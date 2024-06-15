@@ -8,7 +8,7 @@ final class AddFoodInitial extends AddFoodState {}
 final class AddFoodLoadingState extends AddFoodState {}
 
 final class AddFoodLoadedState extends AddFoodState {
-  final List<ProductDataModel> allProduct;
+   List<ProductDataModel> allProduct;
 
   AddFoodLoadedState({
     required this.allProduct,

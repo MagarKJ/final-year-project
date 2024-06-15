@@ -1,5 +1,8 @@
 import 'dart:ui';
 
+Color secondaryColor = const Color(0xff26D616);
+Color primaryColor = const Color(0xff59C9ED);
+
 Color myBrownColor = const Color(0xFF995D42);
 Color myGrey = const Color(0xFFA8A8A9);
 Color myDarkGrey = const Color(0xFF676767);
@@ -39,13 +42,11 @@ const goodEvening = "assets/animation/goodevening.json";
 //       content: Text(text!),
 //       duration: const Duration(seconds: 3),
 
-     
 //     );
 //      messengerKey.cureentState!
 //       ..removeCureentSnackBar()
 //       ..showSnackBar(snackBar);
 //   }
-
 
 // }
 

@@ -28,14 +28,11 @@ class CustomButton extends StatelessWidget {
       height: height,
       width: width,
       child: ElevatedButton(
-        
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          
           backgroundColor: backGroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
-            
           ),
         ),
         child: Row(
@@ -47,7 +44,9 @@ class CustomButton extends StatelessWidget {
                 size: 20.0, // Adjust the size of the icon as needed
                 color: Colors.white,
               ),
-            SizedBox(width: Get.width * 0.02),
+            icon != null
+                ? SizedBox(width: Get.width * 0.02)
+                : SizedBox.shrink(),
             Text(
               buttonText,
               style: GoogleFonts.montserrat(
@@ -62,5 +61,3 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
-
-

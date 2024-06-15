@@ -2,25 +2,25 @@ class ProductDataModel {
   final String id;
   final String userId;
   final String name;
+  final String description;
   final String calories;
   final String fats;
-  final String water;
+  final String protein;
   final String carbs;
-  final String sleep;
+  final String sodium;
   // final double price;
   // final String imageUrl;
 
   ProductDataModel({
     required this.id,
     required this.name,
-    // required this.price,
-    // required this.imageUrl,
+    required this.description,
     required this.userId,
     required this.calories,
     required this.fats,
-    required this.water,
+    required this.protein,
     required this.carbs,
-    required this.sleep,
+    required this.sodium,
   });
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) {
@@ -28,11 +28,12 @@ class ProductDataModel {
       id: json['id'].toString(),
       userId: json['user_id'].toString(),
       name: json['name'],
+      description: json['description'],
       calories: json['calories'].toString(),
-      fats: json['fats'].toString(),
-      water: json['water'].toString(),
-      carbs: json['carbohydrates'].toString(),
-      sleep: json['sleep'].toString(),
+      fats: json['fat'].toString(),
+      protein: json['protein'].toString(),
+      carbs: json['carbohydrate'].toString(),
+      sodium: json['sodium'].toString(),
       // price: (json['price'] as num).toDouble(),
       // imageUrl: json['imageUrl'],
     );
@@ -42,11 +43,12 @@ class ProductDataModel {
         'id': id,
         'user_id': userId,
         'name': name,
+        'description': description,
         'calories': calories,
-        'fats': fats,
-        'water': water,
-        'carbohydrates': carbs,
-        'sleep': sleep,
+        'fat': fats,
+        'protein': protein,
+        'carbohydrate': carbs,
+        'sodium': sodium,
         // 'price': price,
         // 'imageUrl': imageUrl,
       };

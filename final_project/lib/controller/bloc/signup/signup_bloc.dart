@@ -75,11 +75,18 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         'uid': userCredential.user!.uid,
       });
       log('Data Inserted');
+
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      log('Email Verification Sent');
+      Get.snackbar(
+          'Verification Email has been sent', 'Please verify your email');
+
       await Future.delayed(const Duration(seconds: 1), () {
         Get.snackbar('Signup Success', 'Welcome $email');
 
         emit(SignupSuccessstate(uid: '$email-$password'));
       });
+
       emit(SignupInitial());
     } catch (e) {
       emit(SignupFailurestate(e.toString()));

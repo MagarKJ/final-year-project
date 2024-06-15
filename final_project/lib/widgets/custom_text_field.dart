@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final IconData prefixIcon;
@@ -33,7 +32,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText && !(showPassword ?? false),
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: myBrownColor),
+            borderSide: BorderSide(color: primaryColor),
             borderRadius: BorderRadius.circular(3),
           ),
           border: OutlineInputBorder(
@@ -55,7 +54,13 @@ class CustomTextField extends StatelessWidget {
                 )
               : null,
           hintText: hintText,
-          floatingLabelAlignment: FloatingLabelAlignment.center,
+          label: Text(hintText),
+          labelStyle: GoogleFonts.montserrat(
+            color: myGrey,
+            fontSize: 11.43,
+            fontWeight: FontWeight.w500,
+          ),
+          // floatingLabelAlignment: FloatingLabelAlignment.center,
           hintStyle: GoogleFonts.montserrat(
             color: myGrey,
             fontSize: 11.43,

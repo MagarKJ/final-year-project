@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/controller/bloc/profile/profile_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/login.dart';
+import 'package:final_project/view/screens/profile/payment_screen.dart';
 import 'package:final_project/view/screens/profile/profile_editor.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -238,8 +239,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             context,
                             'Manage Your Goals',
                             Icons.manage_search_outlined,
-                            Icons.arrow_forward_ios,
-                            () {}),
+                            Icons.arrow_forward_ios, () {
+                          // Get.to(() => const PaymentScreen());
+                        }),
                         _buildRowContent(
                             context,
                             'Change Password',
