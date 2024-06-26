@@ -28,7 +28,7 @@ class ProductDataModel {
       id: json['id'].toString(),
       userId: json['user_id'].toString(),
       name: json['name'],
-      description: json['description'],
+      description: json['description'] ?? '',
       calories: json['calories'].toString(),
       fats: json['fat'].toString(),
       protein: json['protein'].toString(),

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/view/bottom_navigtion_bar.dart';
+import 'package:final_project/view/screens/addfood/addfood.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:final_project/view/screens/home/step_counter2.dart';
@@ -14,6 +16,7 @@ import '../../../controller/apis/firebase_api.dart';
 import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_titile.dart';
+import '../addfood/food_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -171,25 +174,70 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: "Today's Food",
                         ),
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => MyBottomNavigationBar(
+                                  currentIndex: 2,
+                                ));
+                          },
                           icon: const Icon(Icons.add),
                           label: const Text("Add Meals"),
                         ),
                       ],
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.allProduct.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(state.allProduct[index].name),
-                          subtitle: Text(
-                            'Calories: ${state.allProduct[index].calories}, Fats: ${state.allProduct[index].fats}',
+                    state.allProduct.isEmpty
+                        ? const Center(
+                            child: Text('No data found'),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.allProduct.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showFoodDesc(
+                                    context: context,
+                                    image: 'image',
+                                    name: state.allProduct[index].name,
+                                    ammount: 'per 100 grams',
+                                    description:
+                                        state.allProduct[index].description,
+                                    calories: state.allProduct[index].calories,
+                                    carbs: state.allProduct[index].carbs,
+                                    protein: state.allProduct[index].protein,
+                                    fat: state.allProduct[index].fats,
+                                    sodium: state.allProduct[index].sodium,
+                                  );
+                                },
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.green,
+                                    child: Text(
+                                      getFirstandLastNameInitals(state
+                                          .allProduct[index].name
+                                          .toString()
+                                          .toUpperCase()),
+                                      style: TextStyle(
+                                          color: whiteColor, fontSize: 16),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    state.allProduct[index].name,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    'Calories: ${state.allProduct[index].calories.toString()}',
+                                    style: TextStyle(
+                                        fontSize: 14, color: calorieColor),
+                                  ),
+                                  trailing: Icon(Icons.add_circle_outline,
+                                      color: myBlue),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ),

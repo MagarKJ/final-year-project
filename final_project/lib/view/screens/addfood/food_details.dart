@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:final_project/controller/bloc/addFood/add_food_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -270,7 +272,23 @@ class _FoodDescState extends State<FoodDesc> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextButton(
-                  onPressed: null,
+                  onPressed: () {
+                    BlocProvider.of<AddFoodBloc>(context)
+                        .add(AddFoodButtonPressedEvent(
+                      userId: 1,
+                      foodName: widget.name,
+                      foodCalories: widget.calories,
+                      foodCarbs: widget.carbs,
+                      foodProtein: widget.protein,
+                      foodFat: widget.fat,
+                      foodSodium: widget.sodium,
+                    ));
+
+                    BlocProvider.of<AddFoodBloc>(context)
+                        .add(AddFoodLoadedEvent());
+
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     'ADD FOOD',
                     style: GoogleFonts.inter(

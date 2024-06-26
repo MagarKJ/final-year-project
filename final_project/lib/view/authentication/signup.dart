@@ -250,7 +250,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     await prefs.setBool('Login', true);
-                    Get.offAll(() => const MyBottomNavigationBar());
+                    Get.offAll(() =>  MyBottomNavigationBar());
                   }
                   if (state is SignupFailurestate) {
                     Get.snackbar('Signup Failed', state.error);
@@ -310,7 +310,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             await SharedPreferences.getInstance();
 
                         prefs.setBool('Login', true);
-                        Get.offAll(() => const MyBottomNavigationBar());
+                        Get.offAll(() =>  MyBottomNavigationBar());
                       }
                       if (state is GoogleSignupFailurestate) {
                         Get.snackbar('Signup Failed', state.error);
