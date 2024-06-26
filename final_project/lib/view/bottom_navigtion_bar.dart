@@ -1,22 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:final_project/controller/bloc/home/home_page_bloc.dart';
 import 'package:final_project/view/screens/addfood/addfood.dart';
 import 'package:final_project/view/screens/analytics/analytics.dart';
 import 'package:final_project/view/screens/home/homescreen.dart';
 import 'package:final_project/view/screens/medicalreport/medicalreport.dart';
 import 'package:final_project/view/screens/profile/profile.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
-  const MyBottomNavigationBar({super.key});
+  int? currentIndex;
+  MyBottomNavigationBar({
+    super.key,
+    this.currentIndex,
+  });
 
   @override
   State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-  int _currentIndex = 0;
-
   final List<Widget> _pages = [
     BlocProvider(
       create: (context) => HomePageBloc(),
@@ -29,15 +33,17 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   ];
   @override
   Widget build(BuildContext context) {
+    int? _selectedIndex =
+        (widget.currentIndex == null) ? 0 : widget.currentIndex;
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: _pages[_selectedIndex!],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
-        currentIndex: _currentIndex,
+        currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            widget.currentIndex = index;
           });
         },
         items: const [

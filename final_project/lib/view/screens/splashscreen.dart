@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
 //if value false xa vane onboard screen ma janxa else bottom navigation bar ma janxa.
 //Navigation bar vaneko home page ko bottom navigation bar homepage vanda hunxa
     if (isLoggedIn) {
-      Get.offAll(() => const MyBottomNavigationBar());
+      Get.offAll(() =>  MyBottomNavigationBar());
     } else {
       Get.offAll(() => const OnBoardScreen());
     }

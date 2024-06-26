@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
                     //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
                     //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
-                    Get.offAll(() => const MyBottomNavigationBar());
+                    Get.offAll(() => MyBottomNavigationBar());
                     //auth bloc mai xaaa
                   }
                   if (state is LoginFailurestate) {
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefs.setString('email', emailController.text.trim());
                         prefs.setString(
                             'password', passwordController.text.trim());
-                        Get.offAll(() => const MyBottomNavigationBar());
+                        Get.offAll(() => MyBottomNavigationBar());
                       }
                       if (state is GoogleLoginFailurestate) {
                         Get.snackbar('Login Failed', state.error);
