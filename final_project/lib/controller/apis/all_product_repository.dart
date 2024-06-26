@@ -9,7 +9,7 @@ class AllProductRepository {
     try {
       // Use the correct IP for your local server
       Response response =
-          await api.sendRequest.get('http://192.168.254.90:8000/api/meals');
+          await api.sendRequest.get('/api/meals');
       // log('Response status: ${response.statusCode}');
       // log('Response data: ${response.data}');
 
