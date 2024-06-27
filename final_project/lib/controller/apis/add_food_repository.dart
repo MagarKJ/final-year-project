@@ -27,7 +27,7 @@ class AddFoodRepository {
 
     try {
       Response response =
-          await api.sendRequest.post('$baseUrl/api/everydays', data: value);
+          await api.sendRequest.post('/api/everydays', data: value);
       return response.data;
     } catch (e) {
       rethrow;
@@ -36,11 +36,41 @@ class AddFoodRepository {
 
   Future<dynamic> fetchAddedFood() async {
     try {
-      Response response = await api.sendRequest.get('$baseUrl/api/everydays/1');
+      Response response = await api.sendRequest.get('/api/everydays/1');
       return response.data;
     } catch (e) {
       log(e.toString());
       rethrow;
+    }
+  }
+
+  Future<dynamic> removeSpecificMeal({
+    required dynamic foodID,
+  }) async {
+    try {
+      var value = {
+        "_method": "DELETE",
+      };
+
+      Response response = await api.sendRequest.post(
+        '/api/everydays/$foodID',
+        data: value,
+      );
+      return response.data;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<dynamic> removeAllDailyMeals() async {
+    try {
+      Response response =
+          await api.sendRequest.delete('/api/everydays/destroy/1');
+      log('/api/everydays/destroy/1');
+      return response.data;
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

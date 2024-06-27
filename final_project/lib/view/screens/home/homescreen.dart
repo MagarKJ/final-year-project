@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/addfood/addfood.dart';
+import 'package:final_project/view/screens/home/everydaymeal.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:final_project/view/screens/home/step_counter2.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../controller/apis/firebase_api.dart';
@@ -191,7 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.allProduct.length,
+                            itemCount: state.allProduct.length > 3
+                                ? 3
+                                : state.allProduct.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
@@ -232,12 +236,50 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                         fontSize: 14, color: calorieColor),
                                   ),
-                                  trailing: Icon(Icons.add_circle_outline,
+                                  trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.remove_circle_outline,
+                                        color: myBlue,
+                                      ),
+                                      onPressed: () {
+                                        BlocProvider.of<HomePageBloc>(context)
+                                            .add(RemoveSpecificFoodEvent(
+                                          foodID: state.allProduct[index].id,
+                                        ));
+                                        BlocProvider.of<HomePageBloc>(context)
+                                            .add(HomePageLoadEvent());
+                                      },
                                       color: myBlue),
                                 ),
                               );
                             },
                           ),
+                    state.allProduct.length > 3
+                        ? Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              // color: primaryColor,
+                              width: Get.width * 0.19,
+                              child: GestureDetector(
+                                onTap: () => Get.to(() => Everydaymeal()),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'See All',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.navigate_next,
+                                      size: 25,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -248,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
         log(state.toString());
         log(state.message.toString());
         return Center(
-          child: Text(state.message + ' Please try again'),
+          child: Text('${state.message} Please try again'),
         );
       }
       return const SizedBox();

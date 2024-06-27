@@ -22,3 +22,35 @@ final class HomePageErrorState extends HomePageState {
     required this.message,
   });
 }
+
+final class RemoveSpecificFoodState extends HomePageState {
+  final String message;
+
+  RemoveSpecificFoodState({
+    required this.message,
+  });
+}
+
+final class RemoveSpecificFoodErrorState extends HomePageState {
+  final String message;
+
+  RemoveSpecificFoodErrorState({
+    required this.message,
+  });
+}
+
+final class RemoveAllMealsState extends HomePageState {
+  final String message;
+
+  RemoveAllMealsState({
+    required this.message,
+  });
+}
+
+final class RemoveAllMealsErrorState extends HomePageState {
+  final String message;
+
+  RemoveAllMealsErrorState({
+    required this.message,
+  });
+}
