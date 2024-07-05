@@ -1,5 +1,4 @@
-import 'package:final_project/view/screens/analytics/water/individual_bar.dart';
-
+import 'package:final_project/view/screens/analytics/calorie/individual_bar.dart';
 
 class BarData {
   final double sunAmmount;

@@ -93,6 +93,8 @@ class _AddFoodState extends State<Everydaymeal> {
                                 onTap: () {
                                   showFoodDesc(
                                     context: context,
+                                    foodId: int.tryParse(
+                                        state.allProduct[index].id.toString())!,
                                     image: 'image',
                                     name: state.allProduct[index].name,
                                     ammount: 'per 100 grams',

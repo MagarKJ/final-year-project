@@ -1,13 +1,11 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
-import 'package:final_project/view/screens/addfood/addfood.dart';
 import 'package:final_project/view/screens/home/everydaymeal.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:final_project/view/screens/home/step_counter2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -28,52 +26,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String name = '';
-
   FireBaseAPi fireBaseAPi = FireBaseAPi();
 
   @override
   void initState() {
     log('homepageinit state');
+    log('$token');
+    log('$userId');
+    log('$token');
     super.initState();
+
     fireBaseAPi.requestNotificationPermission();
     fireBaseAPi.getDeviceToken();
     fireBaseAPi.isTokenRefresh();
     fireBaseAPi.firebaseInit(context);
     fireBaseAPi.setupInteractMessage(context);
-    _loadUserName();
-    _loadUserNameFromGoogle();
+    // _loadUserName();
+    // _loadUserNameFromGoogle();
   }
 
-  Future<void> _loadUserName() async {
-    User? currenyUser = FirebaseAuth.instance.currentUser;
-    if (currenyUser != null) {
-      DocumentSnapshot userName = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currenyUser.uid)
-          .get();
-      if (userName.exists) {
-        setState(() {
-          name = userName['name'];
-        });
-      } else {
-        name = '';
-      }
-    }
-  }
+  // Future<void> _loadUserName() async {
+  //   User? currenyUser = FirebaseAuth.instance.currentUser;
+  //   if (currenyUser != null) {
+  //     DocumentSnapshot userName = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(currenyUser.uid)
+  //         .get();
+  //     if (userName.exists) {
+  //       setState(() {
+  //         name = userName['name'];
+  //       });
+  //     } else {
+  //       name = '';
+  //     }
+  //   }
+  // }
 
-  Future<void> _loadUserNameFromGoogle() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      if (currentUser.displayName != null) {
-        setState(() {
-          name = currentUser.displayName!;
-        });
-      } else {
-        name = '';
-      }
-    }
-  }
+  // Future<void> _loadUserNameFromGoogle() async {
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
+  //   if (currentUser != null) {
+  //     if (currentUser.displayName != null) {
+  //       setState(() {
+  //         name = currentUser.displayName!;
+  //       });
+  //     } else {
+  //       name = '';
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          name,
+                          name ?? 'User',
                           style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold),
                         ),
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Activity',
                       fontSize: 25,
                     ),
-                    const Nutritions(),
+                    Nutritions(nutrients: state.nutrients[0]),
                     const CustomTitle(
                       title: 'Step Counter',
                       fontSize: 25,
@@ -201,6 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () {
                                   showFoodDesc(
                                     context: context,
+                                    foodId: int.tryParse(
+                                        state.allProduct[index].id.toString())!,
                                     image: 'image',
                                     name: state.allProduct[index].name,
                                     ammount: 'per 100 grams',
@@ -211,6 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     protein: state.allProduct[index].protein,
                                     fat: state.allProduct[index].fats,
                                     sodium: state.allProduct[index].sodium,
+                                    isToRemove: true,
                                   );
                                 },
                                 child: ListTile(
@@ -259,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             alignment: Alignment.bottomCenter,
                             child: Container(
                               // color: primaryColor,
-                              width: Get.width * 0.19,
+                              width: Get.width * 0.25,
                               child: GestureDetector(
                                 onTap: () => Get.to(() => Everydaymeal()),
                                 child: Row(

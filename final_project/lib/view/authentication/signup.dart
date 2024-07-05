@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
@@ -29,7 +31,10 @@ class _CreateAccountState extends State<CreateAccount> {
   final sugarController = TextEditingController();
   final sexController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final bodyTypeController = TextEditingController();
+  final bodyGoalController = TextEditingController();
+
+  final ethnicityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
   bool _showConfirmPassword = false;
@@ -38,7 +43,7 @@ class _CreateAccountState extends State<CreateAccount> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
+
     super.dispose();
   }
 
@@ -138,7 +143,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       SizedBox(height: Get.height * 0.02),
                       CustomDropDownField(
-                        controller: sexController,
+                        controller: ethnicityController,
                         hintText: 'Ethnicity',
                         prefixIcon: Icons.safety_check,
                         selectSomething: 'Select Your Ethnicity',
@@ -150,7 +155,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       SizedBox(height: Get.height * 0.02),
                       CustomDropDownField(
-                        controller: sexController,
+                        controller: bodyTypeController,
                         hintText: 'Body Type',
                         prefixIcon: Icons.safety_check,
                         selectSomething: 'Select Your BodyType',
@@ -162,7 +167,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       SizedBox(height: Get.height * 0.02),
                       CustomDropDownField(
-                        controller: sexController,
+                        controller: bodyGoalController,
                         hintText: 'Body Goal',
                         prefixIcon: Icons.safety_check,
                         selectSomething: 'Select Your BodyGoal',
@@ -184,19 +189,6 @@ class _CreateAccountState extends State<CreateAccount> {
                           });
                         },
                         controller: passwordController,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        prefixIcon: Icons.lock,
-                        hintText: "Confirm Password",
-                        obscureText: true,
-                        showPassword: _showConfirmPassword,
-                        onTogglePassword: (bool show) {
-                          setState(() {
-                            _showConfirmPassword = show;
-                          });
-                        },
-                        controller: confirmPasswordController,
                       ),
                     ],
                   ),
@@ -250,7 +242,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     await prefs.setBool('Login', true);
-                    Get.offAll(() =>  MyBottomNavigationBar());
+                    Get.offAll(() => MyBottomNavigationBar());
                   }
                   if (state is SignupFailurestate) {
                     Get.snackbar('Signup Failed', state.error);
@@ -272,8 +264,13 @@ class _CreateAccountState extends State<CreateAccount> {
                                 name: nameController.text.trim(),
                                 phoneno: phonenoController.text.trim(),
                                 password: passwordController.text.trim(),
-                                confirmPassword:
-                                    confirmPasswordController.text.trim(),
+                                sex: sexController.text.trim(),
+                                weight: weightController.text.trim(),
+                                bloodPressue: bpController.text.trim(),
+                                bloodSugar: sugarController.text.trim(),
+                                bodygoal: bodyGoalController.text.trim(),
+                                bodytype: bodyTypeController.text.trim(),
+                                ethnicity: ethnicityController.text.trim(),
                                 age: ageController.text.trim(),
                               ),
                             );
@@ -310,7 +307,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             await SharedPreferences.getInstance();
 
                         prefs.setBool('Login', true);
-                        Get.offAll(() =>  MyBottomNavigationBar());
+                        Get.offAll(() => MyBottomNavigationBar());
                       }
                       if (state is GoogleSignupFailurestate) {
                         Get.snackbar('Signup Failed', state.error);

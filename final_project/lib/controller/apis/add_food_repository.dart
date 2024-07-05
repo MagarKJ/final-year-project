@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:final_project/controller/apis/api.dart';
+import 'package:final_project/model/global_variables.dart';
 
 class AddFoodRepository {
   API api = API();
 
   Future<dynamic> addFood({
-    required dynamic userId,
     required dynamic foodName,
     required dynamic foodCalories,
     required dynamic foodCarbs,
@@ -36,7 +36,7 @@ class AddFoodRepository {
 
   Future<dynamic> fetchAddedFood() async {
     try {
-      Response response = await api.sendRequest.get('/api/everydays/1');
+      Response response = await api.sendRequest.get('/api/everydays/$userId');
       return response.data;
     } catch (e) {
       log(e.toString());
@@ -66,8 +66,8 @@ class AddFoodRepository {
   Future<dynamic> removeAllDailyMeals() async {
     try {
       Response response =
-          await api.sendRequest.delete('/api/everydays/destroy/1');
-      log('/api/everydays/destroy/1');
+          await api.sendRequest.delete('/api/everydays/destroy/$userId');
+      log('/api/everydays/destroy/$userId');
       return response.data;
     } catch (e) {
       log(e.toString());

@@ -53,7 +53,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       AddFoodRepository addFoodRepository = AddFoodRepository();
       emit(AddFoodButtonPressedLoadingState());
       dynamic addFood = await addFoodRepository.addFood(
-        userId: event.userId,
         foodName: event.foodName,
         foodCalories: event.foodCalories,
         foodCarbs: event.foodCarbs,
@@ -64,7 +63,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
       emit(
         AddFoodButtonPressedLoadedState(addFood: addFood),
-     
       );
     } catch (ex) {
       emit(AddFoodButtonPressedErrorState(message: ex.toString()));

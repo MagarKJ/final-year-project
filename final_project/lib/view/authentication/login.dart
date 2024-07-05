@@ -107,53 +107,27 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: Get.height * 0.07,
               ),
-              BlocConsumer<LoginBloc, LoginState>(
-                //Listner use gareko kina ki listen ni garna xa rw build ni garna xa
-                //blocConsumer is BlocListener + BlocBuilder
-                //BlocListener used for functionality that needs to occur once per state change such as navigation, showing a snackbarr, shpowing a dialog, etc.a dialog etc.
-                //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
-
-                listener: (context, state) async {
-                  if (state is LoginSuccessstate) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
-                    prefs.setBool('Login', true);
-                    prefs.setString('email', emailController.text.trim());
-                    prefs.setString('password', passwordController.text.trim());
-
-                    //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
-                    //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
-                    //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
-                    Get.offAll(() => MyBottomNavigationBar());
-                    //auth bloc mai xaaa
+              CustomButton(
+                buttonText: 'Log In',
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  if (formKey.currentState!.validate()) {
+                    context.read<LoginBloc>().add(
+                          LoginRequestedEvent(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          ),
+                        );
                   }
-                  if (state is LoginFailurestate) {
-                    Get.snackbar('Login Failed', state.error);
-                  }
+                  prefs.setBool('Login', true);
+                  prefs.setString('email', emailController.text.trim());
+                  prefs.setString('password', passwordController.text.trim());
                 },
-                builder: (context, state) {
-                  if (state is LoginLoadingstate) {
-                    return const CircularProgressIndicator();
-                  }
-                  return CustomButton(
-                    buttonText: 'Log In',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<LoginBloc>().add(
-                              LoginRequestedEvent(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ),
-                            );
-                      }
-                    },
-                    width: Get.width * 0.6,
-                    height: Get.height * 0.07,
-                    fontSize: 15,
-                    backGroundColor: primaryColor,
-                  );
-                },
+                width: Get.width * 0.6,
+                height: Get.height * 0.07,
+                fontSize: 15,
+                backGroundColor: primaryColor,
               ),
               SizedBox(
                 height: Get.height * 0.05,
