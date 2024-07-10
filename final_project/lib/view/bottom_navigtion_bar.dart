@@ -39,7 +39,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       body: _pages[_selectedIndex!],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.blue,
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -66,9 +66,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             label: 'Analytics',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
+              icon: Icon(
+                Icons.person_outline,
+              ),
+              label: "Profile"),
         ],
       ),
     );

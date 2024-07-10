@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/controller/bloc/profile/profile_bloc.dart';
 import 'package:final_project/utils/constants.dart';
@@ -111,147 +113,214 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          body: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              //color: Colors.amber,
-              width: Get.width * 0.9,
-              height: Get.height * 0.7,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: Get.height * 0.14,
-                      ),
-                      Stack(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: profile != null &&
-                                        Uri.parse(profile!).isAbsolute
-                                    ? NetworkImage(profile!)
-                                    : const AssetImage(userProfile)
-                                        as ImageProvider<Object>?,
-                                radius: Get.width * 0.1,
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.04,
-                                height: Get.height * 0.12,
-                              ),
-                            ],
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: Get.height * 0.05,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: myBrownColor,
-                                  border: Border.all(
-                                      width: 2, color: Colors.white)),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.edit_outlined,
-                                  color: Colors.white,
-                                  size: Get.width * 0.06,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: Get.width * 0.5,
-                        //color: Colors.red,
-                        height: Get.height * 0.1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          body: SingleChildScrollView(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: Get.width * 0.9,
+                height: Get.height,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: Get.height * 0.14,
+                        ),
+                        Stack(
                           children: [
-                            Text(
-                              '$name',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20, color: myBrownColor),
-                            ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.mail_outline,
-                                  color: myDarkGrey,
+                                CircleAvatar(
+                                  backgroundImage: profile != null &&
+                                          Uri.parse(profile!).isAbsolute
+                                      ? NetworkImage(profile!)
+                                      : const AssetImage(userProfile)
+                                          as ImageProvider<Object>?,
+                                  radius: Get.width * 0.1,
                                 ),
                                 SizedBox(
-                                  width: Get.width * 0.02,
-                                ),
-                                Text(
-                                  '$email',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14, color: myDarkGrey),
+                                  width: Get.width * 0.06,
+                                  height: Get.height * 0.12,
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.call_outlined,
-                                  color: myDarkGrey,
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: Get.height * 0.05,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: myBrownColor,
+                                    border: Border.all(
+                                        width: 2, color: Colors.white)),
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.edit_outlined,
+                                    color: Colors.white,
+                                    size: Get.width * 0.06,
+                                  ),
                                 ),
-                                SizedBox(
-                                  width: Get.width * 0.02,
-                                ),
-                                Text(
-                                  '$phone',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14, color: myDarkGrey),
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.04,
-                  ),
-                  SizedBox(
-                    // color: Colors.red,
-                    height: Get.height * 0.4,
-                    width: Get.width * 0.9,
-                    child: Column(
-                      children: [
-                        _buildRowContent(
-                            context,
-                            'Edit Your Details',
-                            Icons.favorite_outline,
-                            Icons.arrow_forward_ios, () {
-                          Get.to(() => const EditYourProfile());
-                        }),
-                        _buildRowContent(
-                            context,
-                            'Food History',
-                            Icons.history_outlined,
-                            Icons.arrow_forward_ios,
-                            () {}),
-                        _buildRowContent(
-                            context,
-                            'Manage Your Goals',
-                            Icons.manage_search_outlined,
-                            Icons.arrow_forward_ios, () {
-                          // Get.to(() => const PaymentScreen());
-                        }),
-                        _buildRowContent(
-                            context,
-                            'Change Password',
-                            Icons.vpn_key_outlined,
-                            Icons.arrow_forward_ios,
-                            () {}),
+                        Container(
+                          width: Get.width * 0.6,
+                          // color: Colors.amber,
+                          height: Get.height * 0.1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$name',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 20, color: myBrownColor),
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.mail_outline,
+                                    color: myDarkGrey,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Text(
+                                    '$email',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 14, color: myDarkGrey),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.call_outlined,
+                                    color: myDarkGrey,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Text(
+                                    '$phone',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 14, color: myDarkGrey),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: Get.height * 0.05,
+                    ),
+                    Container(
+                      // color: Colors.red,
+                      height: Get.height * 0.7,
+                      width: Get.width * 0.9,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text("Basic Information"),
+                              SizedBox(height: 30)
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                'Edit Your Details',
+                                Icons.favorite_outline,
+                                Icons.arrow_forward_ios, () {
+                              Get.to(() => const EditYourProfile());
+                            }),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                'Food History',
+                                Icons.history_outlined,
+                                Icons.arrow_forward_ios,
+                                () {}),
+                          ),
+                          Row(
+                            children: [
+                              Text("security Question"),
+                              SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                'Manage Your Goals',
+                                Icons.manage_search_outlined,
+                                Icons.arrow_forward_ios, () {
+                              // Get.to(() => const PaymentScreen());
+                            }),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                'Change Password',
+                                Icons.vpn_key_outlined,
+                                Icons.arrow_forward_ios,
+                                () {}),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(context, 'Logout',
+                                Icons.logout, Icons.arrow_forward_ios, () {}),
+                          ),
+                          // SizedBox(
+                          //   height: 50,
+                          // ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                "Terms and Condition",
+                                Icons.newspaper_outlined,
+                                Icons.arrow_forward_ios,
+                                () {}),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: _buildRowContent(
+                                context,
+                                "Privacy",
+                                Icons.privacy_tip_rounded,
+                                Icons.arrow_forward_ios,
+                                () {}),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -261,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _logoutDialogBox();
             },
             width: Get.width * 0.4,
-            height: Get.height * 0.06,
+            height: Get.height * 0.0,
             fontSize: 12,
             backGroundColor: myLightRed,
             icon: Icons.logout_outlined,

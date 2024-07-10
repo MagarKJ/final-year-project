@@ -1,6 +1,5 @@
 import 'package:final_project/view/screens/analytics/water/individual_bar.dart';
 
-
 class BarData {
   final double sunAmmount;
   final double monAmmount;
@@ -9,6 +8,7 @@ class BarData {
   final double thurAmmount;
   final double friAmmount;
   final double satAmmount;
+  List<IndividualBar> barData = [];
 
   BarData({
     required this.sunAmmount,
@@ -19,7 +19,6 @@ class BarData {
     required this.friAmmount,
     required this.satAmmount,
   });
-  List<IndividualBar> barData = [];
 
   void initializeBarData() {
     barData = [
