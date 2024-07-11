@@ -5,7 +5,6 @@ import 'package:final_project/view/authentication/signup.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 
 import 'package:final_project/widgets/custom_button.dart';
-import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +25,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
+  bool _isRememberMe = false;
+
+  String email = '';
+  String password = '';
+
+  @override
+  void initState() {
+    loadPreferences();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void loadPreferences() async {
+    // log('login load preferences called');
+    String? email = await getEmail1();
+    // log('login kon email is $email');
+    bool? _isRememberMe = await getRememberMe();
+    // log('is remember me $_isRememberMe');
+    String? password = await getPassword();
+
+    setState(() {
+      email = email;
+      password = password;
+      _isRememberMe = _isRememberMe!;
+    });
+    if (_isRememberMe == true) {
+      emailController.text = email.toString();
+      passwordController.text = password.toString();
+      // log('email controller ${emailController.text}');
+      _isRememberMe = true;
+    }
+  }
+
+  Future<bool?> getRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isRememberMe = prefs.getBool('rememberMe') ?? false;
+    return _isRememberMe;
+  }
+
+  Future<String?> getEmail1() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('email_address') ?? '';
+    // log('email is ${prefs.getString('email_address')}');
+    return email;
+  }
+
+  Future<String?> getPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    password = prefs.getString('password') ?? '';
+    // log('password is ${prefs.getString('password')}');
+    return password;
+  }
 
   @override
   void dispose() {
@@ -42,105 +93,193 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: Get.height * 0.17,
-              ),
-              SizedBox(
-                height: Get.height * 0.06,
-                width: Get.width * 0.831,
-                child: Text(
-                  "Log in into your account",
-                  style: GoogleFonts.jost(
-                      fontSize: 21, color: black, fontWeight: FontWeight.w700),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.04,
-              ),
-              Form(
-                key: formKey,
-                child: SizedBox(
-                  height: Get.height * 0.18,
-                  width: Get.width * 0.831,
-                  child: Column(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30.0, right: 30),
+              child: Column(
+                children: [
+                  Text(
+                    "Login To Your Account",
+                    style: GoogleFonts.poppins(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.02,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: TextFormField(
+                      cursorColor: secondaryColor,
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Email';
+                        }
+                        if (value.length < 10) {
+                          return 'Please enter valid Email';
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                          floatingLabelStyle: floatingLabelTextStyle(),
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: myGrey,
+                          ),
+                          focusedBorder: customFocusBorder(),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: secondaryColor, width: 2)),
+                          labelStyle: TextStyle(color: myGrey, fontSize: 13),
+                          labelText: 'Enter Your Email',
+                          hintText: 'Enter Your Email'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
+                  TextFormField(
+                    cursorColor: secondaryColor,
+                    controller: passwordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.go,
+                    obscureText: !_showPassword,
+                    decoration: InputDecoration(
+                        floatingLabelStyle:
+                            TextStyle(color: secondaryColor, fontSize: 13),
+                        focusedBorder: customFocusBorder(),
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: secondaryColor, width: 2)),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: myGrey,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _showPassword = !_showPassword;
+                            });
+                          },
+                          icon: (_showPassword)
+                              ? Icon(
+                                  Icons.remove_red_eye_outlined,
+                                  color: myGrey,
+                                )
+                              : Icon(
+                                  Icons.remove_red_eye,
+                                  color: myGrey,
+                                ),
+                        ),
+                        labelStyle: TextStyle(color: myGrey, fontSize: 13),
+                        labelText: 'Enter Your Password',
+                        hintText: 'Enter Your Password'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomTextField(
-                        prefixIcon: Icons.person,
-                        hintText: 'Email',
-                        obscureText: false,
-                        controller: emailController,
+                      Row(
+                        children: [
+                          Checkbox(
+                            activeColor: secondaryColor,
+                            value: _isRememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _isRememberMe = !_isRememberMe;
+                              });
+                            },
+                          ),
+                          Text("Remember Me",
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: black,
+                                  fontWeight: FontWeight.w500)),
+                        ],
                       ),
-                      SizedBox(height: Get.height * 0.04),
-                      CustomTextField(
-                        prefixIcon: Icons.lock,
-                        hintText: 'Password',
-                        obscureText: true,
-                        showPassword: _showPassword,
-                        onTogglePassword: (bool show) {
-                          setState(() {
-                            _showPassword = show;
-                          });
-                        },
-                        controller: passwordController,
-                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const ForgotPassword()));
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: myGrey,
+                              // decoration: TextDecoration.underline,
+                            ),
+                          )),
                     ],
                   ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.to(() => const ForgotPassword());
-                },
-                child: Text(
-                  'Forgot Password?',
-                  style: GoogleFonts.jost(
-                    color: myGrey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.07,
-              ),
-              CustomButton(
-                buttonText: 'Log In',
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  if (formKey.currentState!.validate()) {
-                    context.read<LoginBloc>().add(
-                          LoginRequestedEvent(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
+                  CustomButton(
+                    buttonText: 'Log In',
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      if (formKey.currentState!.validate()) {
+                        context.read<LoginBloc>().add(
+                              LoginRequestedEvent(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              ),
+                            );
+                      }
+                      prefs.setBool('Login', true);
+                      prefs.setString('email', emailController.text.trim());
+                      prefs.setString(
+                          'password', passwordController.text.trim());
+                    },
+                    width: Get.width * 0.6,
+                    height: Get.height * 0.06,
+                    fontSize: 15,
+                    backGroundColor: primaryColor,
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.05,
+                  ),
+                  Container(
+                    width: Get.width * 0.8,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: secondaryColor,
+                            thickness: 2,
+                            endIndent: 5,
                           ),
-                        );
-                  }
-                  prefs.setBool('Login', true);
-                  prefs.setString('email', emailController.text.trim());
-                  prefs.setString('password', passwordController.text.trim());
-                },
-                width: Get.width * 0.6,
-                height: Get.height * 0.07,
-                fontSize: 15,
-                backGroundColor: primaryColor,
-              ),
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
-              Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "- OR Continue with -",
-                      style: GoogleFonts.jost(
-                          fontSize: 12,
-                          color: myDarkGrey,
-                          fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'OR',
+                          style: GoogleFonts.inter(
+                            color: black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: secondaryColor,
+                            thickness: 2,
+                            indent: 5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -176,7 +315,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(googleLogo),
+                              Image.asset(
+                                googleLogo,
+                              ),
                               SizedBox(
                                 width: Get.width * 0.02,
                               ),
@@ -226,7 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

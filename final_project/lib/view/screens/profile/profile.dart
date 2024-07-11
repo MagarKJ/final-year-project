@@ -15,6 +15,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../widgets/custom_alert_dialog_box.dart';
+import '../../../widgets/custom_titile.dart';
 import '../../authentication/login.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -81,10 +82,15 @@ class _CustomDrawerState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: whiteColor,
-          surfaceTintColor: whiteColor,
-          titleSpacing: 0,
-          title: Text('Profile')),
+        backgroundColor: whiteColor,
+        surfaceTintColor: whiteColor,
+        title: const CustomTitle(
+          fontSize: 25,
+          isAppbar: true,
+          title: "Profile",
+        ),
+        leading: null,
+      ),
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
         child: Center(

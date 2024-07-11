@@ -290,7 +290,7 @@ class _FoodDescState extends State<FoodDesc> {
                           ));
 
                           BlocProvider.of<AddFoodBloc>(context)
-                              .add(AddFoodLoadedEvent());
+                              .add(AddFoodLoadedEvent(url: '/api/meals'));
 
                           Navigator.pop(context);
                         },
@@ -321,7 +321,7 @@ class _FoodDescState extends State<FoodDesc> {
                           foodID: widget.foodId,
                         ));
                         BlocProvider.of<AddFoodBloc>(context)
-                            .add(AddFoodLoadedEvent());
+                            .add(AddFoodLoadedEvent(url: '/api/meals'));
 
                         Navigator.pop(context);
                       },

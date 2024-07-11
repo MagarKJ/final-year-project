@@ -62,8 +62,6 @@ class _CreateAccountState extends State<CreateAccount> {
                 height: Get.height * 0.12,
               ),
               SizedBox(
-                height: Get.height * 0.06,
-                width: Get.width * 0.831,
                 child: Text(
                   "Create an account",
                   style: GoogleFonts.jost(

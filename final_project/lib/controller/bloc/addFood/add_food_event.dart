@@ -3,7 +3,13 @@ part of 'add_food_bloc.dart';
 @immutable
 sealed class AddFoodEvent {}
 
-class AddFoodLoadedEvent extends AddFoodEvent {}
+class AddFoodLoadedEvent extends AddFoodEvent {
+  final String url;
+
+  AddFoodLoadedEvent({
+    required this.url,
+  });
+}
 
 class AddFoodButtonPressedEvent extends AddFoodEvent {
   final dynamic foodName;
