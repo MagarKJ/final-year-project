@@ -15,8 +15,10 @@ class API {
 }
 
 // String baseUrl = "http://127.0.0.1:8000";
-// String baseUrl = 'http://192.168.254.186:8000';
+String baseUrl = 'http://192.168.254.186:8000';
 //office ko
-String baseUrl = 'http://192.168.1.72:8000';
+// String baseUrl = 'http://192.168.1.72:8000';
+//home ko
+// String baseUrl = 'http://192.168.254.186:8000';
 
 // String baseUrl = "http://10.0.2.2:8000";

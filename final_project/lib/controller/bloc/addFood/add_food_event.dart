@@ -5,9 +5,11 @@ sealed class AddFoodEvent {}
 
 class AddFoodLoadedEvent extends AddFoodEvent {
   final String url;
+  final String url1;
 
   AddFoodLoadedEvent({
-    required this.url,
+    this.url = '/api/meals',
+    this.url1 = '/api/customs',
   });
 }
 

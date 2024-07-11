@@ -29,10 +29,12 @@ class AllProductRepository {
     }
   }
 
-  Future<dynamic> fetchPremiumProducts() async {
+  Future<dynamic> fetchPremiumProducts({
+    required String url,
+  }) async {
     try {
       // Use the correct IP for your local server
-      Response response = await api.sendRequest.get('/api/customs');
+      Response response = await api.sendRequest.get(url);
       // log('Response status: ${response.statusCode}');
       // log('Response data: ${response.data}');
 

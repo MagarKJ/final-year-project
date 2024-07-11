@@ -108,182 +108,187 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: () async {
             BlocProvider.of<HomePageBloc>(context).add(HomePageLoadEvent());
           },
-          child: Scaffold(
-            backgroundColor: whiteColor,
-            appBar: AppBar(
-              leadingWidth: 200,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
               backgroundColor: whiteColor,
-              surfaceTintColor: whiteColor,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_active_outlined),
-                  onPressed: () {
-                    Get.to(() => const Notifications());
-                  },
-                ),
-                const SizedBox(width: 10),
-              ],
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Row(
-                  children: [
-                    LottieBuilder.asset(
-                      greetingAnimation,
-                      // repeat: false,
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          greeting,
-                          style: const TextStyle(
-                            fontSize: 14,
+              appBar: AppBar(
+                leadingWidth: 200,
+                backgroundColor: whiteColor,
+                surfaceTintColor: whiteColor,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_active_outlined),
+                    onPressed: () {
+                      Get.to(() => const Notifications());
+                    },
+                  ),
+                  const SizedBox(width: 10),
+                ],
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    children: [
+                      LottieBuilder.asset(
+                        greetingAnimation,
+                        // repeat: false,
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            greeting,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        Text(
-                          name ?? 'User',
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Text(
+                            name ?? 'User',
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CustomTitle(
-                      title: 'Activity',
-                      fontSize: 25,
-                    ),
-                    Nutritions(nutrients: state.nutrients[0]),
-                    const CustomTitle(
-                      title: 'Step Counter',
-                      fontSize: 25,
-                    ),
-                    const StepCounter2(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CustomTitle(
-                          fontSize: 25,
-                          title: "Today's Food",
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            Get.to(() => MyBottomNavigationBar(
-                                  currentIndex: 2,
-                                ));
-                          },
-                          icon: const Icon(Icons.add),
-                          label: const Text("Add Meals"),
-                        ),
-                      ],
-                    ),
-                    state.allProduct.isEmpty
-                        ? const Center(
-                            child: Text('No data found'),
-                          )
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.allProduct.length > 3
-                                ? 3
-                                : state.allProduct.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  showFoodDesc(
-                                    context: context,
-                                    foodId: int.tryParse(
-                                        state.allProduct[index].id.toString())!,
-                                    image: 'image',
-                                    name: state.allProduct[index].name,
-                                    ammount: 'per 100 grams',
-                                    description:
-                                        state.allProduct[index].description,
-                                    calories: state.allProduct[index].calories,
-                                    carbs: state.allProduct[index].carbs,
-                                    protein: state.allProduct[index].protein,
-                                    fat: state.allProduct[index].fats,
-                                    sodium: state.allProduct[index].sodium,
-                                    isToRemove: true,
-                                  );
-                                },
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Colors.green,
-                                    child: Text(
-                                      getFirstandLastNameInitals(state
-                                          .allProduct[index].name
-                                          .toString()
-                                          .toUpperCase()),
-                                      style: TextStyle(
-                                          color: whiteColor, fontSize: 16),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    state.allProduct[index].name,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
-                                    'Calories: ${state.allProduct[index].calories.toString()}',
-                                    style: TextStyle(
-                                        fontSize: 14, color: calorieColor),
-                                  ),
-                                  trailing: IconButton(
-                                      icon: Icon(
-                                        Icons.remove_circle_outline,
-                                        color: myBlue,
-                                      ),
-                                      onPressed: () {
-                                        BlocProvider.of<HomePageBloc>(context)
-                                            .add(RemoveSpecificFoodEvent(
-                                          foodID: state.allProduct[index].id,
-                                        ));
-                                        BlocProvider.of<HomePageBloc>(context)
-                                            .add(HomePageLoadEvent());
-                                      },
-                                      color: myBlue),
-                                ),
-                              );
-                            },
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomTitle(
+                        title: 'Activity',
+                        fontSize: 25,
+                      ),
+                      Nutritions(nutrients: state.nutrients[0]),
+                      const CustomTitle(
+                        title: 'Step Counter',
+                        fontSize: 25,
+                      ),
+                      const StepCounter2(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const CustomTitle(
+                            fontSize: 25,
+                            title: "Today's Food",
                           ),
-                    state.allProduct.length > 3
-                        ? Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              // color: primaryColor,
-                              width: Get.width * 0.25,
-                              child: GestureDetector(
-                                onTap: () => Get.to(() => Everydaymeal()),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'See All',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 18,
+                          TextButton.icon(
+                            onPressed: () {
+                              Get.to(() => MyBottomNavigationBar(
+                                    currentIndex: 2,
+                                  ));
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text("Add Meals"),
+                          ),
+                        ],
+                      ),
+                      state.allProduct.isEmpty
+                          ? const Center(
+                              child: Text('No data found'),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.allProduct.length > 3
+                                  ? 3
+                                  : state.allProduct.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    showFoodDesc(
+                                      context: context,
+                                      foodId: int.tryParse(state
+                                          .allProduct[index].id
+                                          .toString())!,
+                                      image: 'image',
+                                      name: state.allProduct[index].name,
+                                      ammount: 'per 100 grams',
+                                      description:
+                                          state.allProduct[index].description,
+                                      calories:
+                                          state.allProduct[index].calories,
+                                      carbs: state.allProduct[index].carbs,
+                                      protein: state.allProduct[index].protein,
+                                      fat: state.allProduct[index].fats,
+                                      sodium: state.allProduct[index].sodium,
+                                      isToRemove: true,
+                                    );
+                                  },
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.green,
+                                      child: Text(
+                                        getFirstandLastNameInitals(state
+                                            .allProduct[index].name
+                                            .toString()
+                                            .toUpperCase()),
+                                        style: TextStyle(
+                                            color: whiteColor, fontSize: 16),
                                       ),
                                     ),
-                                    const Icon(
-                                      Icons.navigate_next,
-                                      size: 25,
+                                    title: Text(
+                                      state.allProduct[index].name,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ],
+                                    subtitle: Text(
+                                      'Calories: ${state.allProduct[index].calories.toString()}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: calorieColor),
+                                    ),
+                                    trailing: IconButton(
+                                        icon: Icon(
+                                          Icons.remove_circle_outline,
+                                          color: myBlue,
+                                        ),
+                                        onPressed: () {
+                                          BlocProvider.of<HomePageBloc>(context)
+                                              .add(RemoveSpecificFoodEvent(
+                                            foodID: state.allProduct[index].id,
+                                          ));
+                                          BlocProvider.of<HomePageBloc>(context)
+                                              .add(HomePageLoadEvent());
+                                        },
+                                        color: myBlue),
+                                  ),
+                                );
+                              },
+                            ),
+                      state.allProduct.length > 3
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                // color: primaryColor,
+                                width: Get.width * 0.25,
+                                child: GestureDetector(
+                                  onTap: () => Get.to(() => Everydaymeal()),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'See All',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const Icon(
+                                        Icons.navigate_next,
+                                        size: 25,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
                 ),
               ),
             ),

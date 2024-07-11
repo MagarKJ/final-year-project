@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:final_project/controller/apis/add_food_repository.dart';
+import 'package:final_project/model/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,9 +27,11 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
     emit(AddFoodLoadingState());
     try {
       String url = event.url;
+      String url1 = event.url1;
       // Fetch all products
       dynamic allFood = await allProductRepository.fetchAllProduct(url: url);
-      dynamic premiumFood = await allProductRepository.fetchPremiumProducts();
+      dynamic premiumFood =
+          await allProductRepository.fetchPremiumProducts(url: url1);
       List<dynamic> meals = allFood['meals'];
       List<dynamic> premiumFoods = premiumFood['Meals'];
       // Ensure allFood is a List of Maps
