@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 Color secondaryColor = const Color(0xff26D616);
 Color primaryColor = const Color(0xff59C9ED);
 
@@ -59,4 +61,22 @@ String getFirstandLastNameInitals(String fullName) {
   }
   List<String> name = fullName.split(' ');
   return name[0][0] + name[1][0];
+}
+
+String extractMonthAndDay(String createdAt) {
+  DateTime dateTime = DateTime.parse(createdAt);
+  String month = dateTime.month.toString().padLeft(2, '0');
+  String day = dateTime.day.toString().padLeft(2, '0');
+  return '$month-$day';
+}
+
+
+OutlineInputBorder customFocusBorder() {
+  return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: secondaryColor, width: 2));
+}
+
+TextStyle floatingLabelTextStyle() {
+  return TextStyle(color: secondaryColor, fontSize: 13);
 }

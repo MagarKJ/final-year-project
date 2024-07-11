@@ -4,15 +4,15 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../model/analtics_model.dart';
 
-class WaterGraph extends StatefulWidget {
+class CalorieGraphhh extends StatefulWidget {
   final List<AnalticsModel> analytics;
-  const WaterGraph({Key? key, required this.analytics}) : super(key: key);
+  const CalorieGraphhh({Key? key, required this.analytics}) : super(key: key);
 
   @override
   _StepDataPageState createState() => _StepDataPageState();
 }
 
-class _StepDataPageState extends State<WaterGraph> {
+class _StepDataPageState extends State<CalorieGraphhh> {
   // late List<Map<String, dynamic>> _stepData = [
 
   // ];
@@ -43,7 +43,7 @@ class _StepDataPageState extends State<WaterGraph> {
             //     ?
             SfCartesianChart(
           primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Water')),
+          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Calories')),
           // series: <ChartSeries<Map<String, dynamic>, String>>[
           //   LineSeries<Map<String, dynamic>, String>(
           //     dataSource: _stepData,
@@ -60,8 +60,8 @@ class _StepDataPageState extends State<WaterGraph> {
               xValueMapper: (AnalticsModel data, _) =>
                   extractMonthAndDay(data.date),
               yValueMapper: (AnalticsModel data, _) =>
-                  double.parse(data.volume),
-              name: 'Volume',
+                  double.parse(data.calories),
+              name: 'Calories',
               // Enable data label
               // dataLabelSettings: DataLabelSettings(isVisible: true),
             ),

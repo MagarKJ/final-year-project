@@ -9,7 +9,13 @@ final class SignupRequestedEvent extends SignupEvent {
   final String age;
   final String phoneno;
   final String password;
-  final String confirmPassword;
+  final String sex;
+  final String weight;
+  final String ethnicity;
+  final String bodytype;
+  final String bodygoal;
+  final String bloodPressue;
+  final String bloodSugar;
 
   SignupRequestedEvent({
     required this.email,
@@ -17,10 +23,14 @@ final class SignupRequestedEvent extends SignupEvent {
     required this.phoneno,
     required this.age,
     required this.password,
-    required this.confirmPassword,
+    required this.sex,
+    required this.weight,
+    required this.bloodPressue,
+    required this.bloodSugar,
+    required this.bodygoal,
+    required this.bodytype,
+    required this.ethnicity,
   });
 }
 
-final class GoogleSignupRequestedEvent extends SignupEvent {
-  
-}
+final class GoogleSignupRequestedEvent extends SignupEvent {}

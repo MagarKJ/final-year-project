@@ -2,6 +2,7 @@
 import "dart:developer";
 
 import "package:final_project/controller/bloc/addFood/add_food_bloc.dart";
+import "package:final_project/controller/bloc/analytics/analytics_bloc.dart";
 import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
 import "package:final_project/controller/bloc/login/login_bloc.dart";
 import "package:final_project/controller/bloc/notification/notification_bloc.dart";
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddFoodBloc>(
           create: (context) => AddFoodBloc(),
         ),
+        BlocProvider<AnalyticsBloc>(
+          create: (context) => AnalyticsBloc(),
+        ),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -81,4 +85,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

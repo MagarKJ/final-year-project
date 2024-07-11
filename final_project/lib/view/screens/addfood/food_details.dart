@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
 
 class FoodDesc extends StatefulWidget {
   final String image;
+  final int foodId;
   final String name;
   final String ammount;
   final String description;
@@ -17,8 +19,10 @@ class FoodDesc extends StatefulWidget {
   final String protein;
   final String fat;
   final String sodium;
-  FoodDesc({
-    Key? key,
+  final bool isToRemove;
+  const FoodDesc({
+    super.key,
+    required this.foodId,
     required this.image,
     required this.name,
     required this.ammount,
@@ -28,7 +32,8 @@ class FoodDesc extends StatefulWidget {
     required this.protein,
     required this.fat,
     required this.sodium,
-  }) : super(key: key);
+    required this.isToRemove,
+  });
 
   @override
   State<FoodDesc> createState() => _FoodDescState();
@@ -208,99 +213,129 @@ class _FoodDescState extends State<FoodDesc> {
           const SizedBox(
             height: 25,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
+          widget.isToRemove == false
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.green),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (counter > 1) {
+                                  counter--;
+                                }
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.02,
+                        ),
+                        Text(
+                          '$counter',
+                          style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 27),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.02,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.green),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                counter++;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: Get.height * 0.05,
+                      width: Get.width * 0.3,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          BlocProvider.of<AddFoodBloc>(context)
+                              .add(AddFoodButtonPressedEvent(
+                            foodName: widget.name,
+                            foodCalories: widget.calories,
+                            foodCarbs: widget.carbs,
+                            foodProtein: widget.protein,
+                            foodFat: widget.fat,
+                            foodSodium: widget.sodium,
+                          ));
+
+                          BlocProvider.of<AddFoodBloc>(context)
+                              .add(AddFoodLoadedEvent(url: '/api/meals'));
+
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'ADD FOOD',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Center(
+                  child: Container(
+                    height: Get.height * 0.05,
+                    // width: Get.width * 0.3,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.green),
-                    child: IconButton(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextButton(
                       onPressed: () {
-                        setState(() {
-                          if (counter > 1) {
-                            counter--;
-                          }
-                        });
+                        BlocProvider.of<HomePageBloc>(context)
+                            .add(RemoveSpecificFoodEvent(
+                          foodID: widget.foodId,
+                        ));
+                        BlocProvider.of<AddFoodBloc>(context)
+                            .add(AddFoodLoadedEvent(url: '/api/meals'));
+
+                        Navigator.pop(context);
                       },
-                      icon: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                        size: 20,
+                      child: Text(
+                        'REMOVE FOOD',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: Get.width * 0.02,
-                  ),
-                  Text(
-                    '$counter',
-                    style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 27),
-                  ),
-                  SizedBox(
-                    width: Get.width * 0.02,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.green),
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          counter++;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: Get.height * 0.05,
-                width: Get.width * 0.3,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: TextButton(
-                  onPressed: () {
-                    BlocProvider.of<AddFoodBloc>(context)
-                        .add(AddFoodButtonPressedEvent(
-                      userId: 1,
-                      foodName: widget.name,
-                      foodCalories: widget.calories,
-                      foodCarbs: widget.carbs,
-                      foodProtein: widget.protein,
-                      foodFat: widget.fat,
-                      foodSodium: widget.sodium,
-                    ));
-
-                    BlocProvider.of<AddFoodBloc>(context)
-                        .add(AddFoodLoadedEvent());
-
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'ADD FOOD',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -309,6 +344,7 @@ class _FoodDescState extends State<FoodDesc> {
 
 void showFoodDesc({
   required context,
+  required int foodId,
   required String image,
   required String name,
   required String ammount,
@@ -318,11 +354,13 @@ void showFoodDesc({
   required String protein,
   required String fat,
   required String sodium,
+  bool isToRemove = false,
 }) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return FoodDesc(
+        foodId: foodId,
         image: image,
         name: name,
         ammount: ammount,
@@ -332,6 +370,7 @@ void showFoodDesc({
         protein: protein,
         fat: fat,
         sodium: sodium,
+        isToRemove: isToRemove,
       );
     },
   );

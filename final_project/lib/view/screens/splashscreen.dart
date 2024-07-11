@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
+import 'package:final_project/view/screens/onboardingscreen/on_boarding.dart';
 import 'package:final_project/view/screens/onboardingscreen/onbardingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,8 +22,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
+    getInfo();
     whereToGo();
+  }
+
+  void getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    name = prefs.getString('name') ?? '';
+    email1 = prefs.getString('email') ?? '';
+    userId = prefs.getInt('userId') ?? '';
+    token = prefs.getString('token') ?? '';
+    log(name);
+    log(email1);
+    log(userId.toString());
+    log(token);
   }
 
   @override
@@ -49,9 +65,9 @@ class _SplashScreenState extends State<SplashScreen> {
 //if value false xa vane onboard screen ma janxa else bottom navigation bar ma janxa.
 //Navigation bar vaneko home page ko bottom navigation bar homepage vanda hunxa
     if (isLoggedIn) {
-      Get.offAll(() =>  MyBottomNavigationBar());
+      Get.offAll(() => MyBottomNavigationBar());
     } else {
-      Get.offAll(() => const OnBoardScreen());
+      Get.offAll(() => const OnboardingScreen());
     }
   }
 }

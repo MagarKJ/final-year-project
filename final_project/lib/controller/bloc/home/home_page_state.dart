@@ -9,9 +9,12 @@ final class HomePageLoadingState extends HomePageState {}
 
 final class HomePageLoadedState extends HomePageState {
   List<ProductDataModel> allProduct;
+  List<NutrientsModel> nutrients;
+
 
   HomePageLoadedState({
     required this.allProduct,
+    required this.nutrients,
   });
 }
 

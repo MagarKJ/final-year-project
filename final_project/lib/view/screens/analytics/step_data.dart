@@ -2,17 +2,17 @@ import 'package:final_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../../model/analtics_model.dart';
+import '../../../model/analtics_model.dart';
 
-class WaterGraph extends StatefulWidget {
+class StepDataPage extends StatefulWidget {
   final List<AnalticsModel> analytics;
-  const WaterGraph({Key? key, required this.analytics}) : super(key: key);
+  const StepDataPage({Key? key, required this.analytics}) : super(key: key);
 
   @override
   _StepDataPageState createState() => _StepDataPageState();
 }
 
-class _StepDataPageState extends State<WaterGraph> {
+class _StepDataPageState extends State<StepDataPage> {
   // late List<Map<String, dynamic>> _stepData = [
 
   // ];
@@ -42,8 +42,8 @@ class _StepDataPageState extends State<WaterGraph> {
             // _dataLoaded // Check the flag to determine whether to show the chart or not
             //     ?
             SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Water')),
+          primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis: NumericAxis(title: AxisTitle(text: 'Steps')),
           // series: <ChartSeries<Map<String, dynamic>, String>>[
           //   LineSeries<Map<String, dynamic>, String>(
           //     dataSource: _stepData,
@@ -59,9 +59,8 @@ class _StepDataPageState extends State<WaterGraph> {
               dataSource: widget.analytics,
               xValueMapper: (AnalticsModel data, _) =>
                   extractMonthAndDay(data.date),
-              yValueMapper: (AnalticsModel data, _) =>
-                  double.parse(data.volume),
-              name: 'Volume',
+              yValueMapper: (AnalticsModel data, _) => double.parse(data.fat),
+              name: 'Carbs',
               // Enable data label
               // dataLabelSettings: DataLabelSettings(isVisible: true),
             ),

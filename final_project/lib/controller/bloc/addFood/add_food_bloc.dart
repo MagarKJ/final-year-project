@@ -17,7 +17,7 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
     on<AddFoodButtonPressedEvent>(_onAddFoodButtonPressedEvent);
   }
 
-  FutureOr<void> _onAddFoodLoadedEvent(
+  void _onAddFoodLoadedEvent(
     AddFoodLoadedEvent event,
     Emitter<AddFoodState> emit,
   ) async {
@@ -25,8 +25,9 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
     emit(AddFoodLoadingState());
     try {
+      String url = event.url;
       // Fetch all products
-      dynamic allFood = await allProductRepository.fetchAllProduct();
+      dynamic allFood = await allProductRepository.fetchAllProduct(url: url);
       dynamic premiumFood = await allProductRepository.fetchPremiumProducts();
       List<dynamic> meals = allFood['meals'];
       List<dynamic> premiumFoods = premiumFood['Meals'];
@@ -53,7 +54,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       AddFoodRepository addFoodRepository = AddFoodRepository();
       emit(AddFoodButtonPressedLoadingState());
       dynamic addFood = await addFoodRepository.addFood(
-        userId: event.userId,
         foodName: event.foodName,
         foodCalories: event.foodCalories,
         foodCarbs: event.foodCarbs,
@@ -64,7 +64,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
       emit(
         AddFoodButtonPressedLoadedState(addFood: addFood),
-     
       );
     } catch (ex) {
       emit(AddFoodButtonPressedErrorState(message: ex.toString()));
