@@ -18,6 +18,7 @@ final class UpdateUserData extends ProfileEvent {
   final String bloodPressue;
   final String bloodSugar;
 
+
   UpdateUserData({
     required this.email,
     required this.name,
@@ -30,5 +31,6 @@ final class UpdateUserData extends ProfileEvent {
     required this.bodygoal,
     required this.bodytype,
     required this.ethnicity,
+  
   });
 }

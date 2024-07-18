@@ -4,15 +4,15 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../model/analtics_model.dart';
 
-class StepDataPage extends StatefulWidget {
+class FatsGraph extends StatefulWidget {
   final List<AnalticsModel> analytics;
-  const StepDataPage({Key? key, required this.analytics}) : super(key: key);
+  const FatsGraph({Key? key, required this.analytics}) : super(key: key);
 
   @override
   _StepDataPageState createState() => _StepDataPageState();
 }
 
-class _StepDataPageState extends State<StepDataPage> {
+class _StepDataPageState extends State<FatsGraph> {
   @override
   void initState() {
     super.initState();
@@ -25,19 +25,18 @@ class _StepDataPageState extends State<StepDataPage> {
         height: 350,
         child: SfCartesianChart(
           primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Steps')),
+          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Fats')),
           series: [
-            // widget.analytics,
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
               xValueMapper: (AnalticsModel data, _) =>
                   extractMonthAndDay(data.date),
-              yValueMapper: (AnalticsModel data, _) => double.parse(data.steps),
-              name: 'Steps',
+              yValueMapper: (AnalticsModel data, _) => double.parse(data.fat),
+              name: 'Fats',
             ),
           ],
           title: const ChartTitle(
-              text: 'Step Count', alignment: ChartAlignment.near),
+              text: 'Fats Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair
             lineType: CrosshairLineType

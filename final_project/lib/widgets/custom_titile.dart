@@ -18,14 +18,14 @@ class CustomTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.only(bottom: 12, left: 6),
         child: Column(
           children: [
             Text(
               title,
               style: GoogleFonts.poppins(
                 fontSize: fontSize,
-                fontWeight: isAppbar ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: isAppbar ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
           ],

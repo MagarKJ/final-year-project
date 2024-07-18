@@ -178,16 +178,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 25,
                             title: "Today's Food",
                           ),
-                          TextButton.icon(
-                            onPressed: () {
-                              log('add food');
-                              Get.to(() => MyBottomNavigationBar(
-                                    currentIndex: 1,
-                                  ));
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text("Add Meals"),
-                          ),
+                          state.allProduct.length > 4
+                              ? TextButton(
+                                  onPressed: () {
+                                    log('add food');
+                                    Get.offAll(() => const Everydaymeal());
+                                  },
+                                  child: const Text("See All"),
+                                )
+                              : const SizedBox.shrink(),
                         ],
                       ),
                       state.allProduct.isEmpty
@@ -197,8 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: state.allProduct.length > 3
-                                  ? 3
+                              itemCount: state.allProduct.length > 4
+                                  ? 4
                                   : state.allProduct.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
@@ -259,6 +258,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 );
                                               },
+                                              placeholder: (context, url) {
+                                                return Image.asset(
+                                                  'assets/no_food.jpeg',
+                                                  fit: BoxFit.fitHeight,
+                                                );
+                                              },
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Image.asset(
+                                                'assets/no_food.jpeg',
+                                                fit: BoxFit.fitHeight,
+                                              ),
                                             ),
                                     ),
                                     title: Text(
@@ -290,33 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               },
                             ),
-                      state.allProduct.length > 3
-                          ? Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                // color: primaryColor,
-                                width: Get.width * 0.25,
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      Get.offAll(() => const Everydaymeal()),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'See All',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      const Icon(
-                                        Icons.navigate_next,
-                                        size: 25,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),

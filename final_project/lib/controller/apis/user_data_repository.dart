@@ -36,17 +36,18 @@ class GetUserData {
   }
 
   Future<dynamic> updateUserData({
-    required dynamic name,
-    required dynamic age,
-    required dynamic phoneno,
-    required dynamic email,
-    required dynamic sex,
-    required dynamic weight,
-    required dynamic ethnicity,
-    required dynamic bodytype,
-    required dynamic bodygoal,
-    required dynamic bloodPressue,
-    required dynamic bloodSugar,
+    dynamic name,
+    dynamic age,
+    dynamic phoneno,
+    dynamic email,
+    dynamic sex,
+    dynamic weight,
+    dynamic ethnicity,
+    dynamic bodytype,
+    dynamic bodygoal,
+    dynamic bloodPressue,
+    dynamic bloodSugar,
+    dynamic image,
   }) async {
     var value = {
       "email": email,
@@ -60,6 +61,7 @@ class GetUserData {
       "bodyGoal": bodygoal,
       "bloodPressure": bloodPressue,
       "bloodSugar": bloodSugar,
+      "photo": image
     };
 
     try {

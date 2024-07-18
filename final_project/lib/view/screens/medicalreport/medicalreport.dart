@@ -1,3 +1,4 @@
+import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/screens/home/note_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,10 @@ class MedicalReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
+        surfaceTintColor: whiteColor,
+        backgroundColor: whiteColor,
         title: const CustomTitle(
           fontSize: 25,
           isAppbar: true,

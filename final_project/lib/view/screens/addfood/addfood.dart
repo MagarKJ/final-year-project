@@ -26,15 +26,15 @@ class _AddFoodState extends State<AddFood> {
 
   int? groupVal;
 
-  @override
-  void initState() {
-    super.initState();
-    selectedIndex == 0
-        ? BlocProvider.of<AddFoodBloc>(context)
-            .add(AddFoodLoadedEvent(url: '/api/meals'))
-        : BlocProvider.of<AddFoodBloc>(context)
-            .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   selectedIndex == 0
+  //       ? BlocProvider.of<AddFoodBloc>(context)
+  //           .add(AddFoodLoadedEvent(url: '/api/meals'))
+  //       : BlocProvider.of<AddFoodBloc>(context)
+  //           .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,10 @@ class _AddFoodState extends State<AddFood> {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
+          backgroundColor: whiteColor,
           appBar: AppBar(
+            surfaceTintColor: whiteColor,
+            backgroundColor: whiteColor,
             title: const CustomTitle(
               fontSize: 25,
               isAppbar: true,
@@ -341,6 +344,18 @@ class _AddFoodState extends State<AddFood> {
                                                       ),
                                                     );
                                                   },
+                                                  placeholder: (context, url) {
+                                                    return Image.asset(
+                                                      'assets/no_food.jpeg',
+                                                      fit: BoxFit.fitHeight,
+                                                    );
+                                                  },
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'assets/no_food.jpeg',
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
                                                 ),
                                         ),
                                         title: Text(
@@ -434,6 +449,18 @@ class _AddFoodState extends State<AddFood> {
                                                       ),
                                                     );
                                                   },
+                                                  placeholder: (context, url) {
+                                                    return Image.asset(
+                                                      'assets/no_food.jpeg',
+                                                      fit: BoxFit.fitHeight,
+                                                    );
+                                                  },
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'assets/no_food.jpeg',
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
                                                 ),
                                         ),
                                         title: Text(

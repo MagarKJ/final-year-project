@@ -163,6 +163,18 @@ class _AddFoodState extends State<Everydaymeal> {
                                                 ),
                                               );
                                             },
+                                            placeholder: (context, url) {
+                                              return Image.asset(
+                                                'assets/no_food.jpeg',
+                                                fit: BoxFit.fitHeight,
+                                              );
+                                            },
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Image.asset(
+                                              'assets/no_food.jpeg',
+                                              fit: BoxFit.fitHeight,
+                                            ),
                                           ),
                                   ),
                                   title: Text(

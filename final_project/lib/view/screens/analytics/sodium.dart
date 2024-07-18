@@ -4,20 +4,15 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../model/analtics_model.dart';
 
-class StepDataPage extends StatefulWidget {
+class SodiumGraph extends StatefulWidget {
   final List<AnalticsModel> analytics;
-  const StepDataPage({Key? key, required this.analytics}) : super(key: key);
+  const SodiumGraph({Key? key, required this.analytics}) : super(key: key);
 
   @override
   _StepDataPageState createState() => _StepDataPageState();
 }
 
-class _StepDataPageState extends State<StepDataPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _StepDataPageState extends State<SodiumGraph> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -25,19 +20,19 @@ class _StepDataPageState extends State<StepDataPage> {
         height: 350,
         child: SfCartesianChart(
           primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Steps')),
+          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Sodium')),
           series: [
-            // widget.analytics,
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
               xValueMapper: (AnalticsModel data, _) =>
                   extractMonthAndDay(data.date),
-              yValueMapper: (AnalticsModel data, _) => double.parse(data.steps),
-              name: 'Steps',
+              yValueMapper: (AnalticsModel data, _) =>
+                  double.parse(data.sodium),
+              name: 'Sodium',
             ),
           ],
           title: const ChartTitle(
-              text: 'Step Count', alignment: ChartAlignment.near),
+              text: 'Sodium Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair
             lineType: CrosshairLineType

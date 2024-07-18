@@ -7,6 +7,7 @@ class AnalticsModel {
   final String protein;
   final String sodium;
   final String volume;
+  final String steps;
   final String date;
 
   AnalticsModel({
@@ -18,6 +19,7 @@ class AnalticsModel {
     required this.protein,
     required this.sodium,
     required this.volume,
+    required this.steps,
     required this.date,
   });
 
@@ -31,6 +33,7 @@ class AnalticsModel {
       protein: json['protein'],
       sodium: json['sodium'],
       volume: json['volume'],
+      steps: json['steps'],
       date: json['created_at'],
     );
   }

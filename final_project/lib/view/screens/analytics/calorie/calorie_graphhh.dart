@@ -13,48 +13,20 @@ class CalorieGraphhh extends StatefulWidget {
 }
 
 class _StepDataPageState extends State<CalorieGraphhh> {
-  // late List<Map<String, dynamic>> _stepData = [
-
-  // ];
-
-  bool _dataLoaded = true; // Add a flag to track data loading
-
   @override
   void initState() {
     super.initState();
-    // fetchStepData();
   }
-
-  // Future<void> fetchStepData() async {
-  //   // final stepData = await SQLHelper.getAllStepTrackerData();
-  //   setState(() {
-  //     _stepData = stepData;
-  //     _dataLoaded = true; // Set the flag to true when data is loaded
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 300,
-        child:
-            // _dataLoaded // Check the flag to determine whether to show the chart or not
-            //     ?
-            SfCartesianChart(
+        height: 350,
+        child: SfCartesianChart(
           primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
           primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Calories')),
-          // series: <ChartSeries<Map<String, dynamic>, String>>[
-          //   LineSeries<Map<String, dynamic>, String>(
-          //     dataSource: _stepData,
-          //     xValueMapper: (datum, _) =>
-          //         (datum['id'] ?? '').toString(),
-          //     yValueMapper: (datum, _) => datum['steps'] as int,
-          //   ),
-          // ],
-
           series: [
-            // widget.analytics,
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
               xValueMapper: (AnalticsModel data, _) =>
@@ -62,10 +34,10 @@ class _StepDataPageState extends State<CalorieGraphhh> {
               yValueMapper: (AnalticsModel data, _) =>
                   double.parse(data.calories),
               name: 'Calories',
-              // Enable data label
-              // dataLabelSettings: DataLabelSettings(isVisible: true),
             ),
           ],
+          title: const ChartTitle(
+              text: 'Calories Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair
             lineType: CrosshairLineType
@@ -77,13 +49,6 @@ class _StepDataPageState extends State<CalorieGraphhh> {
             activationMode:
                 ActivationMode.singleTap, // Set the activation mode as needed
           ),
-        )
-        // : const Center(
-        //     child: Text(
-        //       'No step data available',
-        //       style: TextStyle(fontSize: 16),
-        //     ),
-        //   ),
-        );
+        ));
   }
 }

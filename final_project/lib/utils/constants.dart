@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Color secondaryColor = const Color(0xff26D616);
 Color primaryColor = const Color(0xff59C9ED);
@@ -79,4 +80,10 @@ OutlineInputBorder customFocusBorder() {
 
 TextStyle floatingLabelTextStyle() {
   return TextStyle(color: secondaryColor, fontSize: 13);
+}
+Future<void> saveImage(String image) async {
+  var prefs = await SharedPreferences.getInstance();
+  prefs.setString('image', image);
+
+  print("image saved to device.");
 }

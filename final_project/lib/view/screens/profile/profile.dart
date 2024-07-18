@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/profile/image.dart';
 import 'package:final_project/view/screens/profile/profile_editor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -158,14 +158,9 @@ class _CustomDrawerState extends State<ProfilePage> {
                           height: 0,
                         ),
                         ListTile(
-                          onTap: () {
-                            // Navigate to the Learning Dashboard
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) => const LearningDashboard(),
-                            // ));
-                          },
-                          title: const Text('Learning Dashboard'),
-                          leading: Icon(Icons.school,
+                          onTap: () {},
+                          title: const Text('Premium Meals'),
+                          leading: Icon(Icons.restaurant,
                               color: secondaryColor), // Customize the icon
                           trailing: Icon(
                             Icons.arrow_forward_ios,
@@ -175,18 +170,11 @@ class _CustomDrawerState extends State<ProfilePage> {
                         const Divider(
                           height: 0,
                         ),
-                        // Add more ListTile items for other options as needed
-                        // Example:
                         ListTile(
-                          onTap: () {
-                            // Navigate to My Downloads
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) => const Downloads(),
-                            // ));
-                          },
-                          title: const Text('My Downloads'),
+                          onTap: () {},
+                          title: const Text('Reminders'),
                           leading: Icon(
-                            Icons.download_rounded,
+                            Icons.alarm,
                             color: secondaryColor,
                           ), // Customize the icon
                           trailing: Icon(
@@ -194,56 +182,16 @@ class _CustomDrawerState extends State<ProfilePage> {
                             color: secondaryColor,
                           ),
                         ),
-
-                        const Divider(
-                          height: 0,
-                        ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     Get.to(
-                        //       () => const StudyMaterials(),
-                        //     );
-                        //   },
-                        //   title: const Text('Study Materials'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.bookOpenReader,
-                        //   ), // Customize the icon
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     Get.to(() => NotesPage());
-                        //   },
-                        //   title: const Text('Student Plan'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.noteSticky,
-                        //   ), // Customize the icon
-                        // ),
-
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-
                         const Divider(
                           height: 0,
                         ),
                         Visibility(
                           visible: Platform.isAndroid,
                           child: ListTile(
-                            onTap: () {
-                              // Navigate to Purchase History
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //   builder: (context) => BlocProvider(
-                              //     create: (context) => TransactionsCubit(),
-                              //     child: const PurchaseHistory(),
-                              //   ),
-                              // ));
-                            },
-                            title: const Text('Purchase History'),
+                            onTap: () {},
+                            title: const Text('Change Password'),
                             leading: Icon(
-                              Icons.shopping_cart,
+                              Icons.lock,
                               color: secondaryColor,
                             ), // Customize the icon
                             trailing: Icon(
@@ -255,156 +203,25 @@ class _CustomDrawerState extends State<ProfilePage> {
                         const Divider(
                           height: 0,
                         ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Assignments
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => BlocProvider(
-                        //           create: (context) => AssignmentCubit(),
-                        //           child: const Assignments(),
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        //   title: const Text('Assignments'),
-                        //   leading: const Icon(Icons.assignment), // Customize the icon
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Assignments
-                        //     Get.to(() => const ExamResults());
-                        //   },
-                        //   title: const Text('Exam Results'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.rankingStar,
-                        //   ), // Customize the icon
-                        // ),
-                        const Divider(
-                          height: 0,
-                        ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Assignments
-                        //     Get.to(() => const SyllabusScreen());
-                        //   },
-                        //   title: const Text('Syllabus'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.bookOpen,
-                        //   ), // Customize the icon
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Assignments
-                        //     Get.to(() => BlocProvider(
-                        //           create: (context) => CourseStatsCubit(),
-                        //           child: StatsPage(),
-                        //         ));
-                        //   },
-                        //   title: const Text('Course Stats'),
-                        //   leading: const Icon(Icons.table_chart), // Customize the icon
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Assignments
-                        //     Get.to(
-                        //       () => BlocProvider(
-                        //         create: (context) => UserActivityCubit(),
-                        //         child: LoginHistoryPage(),
-                        //       ),
-                        //     );
-                        //   },
-                        //   title: const Text('Login History'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.timeline,
-                        //   ), // Customize the icon
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        Visibility(
-                          visible: Platform.isAndroid,
-                          child: ListTile(
-                            onTap: () {
-                              // Navigate to Expired Courses
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => BlocProvider(
-                              //       create: (context) =>
-                              //           DashboardCoursesCubit(),
-                              //       child: const ExpiredCourses(),
-                              //     ),
-                              //   ),
-                              // );
-                            },
-                            title: const Text(
-                              'Expired Courses',
-                            ),
-                            leading: Icon(
-                              Icons.timer_off,
-                              color: secondaryColor,
-                            ), // Customize the icon
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
-                        // ListTile(
-                        //   onTap: () {
-                        //     // Navigate to Share and Earn
-                        //     Get.to(
-                        //       () => const ResumeMaker(),
-                        //     );
-                        //   },
-                        //   title: const Text('Resume Maker'),
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.fileWord,
-                        //   ), // Customize the icon
-                        // ),
-                        const Divider(
-                          height: 0,
-                        ),
-                        // Visibility(
-                        //   visible: Platform.isAndroid,
-                        //   child: ListTile(
-                        //     onTap: () {
-                        //       // Navigate to Share and Earn
-                        //       Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //           builder: (context) => const ShareEarn(),
-                        //         ),
-                        //       );
-                        //     },
-                        //     title: const Text('Share and Earn'),
-                        //     leading: const Icon(Icons.share), // Customize the icon
-                        //   ),
-                        // ),
-                        // const Divider(
-                        //   height: 0,
-                        // ),
                         ListTile(
-                          onTap: () {
-                            // Get.to(() => BlocProvider(
-                            //       create: (context) => FeedbackCubit(),
-                            //       child: const FeedBackPage(),
-                            //     ));
-                          },
+                          onTap: () {},
+                          title: const Text(
+                            'Terms and conditions',
+                          ),
+                          leading: Icon(
+                            Icons.sticky_note_2,
+                            color: secondaryColor,
+                          ), // Customize the icon
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: secondaryColor,
+                          ),
+                        ),
+                        const Divider(
+                          height: 0,
+                        ),
+                        ListTile(
+                          onTap: () {},
                           title: const Text('Feedback'),
                           leading: Icon(
                             Icons.feed,
@@ -418,7 +235,6 @@ class _CustomDrawerState extends State<ProfilePage> {
                         const Divider(
                           height: 0,
                         ),
-
                         ListTile(
                           onTap: () async {
                             // final prefs =
@@ -470,56 +286,59 @@ class _CustomDrawerState extends State<ProfilePage> {
                     right: 0,
                     child: Transform.translate(
                       offset: const Offset(0, -70),
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.transparent,
-                            width: 2,
+                      child: GestureDetector(
+                        onTap: () => Get.to(() => const ProfileImage()),
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.transparent,
+                              width: 2,
+                            ),
                           ),
-                        ),
-                        child: image == null || image == ''
-                            ? Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    shape: BoxShape.circle),
-                                child: Center(
-                                  child: Text(
-                                    getFirstandLastNameInitals(
-                                        name.toString().toUpperCase()),
-                                    style: TextStyle(
-                                        color: whiteColor, fontSize: 76),
-                                  ),
-                                ),
-                              )
-                            : CachedNetworkImage(
-                                imageBuilder: (context, imageProvider) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.fitHeight,
-                                      ),
+                          child: image == null || image == ''
+                              ? Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      shape: BoxShape.circle),
+                                  child: Center(
+                                    child: Text(
+                                      getFirstandLastNameInitals(
+                                          name.toString().toUpperCase()),
+                                      style: TextStyle(
+                                          color: whiteColor, fontSize: 76),
                                     ),
-                                  );
-                                },
-                                imageUrl: '$imageBaseUrl/user-photos/$image',
-                                placeholder: (context, url) => Image.asset(
-                                  'assets/others/no-image.png',
-                                  fit: BoxFit.cover,
+                                  ),
+                                )
+                              : CachedNetworkImage(
+                                  imageBuilder: (context, imageProvider) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  imageUrl: '$imageBaseUrl/user-photos/$image',
+                                  placeholder: (context, url) => Image.asset(
+                                    'assets/no_user.png',
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    'assets/no_user.png',
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                  fit: BoxFit.fitHeight,
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  'assets/others/no-image.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                fit: BoxFit.scaleDown,
-                              ),
+                        ),
                       ),
                     ),
                   ),

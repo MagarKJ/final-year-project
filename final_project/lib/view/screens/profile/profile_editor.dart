@@ -273,6 +273,7 @@ class _EditYourProfileState extends State<EditYourProfile> {
                           bodygoal: bodyGoalController.text.trim(),
                           bloodPressue: bpController.text.trim(),
                           bloodSugar: sugarController.text.trim(),
+                       
                         ),
                       );
                     },
