@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/home/everydaymeal.dart';
-import 'package:final_project/view/screens/home/note_list.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:final_project/view/screens/home/step_counter2.dart';
