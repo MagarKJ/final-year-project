@@ -63,6 +63,7 @@ dependencies:
   # flutter_circular_chart: ^0.4.1
   # android_alarm_manager_plus: ^4.0.3
   shimmer: ^3.0.0
+  numberpicker: ^2.1.2
 
   
 dev_dependencies:

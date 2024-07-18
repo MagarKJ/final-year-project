@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
+
 import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/authentication/login.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/widgets/custom_button.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -33,7 +37,29 @@ class _CreateAccountState extends State<CreateAccount> {
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
   bool _showConfirmPassword = false;
+  int _currentAge = 0;
 
+  String? selectedGender;
+  String? selectedEthnicity;
+  String? selectedBodyType;
+  String? selectedBodyGoal;
+
+  final List<String> genders = ["Male", "Female", "Other"];
+  final List<String> ethnicities = [
+    "Asian",
+    "African",
+    "Caucasian",
+    "Hispanic",
+    "Others"
+  ];
+  final List<String> bodyTypes = [
+    "Morbidly Obese",
+    "Obese",
+    "Over Weight",
+    "Average",
+    "Lean"
+  ];
+  final List<String> bodyGoals = ["Lean", "Muscular", "Slim", "Fatloss"];
   @override
   void dispose() {
     emailController.dispose();
@@ -51,166 +77,295 @@ class _CreateAccountState extends State<CreateAccount> {
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: Get.height * 0.12,
-              ),
-              SizedBox(
-                height: Get.height * 0.06,
-                width: Get.width * 0.831,
-                child: Text(
-                  "Create an account",
-                  style: GoogleFonts.jost(
-                    fontSize: 21,
-                    color: black,
-                    fontWeight: FontWeight.w700,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: Get.height * 0.15,
+                      child: Image.asset("assets/logo/splashscreen.png"),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.02,
-              ),
-              Form(
-                key: formKey,
-                child: SizedBox(
-                  width: Get.width * 0.831,
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        controller: nameController,
-                        prefixIcon: Icons.person,
-                        hintText: "Full Name",
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Text(
+                        "Create an account",
+                        style: GoogleFonts.inter(
+                          fontSize: 28,
+                          color: black,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        prefixIcon: Icons.mail,
-                        hintText: "Email",
-                        obscureText: false,
-                        controller: emailController,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        controller: phonenoController,
-                        prefixIcon: Icons.call,
-                        hintText: "Phone No",
-                        keyboardType: TextInputType.phone,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        controller: ageController,
-                        prefixIcon: Icons.person,
-                        hintText: "Age",
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        controller: weightController,
-                        prefixIcon: Icons.monitor_weight,
-                        hintText: "Weight",
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomDropDownField(
-                        controller: sexController,
-                        hintText: 'Sex',
-                        prefixIcon: Icons.safety_check,
-                        selectSomething: 'Select Your Sex',
-                        option1: 'Male',
-                        option2: 'Female',
-                        option3: 'Others',
-                        option4: null,
-                        option5: null,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        controller: bpController,
-                        prefixIcon: Icons.bloodtype,
-                        hintText: "Blood Pressure",
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        controller: sugarController,
-                        prefixIcon: Icons.bloodtype,
-                        hintText: "Sugar Level",
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomDropDownField(
-                        controller: sexController,
-                        hintText: 'Ethnicity',
-                        prefixIcon: Icons.safety_check,
-                        selectSomething: 'Select Your Ethnicity',
-                        option1: 'Asian',
-                        option2: 'African',
-                        option3: 'Caucasian',
-                        option4: 'Hispanic',
-                        option5: 'Others',
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomDropDownField(
-                        controller: sexController,
-                        hintText: 'Body Type',
-                        prefixIcon: Icons.safety_check,
-                        selectSomething: 'Select Your BodyType',
-                        option1: 'Morbidly Obese',
-                        option2: 'Obese',
-                        option3: 'Over Weight',
-                        option4: 'Average',
-                        option5: 'Lean',
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomDropDownField(
-                        controller: sexController,
-                        hintText: 'Body Goal',
-                        prefixIcon: Icons.safety_check,
-                        selectSomething: 'Select Your BodyGoal',
-                        option1: 'Lean',
-                        option2: 'Muscular',
-                        option3: 'Slim',
-                        option4: 'Fatloss',
-                        option5: null,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        prefixIcon: Icons.lock,
-                        hintText: "Password",
-                        obscureText: true,
-                        showPassword: _showPassword,
-                        onTogglePassword: (bool show) {
-                          setState(() {
-                            _showPassword = show;
-                          });
-                        },
-                        controller: passwordController,
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      CustomTextField(
-                        prefixIcon: Icons.lock,
-                        hintText: "Confirm Password",
-                        obscureText: true,
-                        showPassword: _showConfirmPassword,
-                        onTogglePassword: (bool show) {
-                          setState(() {
-                            _showConfirmPassword = show;
-                          });
-                        },
-                        controller: confirmPasswordController,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.01,
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: Get.width * 0.13),
-                child: SizedBox(
-                  height: Get.height * 0.05,
-                  width: Get.width * 0.677,
-                  child: RichText(
+                  SizedBox(
+                    height: Get.height * 0.02,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextField(
+                              controller: nameController,
+                              prefixIcon: Icons.person,
+                              hintText: "Full Name",
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            CustomTextField(
+                              prefixIcon: Icons.mail,
+                              hintText: "Email",
+                              obscureText: false,
+                              controller: emailController,
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            CustomTextField(
+                              controller: phonenoController,
+                              prefixIcon: Icons.call,
+                              hintText: "Phone No",
+                              keyboardType: TextInputType.phone,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            CustomTextField(
+                              controller: bpController,
+                              prefixIcon: Icons.bloodtype,
+                              hintText: "Blood Pressure",
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            CustomTextField(
+                              controller: sugarController,
+                              prefixIcon: Icons.bloodtype,
+                              hintText: "Sugar Level",
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            CustomTextField(
+                              controller: weightController,
+                              prefixIcon: Icons.monitor_weight,
+                              hintText: "Weight",
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            CustomTextField(
+                              prefixIcon: Icons.lock,
+                              hintText: "Password",
+                              obscureText: true,
+                              showPassword: _showPassword,
+                              onTogglePassword: (bool show) {
+                                setState(() {
+                                  _showPassword = show;
+                                });
+                              },
+                              controller: passwordController,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            CustomTextField(
+                              prefixIcon: Icons.lock,
+                              hintText: "Confirm Password",
+                              obscureText: true,
+                              showPassword: _showConfirmPassword,
+                              onTogglePassword: (bool show) {
+                                setState(() {
+                                  _showConfirmPassword = show;
+                                });
+                              },
+                              controller: confirmPasswordController,
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Age: ",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18,
+                                            color: myDarkGrey,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: DropdownButton<int>(
+                                            value: _currentAge,
+                                            onChanged: (int? newValue) {
+                                              setState(() {
+                                                _currentAge = newValue!;
+                                              });
+                                            },
+                                            items: List.generate(
+                                                    100, (index) => index + 1)
+                                                .map<DropdownMenuItem<int>>(
+                                                    (int value) {
+                                              return DropdownMenuItem<int>(
+                                                value: value,
+                                                child: Text(value.toString()),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "Gender: ",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18,
+                                            color: myDarkGrey,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: DropdownButton<String>(
+                                            hint: Text("Select Gender"),
+                                            value: selectedGender,
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedGender = newValue;
+                                              });
+                                            },
+                                            items: genders
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: Get.height * 0.02),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Ethnicity: ",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18,
+                                            color: myDarkGrey,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        DropdownButton<String>(
+                                          hint: Text("Select Ethnicity"),
+                                          value: selectedEthnicity,
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              selectedEthnicity = newValue;
+                                            });
+                                          },
+                                          items: ethnicities
+                                              .map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Body Type:",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18,
+                                            color: myDarkGrey,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: DropdownButton<String>(
+                                            hint: Text("Select Body Type"),
+                                            value: selectedBodyType,
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedBodyType = newValue;
+                                              });
+                                            },
+                                            items: bodyTypes
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Body Goal:",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18,
+                                            color: myDarkGrey,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: DropdownButton<String>(
+                                            hint: Text("Select Body Goal"),
+                                            value: selectedBodyGoal,
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedBodyGoal = newValue;
+                                              });
+                                            },
+                                            items: bodyGoals
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.01,
+                  ),
+                  RichText(
                     text: TextSpan(
                       text: "By clicking the ",
                       style: GoogleFonts.jost(
@@ -230,7 +385,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             },
                         ),
                         TextSpan(
-                          text: " button, you agree to the public offer",
+                          text: " button, you agree to the public offer.",
                           style: GoogleFonts.jost(
                               color: myDarkGrey,
                               fontSize: 11.43,
@@ -239,124 +394,53 @@ class _CreateAccountState extends State<CreateAccount> {
                       ],
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.03,
-              ),
-              BlocConsumer<SignupBloc, SignupState>(
-                listener: (context, state) async {
-                  if (state is SignupSuccessstate) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    await prefs.setBool('Login', true);
-                    Get.offAll(() =>  MyBottomNavigationBar());
-                  }
-                  if (state is SignupFailurestate) {
-                    Get.snackbar('Signup Failed', state.error);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is SignupLoadingstate) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
-                  return CustomButton(
-                    buttonText: 'Create An Account',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<SignupBloc>().add(
-                              SignupRequestedEvent(
-                                email: emailController.text.trim(),
-                                name: nameController.text.trim(),
-                                phoneno: phonenoController.text.trim(),
-                                password: passwordController.text.trim(),
-                                confirmPassword:
-                                    confirmPasswordController.text.trim(),
-                                age: ageController.text.trim(),
-                              ),
-                            );
-                      }
-                    },
-                    width: Get.width * 0.55,
-                    height: Get.height * 0.06,
-                    fontSize: 14,
-                    backGroundColor: primaryColor,
-                  );
-                },
-              ),
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
-              Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "- OR Continue with -",
-                      style: GoogleFonts.jost(
-                          fontSize: 12,
-                          color: myDarkGrey,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
                   SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.03,
                   ),
                   BlocConsumer<SignupBloc, SignupState>(
                     listener: (context, state) async {
-                      if (state is GoogleSignupSuccessstate) {
+                      if (state is SignupSuccessstate) {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
-
-                        prefs.setBool('Login', true);
-                        Get.offAll(() =>  MyBottomNavigationBar());
+                        await prefs.setBool('Login', true);
+                        Get.offAll(() => MyBottomNavigationBar());
                       }
-                      if (state is GoogleSignupFailurestate) {
+                      if (state is SignupFailurestate) {
                         Get.snackbar('Signup Failed', state.error);
                       }
                     },
                     builder: (context, state) {
-                      if (state is GoogleSignupLoadingState) {
+                      if (state is SignupLoadingstate) {
                         return const Center(
-                          child: CircularProgressIndicator(),
+                          child: CupertinoActivityIndicator(),
                         );
                       }
-                      return GestureDetector(
-                        child: Container(
-                          width: Get.width * 0.72,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: myGrey.withOpacity(0.3)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(googleLogo),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              Text(
-                                'Continue with Google',
-                                style: GoogleFonts.jost(
-                                    fontSize: 15,
-                                    color: myDarkGrey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          context.read<SignupBloc>().add(
-                                GoogleSignupRequestedEvent(),
-                              );
+                      return CustomButton(
+                        buttonText: 'Create An Account',
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<SignupBloc>().add(
+                                  SignupRequestedEvent(
+                                    email: emailController.text.trim(),
+                                    name: nameController.text.trim(),
+                                    phoneno: phonenoController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                    confirmPassword:
+                                        confirmPasswordController.text.trim(),
+                                    age: ageController.text.trim(),
+                                  ),
+                                );
+                          }
                         },
+                        width: Get.width * 0.7,
+                        height: Get.height * 0.06,
+                        fontSize: 14,
+                        backGroundColor: primaryColor,
                       );
                     },
                   ),
                   SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.05,
                   ),
                   RichText(
                     text: TextSpan(
@@ -375,7 +459,8 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Get.back();
+                              // Get.back();
+                              Get.offAll((_) => LoginScreen());
                             },
                         ),
                       ],
@@ -386,7 +471,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

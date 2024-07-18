@@ -24,48 +24,45 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: Get.height * 0.0645,
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: controller,
-        obscureText: obscureText && !(showPassword ?? false),
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
-            borderRadius: BorderRadius.circular(3),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: myGrey),
-            borderRadius: BorderRadius.circular(3),
-          ),
-          prefixIcon: Icon(prefixIcon, color: myGrey),
-          suffixIcon: obscureText
-              ? IconButton(
-                  onPressed: () {
-                    onTogglePassword?.call(!(showPassword ?? false));
-                  },
-                  icon: Icon(
-                    showPassword ?? false
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: myGrey,
-                  ),
-                )
-              : null,
-          hintText: hintText,
-          label: Text(hintText),
-          labelStyle: GoogleFonts.montserrat(
-            color: myGrey,
-            fontSize: 11.43,
-            fontWeight: FontWeight.w500,
-          ),
-          // floatingLabelAlignment: FloatingLabelAlignment.center,
-          hintStyle: GoogleFonts.montserrat(
-            color: myGrey,
-            fontSize: 11.43,
-            fontWeight: FontWeight.w500,
-          ),
+    return TextFormField(
+      keyboardType: keyboardType,
+      controller: controller,
+      obscureText: obscureText && !(showPassword ?? false),
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: myGrey),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        prefixIcon: Icon(prefixIcon, color: myGrey),
+        suffixIcon: obscureText
+            ? IconButton(
+                onPressed: () {
+                  onTogglePassword?.call(!(showPassword ?? false));
+                },
+                icon: Icon(
+                  showPassword ?? false
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: myGrey,
+                ),
+              )
+            : null,
+        hintText: hintText,
+        label: Text(hintText),
+        labelStyle: GoogleFonts.montserrat(
+          color: myGrey,
+          fontSize: 11.43,
+          fontWeight: FontWeight.w500,
+        ),
+        // floatingLabelAlignment: FloatingLabelAlignment.center,
+        hintStyle: GoogleFonts.montserrat(
+          color: myGrey,
+          fontSize: 11.43,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

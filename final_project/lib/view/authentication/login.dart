@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:final_project/controller/bloc/login/login_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/forgotpas.dart';
@@ -23,9 +25,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
+  bool _isRememberMe = false;
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
+  void toggleRememberMe() {
+    setState(() {
+      _isRememberMe = !_isRememberMe;
+    });
+  }
 
   @override
   void dispose() {
@@ -43,216 +50,280 @@ class _LoginScreenState extends State<LoginScreen> {
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: Get.height * 0.17,
-              ),
-              SizedBox(
-                height: Get.height * 0.06,
-                width: Get.width * 0.831,
-                child: Text(
-                  "Log in into your account",
-                  style: GoogleFonts.jost(
-                      fontSize: 21, color: black, fontWeight: FontWeight.w700),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.04,
-              ),
-              Form(
-                key: formKey,
-                child: SizedBox(
-                  height: Get.height * 0.18,
-                  width: Get.width * 0.831,
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        prefixIcon: Icons.person,
-                        hintText: 'Email',
-                        obscureText: false,
-                        controller: emailController,
-                      ),
-                      SizedBox(height: Get.height * 0.04),
-                      CustomTextField(
-                        prefixIcon: Icons.lock,
-                        hintText: 'Password',
-                        obscureText: true,
-                        showPassword: _showPassword,
-                        onTogglePassword: (bool show) {
-                          setState(() {
-                            _showPassword = show;
-                          });
-                        },
-                        controller: passwordController,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.to(() => const ForgotPassword());
-                },
-                child: Text(
-                  'Forgot Password?',
-                  style: GoogleFonts.jost(
-                    color: myGrey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.07,
-              ),
-              BlocConsumer<LoginBloc, LoginState>(
-                //Listner use gareko kina ki listen ni garna xa rw build ni garna xa
-                //blocConsumer is BlocListener + BlocBuilder
-                //BlocListener used for functionality that needs to occur once per state change such as navigation, showing a snackbarr, shpowing a dialog, etc.a dialog etc.
-                //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
-
-                listener: (context, state) async {
-                  if (state is LoginSuccessstate) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
-                    prefs.setBool('Login', true);
-                    prefs.setString('email', emailController.text.trim());
-                    prefs.setString('password', passwordController.text.trim());
-
-                    //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
-                    //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
-                    //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
-                    Get.offAll(() => MyBottomNavigationBar());
-                    //auth bloc mai xaaa
-                  }
-                  if (state is LoginFailurestate) {
-                    Get.snackbar('Login Failed', state.error);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is LoginLoadingstate) {
-                    return const CircularProgressIndicator();
-                  }
-                  return CustomButton(
-                    buttonText: 'Log In',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<LoginBloc>().add(
-                              LoginRequestedEvent(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ),
-                            );
-                      }
-                    },
-                    width: Get.width * 0.6,
-                    height: Get.height * 0.07,
-                    fontSize: 15,
-                    backGroundColor: primaryColor,
-                  );
-                },
-              ),
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
-              Column(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: Get.height,
+              width: Get.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Text(
-                      "- OR Continue with -",
-                      style: GoogleFonts.jost(
-                          fontSize: 12,
-                          color: myDarkGrey,
-                          fontWeight: FontWeight.w500),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset("assets/logo/splashscreen.png"),
+                  ),
+                  Text(
+                    "Welcome Back!",
+                    style: GoogleFonts.inter(
+                        fontSize: 26,
+                        color: black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    "Always Keep Yourself Healthy.",
+                    style: GoogleFonts.inter(
+                        fontSize: 26,
+                        color: myDarkGrey,
+                        fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.03,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            prefixIcon: Icons.email,
+                            hintText: 'Email',
+                            obscureText: false,
+                            controller: emailController,
+                          ),
+                          SizedBox(height: Get.height * 0.015),
+                          CustomTextField(
+                            prefixIcon: Icons.lock,
+                            hintText: 'Password',
+                            obscureText: true,
+                            showPassword: _showPassword,
+                            onTogglePassword: (bool show) {
+                              setState(() {
+                                _showPassword = show;
+                              });
+                            },
+                            controller: passwordController,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _isRememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _isRememberMe = !value!;
+                              });
+                              toggleRememberMe();
+                            },
+                          ),
+                          Text("Remember Me",
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: black,
+                                  fontWeight: FontWeight.w400)),
+                        ],
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const ForgotPassword()));
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: GoogleFonts.inter(
+                              decoration: TextDecoration.underline,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: black,
+                              // decoration: TextDecoration.underline,
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.01,
                   ),
                   BlocConsumer<LoginBloc, LoginState>(
+                    //Consumer use gareko kina ki listen ni garna xa rw build ni garna xa
+                    //blocConsumer is BlocListener + BlocBuilder
+                    //BlocListener used for functionality that needs to occur once per state change such as navigation, showing a snackbarr, shpowing a dialog, etc.a dialog etc.
+                    //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
+
                     listener: (context, state) async {
-                      if (state is GoogleLoginSuccessstate) {
+                      if (state is LoginSuccessstate) {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
+                        //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
                         prefs.setBool('Login', true);
                         prefs.setString('email', emailController.text.trim());
                         prefs.setString(
                             'password', passwordController.text.trim());
+
+                        //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
+                        //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
+                        //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
                         Get.offAll(() => MyBottomNavigationBar());
+                        //auth bloc mai xaaa
                       }
-                      if (state is GoogleLoginFailurestate) {
+                      if (state is LoginFailurestate) {
                         Get.snackbar('Login Failed', state.error);
                       }
                     },
                     builder: (context, state) {
-                      if (state is GoogleLoginLoadingstate) {
+                      if (state is LoginLoadingstate) {
                         return const CircularProgressIndicator();
                       }
-                      return GestureDetector(
-                        child: Container(
-                          width: Get.width * 0.72,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: myGrey.withOpacity(0.3)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(googleLogo),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              Text(
-                                'Continue with Google',
-                                style: GoogleFonts.jost(
-                                    fontSize: 15,
-                                    color: myDarkGrey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          context
-                              .read<LoginBloc>()
-                              .add(GoogleLoginRequestedEvent());
+                      return CustomButton(
+                        buttonText: 'Log In',
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<LoginBloc>().add(
+                                  LoginRequestedEvent(
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                  ),
+                                );
+                          }
                         },
+                        width: Get.width * 0.8,
+                        height: Get.height * 0.06,
+                        fontSize: 20,
+                        backGroundColor: primaryColor,
                       );
                     },
                   ),
                   SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.03,
                   ),
-                  RichText(
-                    text: TextSpan(
-                      text: "I Don't Have an Account ",
-                      style: GoogleFonts.jost(
-                          fontSize: 13.43,
-                          color: myDarkGrey,
-                          fontWeight: FontWeight.w400),
-                      children: [
-                        TextSpan(
-                          text: "Sign up",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Get.to(() => const CreateAccount());
-                            },
+                  Column(
+                    children: [
+                      Container(
+                        width: Get.width * 0.9,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: primaryColor,
+                                thickness: 1,
+                                endIndent: 5,
+                              ),
+                            ),
+                            Text(
+                              'OR',
+                              style: GoogleFonts.inter(
+                                color: black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: primaryColor,
+                                thickness: 1,
+                                indent: 5,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      BlocConsumer<LoginBloc, LoginState>(
+                        listener: (context, state) async {
+                          if (state is GoogleLoginSuccessstate) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setBool('Login', true);
+                            prefs.setString(
+                                'email', emailController.text.trim());
+                            prefs.setString(
+                                'password', passwordController.text.trim());
+                            Get.offAll(() => MyBottomNavigationBar());
+                          }
+                          if (state is GoogleLoginFailurestate) {
+                            Get.snackbar('Login Failed', state.error);
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is GoogleLoginLoadingstate) {
+                            return const CircularProgressIndicator();
+                          }
+                          return GestureDetector(
+                            child: Container(
+                              width: Get.width * 0.8,
+                              height: Get.height * 0.06,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(0.06),
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    googleLogo,
+                                    width: 40,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Continue with Google',
+                                    style: GoogleFonts.inter(
+                                      color: black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {},
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: "Don't Have an Account? ",
+                          style: GoogleFonts.inter(
+                              fontSize: 13.43,
+                              color: myDarkGrey,
+                              fontWeight: FontWeight.w400),
+                          children: [
+                            TextSpan(
+                              text: "Sign up",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(() => const CreateAccount());
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
