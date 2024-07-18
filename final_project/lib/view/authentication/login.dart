@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:math';
+
 import 'package:final_project/controller/bloc/login/login_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/forgotpas.dart';
@@ -12,6 +16,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/custom_text_field.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -19,14 +25,26 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
+  bool _isRememberMe = false;
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
-  bool _isRememberMe = false;
+  // bool _isRememberMe = false;
+  void toggleRememberMe() {
+    setState(() {
+      _isRememberMe = !_isRememberMe;
+    });
+  }
 
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  final String _text = 'Welcome Back!';
+  final String _text1 = 'Always Keep Yourself Healthy.';
+
+  final int _durationPerLetter = 100;
   String email = '';
   String password = '';
 
@@ -35,6 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
     loadPreferences();
     // TODO: implement initState
     super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: _text1.length * _durationPerLetter),
+      vsync: this,
+    )..forward();
+    _animation = Tween<double>(begin: 0, end: _text1.length.toDouble())
+        .animate(_controller);
   }
 
   void loadPreferences() async {
@@ -93,98 +117,96 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: Get.height,
+              width: Get.width,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Login To Your Account",
-                    style: GoogleFonts.poppins(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: black,
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Image.asset("assets/logo/splashscreen.png"),
+                  ),
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      int currentLength = _animation.value.round();
+                      String currentText =
+                          _text.substring(0, min(_text.length, currentLength));
+
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            currentText,
+                            style: GoogleFonts.inter(
+                                fontSize: 26,
+                                color: black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      int currentLength = _animation.value.round();
+                      String currentText1 = _text1.substring(
+                          0, min(currentLength, _text1.length));
+
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            currentText1,
+                            style: GoogleFonts.inter(
+                                fontSize: 18,
+                                color: myDarkGrey,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
                   ),
                   Form(
                     key: formKey,
-                    child: TextFormField(
-                      cursorColor: secondaryColor,
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your Email';
-                        }
-                        if (value.length < 10) {
-                          return 'Please enter valid Email';
-                        }
-                        return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          floatingLabelStyle: floatingLabelTextStyle(),
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: myGrey,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            prefixIcon: Icons.email,
+                            hintText: 'Email',
+                            obscureText: false,
+                            controller: emailController,
                           ),
-                          focusedBorder: customFocusBorder(),
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: secondaryColor, width: 2)),
-                          labelStyle: TextStyle(color: myGrey, fontSize: 13),
-                          labelText: 'Enter Your Email',
-                          hintText: 'Enter Your Email'),
+                          SizedBox(height: Get.height * 0.015),
+                          CustomTextField(
+                            prefixIcon: Icons.lock,
+                            hintText: 'Password',
+                            obscureText: true,
+                            showPassword: _showPassword,
+                            onTogglePassword: (bool show) {
+                              setState(() {
+                                _showPassword = show;
+                              });
+                            },
+                            controller: passwordController,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
-                  TextFormField(
-                    cursorColor: secondaryColor,
-                    controller: passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                    textInputAction: TextInputAction.go,
-                    obscureText: !_showPassword,
-                    decoration: InputDecoration(
-                        floatingLabelStyle:
-                            TextStyle(color: secondaryColor, fontSize: 13),
-                        focusedBorder: customFocusBorder(),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: secondaryColor, width: 2)),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: myGrey,
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _showPassword = !_showPassword;
-                            });
-                          },
-                          icon: (_showPassword)
-                              ? Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  color: myGrey,
-                                )
-                              : Icon(
-                                  Icons.remove_red_eye,
-                                  color: myGrey,
-                                ),
-                        ),
-                        labelStyle: TextStyle(color: myGrey, fontSize: 13),
-                        labelText: 'Enter Your Password',
-                        hintText: 'Enter Your Password'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,19 +214,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         children: [
                           Checkbox(
-                            activeColor: secondaryColor,
                             value: _isRememberMe,
                             onChanged: (value) {
                               setState(() {
-                                _isRememberMe = !_isRememberMe;
+                                _isRememberMe = !value!;
                               });
+                              toggleRememberMe();
                             },
                           ),
                           Text("Remember Me",
                               style: GoogleFonts.inter(
                                   fontSize: 14,
                                   color: black,
-                                  fontWeight: FontWeight.w500)),
+                                  fontWeight: FontWeight.w400)),
                         ],
                       ),
                       TextButton(
@@ -214,155 +236,188 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             'Forgot Password?',
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               decoration: TextDecoration.underline,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: myGrey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: black,
                               // decoration: TextDecoration.underline,
                             ),
                           )),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomButton(
-                    buttonText: 'Log In',
-                    onPressed: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      if (formKey.currentState!.validate()) {
-                        context.read<LoginBloc>().add(
-                              LoginRequestedEvent(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ),
-                            );
-                      }
-                      prefs.setBool('Login', true);
-                      prefs.setString('email', emailController.text.trim());
-                      prefs.setString(
-                          'password', passwordController.text.trim());
-                    },
-                    width: Get.width * 0.6,
-                    height: Get.height * 0.06,
-                    fontSize: 15,
-                    backGroundColor: primaryColor,
-                  ),
                   SizedBox(
-                    height: Get.height * 0.05,
-                  ),
-                  Container(
-                    width: Get.width * 0.8,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: secondaryColor,
-                            thickness: 2,
-                            endIndent: 5,
-                          ),
-                        ),
-                        Text(
-                          'OR',
-                          style: GoogleFonts.inter(
-                            color: black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: secondaryColor,
-                            thickness: 2,
-                            indent: 5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.01,
                   ),
                   BlocConsumer<LoginBloc, LoginState>(
+                    //Consumer use gareko kina ki listen ni garna xa rw build ni garna xa
+                    //blocConsumer is BlocListener + BlocBuilder
+                    //BlocListener used for functionality that needs to occur once per state change such as navigation, showing a snackbarr, shpowing a dialog, etc.a dialog etc.
+                    //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
+
                     listener: (context, state) async {
-                      if (state is GoogleLoginSuccessstate) {
+                      if (state is LoginSuccessstate) {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
+                        //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
                         prefs.setBool('Login', true);
                         prefs.setString('email', emailController.text.trim());
                         prefs.setString(
                             'password', passwordController.text.trim());
+
+                        //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
+                        //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
+                        //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
+                        Get.offAll(() => MyBottomNavigationBar());
+                        //auth bloc mai xaaa
                       }
-                      if (state is GoogleLoginFailurestate) {
+                      if (state is LoginFailurestate) {
                         Get.snackbar('Login Failed', state.error);
                       }
                     },
                     builder: (context, state) {
-                      if (state is GoogleLoginLoadingstate) {
+                      if (state is LoginLoadingstate) {
                         return const CircularProgressIndicator();
                       }
-                      return GestureDetector(
-                        child: Container(
-                          width: Get.width * 0.72,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: myGrey.withOpacity(0.3)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                googleLogo,
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              Text(
-                                'Continue with Google',
-                                style: GoogleFonts.jost(
-                                    fontSize: 15,
-                                    color: myDarkGrey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          context
-                              .read<LoginBloc>()
-                              .add(GoogleLoginRequestedEvent());
+                      return CustomButton(
+                        buttonText: 'Log In',
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<LoginBloc>().add(
+                                  LoginRequestedEvent(
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                  ),
+                                );
+                          }
                         },
+                        width: Get.width * 0.8,
+                        height: Get.height * 0.06,
+                        fontSize: 20,
+                        backGroundColor: primaryColor,
                       );
                     },
                   ),
                   SizedBox(
-                    height: Get.height * 0.02,
+                    height: Get.height * 0.03,
                   ),
-                  RichText(
-                    text: TextSpan(
-                      text: "I Don't Have an Account ",
-                      style: GoogleFonts.jost(
-                          fontSize: 13.43,
-                          color: myDarkGrey,
-                          fontWeight: FontWeight.w400),
-                      children: [
-                        TextSpan(
-                          text: "Sign up",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Get.to(() => const CreateAccount());
-                            },
+                  Column(
+                    children: [
+                      Container(
+                        width: Get.width * 0.9,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: primaryColor,
+                                thickness: 1,
+                                endIndent: 5,
+                              ),
+                            ),
+                            Text(
+                              'OR',
+                              style: GoogleFonts.inter(
+                                color: black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: primaryColor,
+                                thickness: 1,
+                                indent: 5,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      BlocConsumer<LoginBloc, LoginState>(
+                        listener: (context, state) async {
+                          if (state is GoogleLoginSuccessstate) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setBool('Login', true);
+                            prefs.setString(
+                                'email', emailController.text.trim());
+                            prefs.setString(
+                                'password', passwordController.text.trim());
+                            Get.offAll(() => MyBottomNavigationBar());
+                          }
+                          if (state is GoogleLoginFailurestate) {
+                            Get.snackbar('Login Failed', state.error);
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is GoogleLoginLoadingstate) {
+                            return const CircularProgressIndicator();
+                          }
+                          return GestureDetector(
+                            child: Container(
+                              width: Get.width * 0.8,
+                              height: Get.height * 0.06,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(0.06),
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    googleLogo,
+                                    width: 40,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Continue with Google',
+                                    style: GoogleFonts.inter(
+                                      color: black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {},
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: "Don't Have an Account? ",
+                          style: GoogleFonts.inter(
+                              fontSize: 13.43,
+                              color: myDarkGrey,
+                              fontWeight: FontWeight.w400),
+                          children: [
+                            TextSpan(
+                              text: "Sign up",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(() => const CreateAccount());
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

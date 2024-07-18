@@ -36,11 +36,11 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: primaryColor),
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(15),
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: myGrey),
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(15),
           ),
           prefixIcon:
               prefixIcon != null ? Icon(prefixIcon, color: myGrey) : null,
@@ -61,13 +61,13 @@ class CustomTextField extends StatelessWidget {
           label: Text(hintText),
           labelStyle: GoogleFonts.montserrat(
             color: myGrey,
-            fontSize: 11.43,
+            fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
           // floatingLabelAlignment: FloatingLabelAlignment.center,
           hintStyle: GoogleFonts.montserrat(
             color: myGrey,
-            fontSize: 11.43,
+            fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
         ),

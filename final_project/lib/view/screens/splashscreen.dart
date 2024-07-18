@@ -4,6 +4,8 @@ import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/onboardingscreen/on_boarding.dart';
+import 'package:final_project/view/screens/onboardingscreen/page1.dart';
+import 'package:final_project/view/screens/onboardingscreen/page2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

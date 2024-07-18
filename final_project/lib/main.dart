@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Final Year Project",
+        title: "Get Fit",
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

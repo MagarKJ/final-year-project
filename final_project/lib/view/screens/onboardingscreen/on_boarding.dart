@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:final_project/view/authentication/login.dart';
+import 'package:final_project/view/screens/onboardingscreen/onbardingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/startup_images/onboard.png'),
+                    Image.asset('assets/logo/getfit.png'),
                     const SizedBox(
                       height: 40,
                     ),
@@ -56,13 +60,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 6, horizontal: 10),
                         decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: primaryColor,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: const Text(
-                          'Learner always wins',
-                          style: TextStyle(
-                            fontSize: 15,
+                        child: Text(
+                          'Where Results Happen',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
@@ -72,45 +76,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Welcome to',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Welcome to',
+                          style: GoogleFonts.lobster(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'GYANPUNJ SCHOOL',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'OF LEADERSHIP',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Get Fit.',
+                          style: GoogleFonts.lobster(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
-                      'Our comprehensive Preparation courses are designed to equip the knowledge, skills, and confidence.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Empowering Your Fitness Dreams With Our Health and Fitness Monitoring App.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: myDarkGrey,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ],
@@ -125,7 +129,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Container(
               width: Get.width * 0.7,
               decoration: BoxDecoration(
-                color: secondaryColor,
+                color: primaryColor,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextButton(

@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backGroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(15),
           ),
         ),
         child: Row(
@@ -49,7 +49,7 @@ class CustomButton extends StatelessWidget {
                 : SizedBox.shrink(),
             Text(
               buttonText,
-              style: GoogleFonts.montserrat(
+              style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: fontSize,
                 fontWeight: FontWeight.w600,
