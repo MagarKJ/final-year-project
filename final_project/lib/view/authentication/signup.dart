@@ -37,7 +37,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   bool _showPassword = false;
   bool _showConfirmPassword = false;
-  int _currentAge = 1;
+  int selectedAge = 1;
 
   String? selectedGender;
   String? selectedEthnicity;
@@ -283,8 +283,33 @@ class _CreateAccountState extends State<CreateAccount> {
                               Row(
                                 children: [
                                   // Text(
+                                  Text(
+                                    "Age: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  DropdownButton<int>(
+                                    value: selectedAge,
+                                    onChanged: (int? newValue) {
+                                      setState(() {
+                                        selectedAge = newValue!;
+                                      });
+                                    },
+                                    items:
+                                        List.generate(100, (index) => index + 1)
+                                            .map<DropdownMenuItem<int>>(
+                                                (int value) {
+                                      return DropdownMenuItem<int>(
+                                        value: value,
+                                        child: Text(value.toString()),
+                                      );
+                                    }).toList(),
+                                  ),
 
-                                  // SizedBox(width: 20),
+                                  SizedBox(width: 8),
                                   Text(
                                     "Gender: ",
                                     style: GoogleFonts.inter(
@@ -338,7 +363,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                         horizontal: 8.0),
                                     child: DropdownButton<String>(
                                       borderRadius: BorderRadius.circular(15),
-                                      hint: Text("Select Ethnicity"),
+                                      hint: Text(
+                                        "Select Ethnicity",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
                                       value: selectedEthnicity,
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -371,7 +400,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                         horizontal: 8.0),
                                     child: DropdownButton<String>(
                                       borderRadius: BorderRadius.circular(15),
-                                      hint: Text("Select Body Type"),
+                                      hint: Text(
+                                        "Select Body Type",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
                                       value: selectedBodyType,
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -403,7 +436,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                         horizontal: 8.0),
                                     child: DropdownButton<String>(
                                       borderRadius: BorderRadius.circular(15),
-                                      hint: Text("Select Body Goal"),
+                                      hint: Text(
+                                        "Select Body Goal",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
                                       value: selectedBodyGoal,
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -499,7 +536,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                   ethnicity: selectedEthnicity ??
                                       '', // Use selectedEthnicity
                                   age:
-                                      _currentAge.toString(), // Use _currentAge
+                                      selectedAge.toString(), // Use _currentAge
                                 ),
                               );
                         }
@@ -530,7 +567,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Get.offAll(LoginScreen());
+                            Get.offAll(() => LoginScreen());
                           },
                       ),
                     ],
