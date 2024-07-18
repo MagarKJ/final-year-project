@@ -7,7 +7,6 @@ import 'package:final_project/view/authentication/signup.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 
 import 'package:final_project/widgets/custom_button.dart';
-import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,10 +27,57 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isRememberMe = false;
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
-  void toggleRememberMe() {
+  bool _isRememberMe = false;
+
+  String email = '';
+  String password = '';
+
+  @override
+  void initState() {
+    loadPreferences();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void loadPreferences() async {
+    // log('login load preferences called');
+    String? email = await getEmail1();
+    // log('login kon email is $email');
+    bool? _isRememberMe = await getRememberMe();
+    // log('is remember me $_isRememberMe');
+    String? password = await getPassword();
+
     setState(() {
-      _isRememberMe = !_isRememberMe;
+      email = email;
+      password = password;
+      _isRememberMe = _isRememberMe!;
     });
+    if (_isRememberMe == true) {
+      emailController.text = email.toString();
+      passwordController.text = password.toString();
+      // log('email controller ${emailController.text}');
+      _isRememberMe = true;
+    }
+  }
+
+  Future<bool?> getRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isRememberMe = prefs.getBool('rememberMe') ?? false;
+    return _isRememberMe;
+  }
+
+  Future<String?> getEmail1() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('email_address') ?? '';
+    // log('email is ${prefs.getString('email_address')}');
+    return email;
+  }
+
+  Future<String?> getPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    password = prefs.getString('password') ?? '';
+    // log('password is ${prefs.getString('password')}');
+    return password;
   }
 
   @override

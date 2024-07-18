@@ -22,7 +22,7 @@ final class ProfileLogoutState extends ProfileState {}
 final class ProfileEditorLoadingState extends ProfileState {}
 
 final class ProfileEditorLoadedState extends ProfileState {
-  final String userData;
+  List<LoginModel> userData;
   ProfileEditorLoadedState({required this.userData});
 }
 

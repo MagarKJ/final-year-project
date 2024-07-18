@@ -1,17 +1,19 @@
-// import "package:android_alarm_manager_plus/android_alarm_manager_plus.dart";
 import "dart:developer";
 
+import "package:final_project/controller/apis/firebase_api.dart";
 import "package:final_project/controller/bloc/addFood/add_food_bloc.dart";
+import "package:final_project/controller/bloc/analytics/analytics_bloc.dart";
 import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
 import "package:final_project/controller/bloc/login/login_bloc.dart";
 import "package:final_project/controller/bloc/notification/notification_bloc.dart";
+import "package:final_project/view/screens/splashscreen.dart";
+import "package:firebase_messaging/firebase_messaging.dart";
 
+import 'package:timezone/data/latest_all.dart' as tz;
 import "package:final_project/controller/bloc/profile/profile_bloc.dart";
 import "package:final_project/controller/bloc/signup/signup_bloc.dart";
 import "package:final_project/controller/bloc/home/home_page_bloc.dart";
-import "package:final_project/view/screens/splashscreen.dart";
 import "package:firebase_core/firebase_core.dart";
-import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -21,6 +23,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
+  FireBaseAPi().initLocalNotifications();
+  tz.initializeTimeZones();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
@@ -28,7 +33,7 @@ void main() async {
 //top level function huna parcaha kina ki background ma message aauda chai top level function ma nai handle garna parxa
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   log("Handling a background message: ${message.messageId}");
 }
 
@@ -66,6 +71,9 @@ class MyApp extends StatelessWidget {
             ),
         BlocProvider<AddFoodBloc>(
           create: (context) => AddFoodBloc(),
+        ),
+        BlocProvider<AnalyticsBloc>(
+          create: (context) => AnalyticsBloc(),
         ),
       ],
       child: GetMaterialApp(

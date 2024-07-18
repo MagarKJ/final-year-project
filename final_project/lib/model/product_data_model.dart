@@ -8,8 +8,9 @@ class ProductDataModel {
   final String protein;
   final String carbs;
   final String sodium;
+  final String? volume;
   // final double price;
-  // final String imageUrl;
+  final String? imageUrl;
 
   ProductDataModel({
     required this.id,
@@ -21,6 +22,8 @@ class ProductDataModel {
     required this.protein,
     required this.carbs,
     required this.sodium,
+    this.volume,
+    this.imageUrl,
   });
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) {
@@ -34,8 +37,9 @@ class ProductDataModel {
       protein: json['protein'].toString(),
       carbs: json['carbohydrate'].toString(),
       sodium: json['sodium'].toString(),
+      volume: json['volume'].toString(),
       // price: (json['price'] as num).toDouble(),
-      // imageUrl: json['imageUrl'],
+      imageUrl: json['photo_name'].toString(),
     );
   }
 
@@ -49,7 +53,8 @@ class ProductDataModel {
         'protein': protein,
         'carbohydrate': carbs,
         'sodium': sodium,
+        'volume': volume,
         // 'price': price,
-        // 'imageUrl': imageUrl,
+        'photo_name': imageUrl,
       };
 }

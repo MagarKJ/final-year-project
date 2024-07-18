@@ -33,7 +33,10 @@ class _CreateAccountState extends State<CreateAccount> {
   final sugarController = TextEditingController();
   final sexController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final bodyTypeController = TextEditingController();
+  final bodyGoalController = TextEditingController();
+
+  final ethnicityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
   bool _showConfirmPassword = false;
@@ -64,7 +67,7 @@ class _CreateAccountState extends State<CreateAccount> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
+
     super.dispose();
   }
 

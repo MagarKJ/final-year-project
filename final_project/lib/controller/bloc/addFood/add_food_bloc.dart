@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:final_project/controller/apis/add_food_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../model/product_data_model.dart';
 import '../../apis/all_product_repository.dart';
@@ -15,9 +16,11 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
   AddFoodBloc() : super(AddFoodInitial()) {
     on<AddFoodLoadedEvent>(_onAddFoodLoadedEvent);
     on<AddFoodButtonPressedEvent>(_onAddFoodButtonPressedEvent);
+    on<AddPremiumFoodButtonPressedEvent>(_onAddPremiumFoodButtonPressedEvent);
+    on<DeletePremiumFoodEvent>(_onDeletePremiumFoodEvent);
   }
 
-  FutureOr<void> _onAddFoodLoadedEvent(
+  void _onAddFoodLoadedEvent(
     AddFoodLoadedEvent event,
     Emitter<AddFoodState> emit,
   ) async {
@@ -25,9 +28,12 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
     emit(AddFoodLoadingState());
     try {
+      String url = event.url;
+      String url1 = event.url1;
       // Fetch all products
-      dynamic allFood = await allProductRepository.fetchAllProduct();
-      dynamic premiumFood = await allProductRepository.fetchPremiumProducts();
+      dynamic allFood = await allProductRepository.fetchAllProduct(url: url);
+      dynamic premiumFood =
+          await allProductRepository.fetchPremiumProducts(url: url1);
       List<dynamic> meals = allFood['meals'];
       List<dynamic> premiumFoods = premiumFood['Meals'];
       // Ensure allFood is a List of Maps
@@ -53,7 +59,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       AddFoodRepository addFoodRepository = AddFoodRepository();
       emit(AddFoodButtonPressedLoadingState());
       dynamic addFood = await addFoodRepository.addFood(
-        userId: event.userId,
         foodName: event.foodName,
         foodCalories: event.foodCalories,
         foodCarbs: event.foodCarbs,
@@ -64,10 +69,48 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
       emit(
         AddFoodButtonPressedLoadedState(addFood: addFood),
-     
       );
     } catch (ex) {
       emit(AddFoodButtonPressedErrorState(message: ex.toString()));
+    }
+  }
+
+  FutureOr<void> _onAddPremiumFoodButtonPressedEvent(
+    AddPremiumFoodButtonPressedEvent event,
+    Emitter<AddFoodState> emit,
+  ) async {
+    try {
+      AddFoodRepository addFoodRepository = AddFoodRepository();
+      emit(AddPremiumFoodButtonPressedLoadingState());
+      dynamic addPremiumFood = await addFoodRepository.addPremiumFood(
+        foodName: event.foodName,
+        description: event.description,
+        foodCalories: event.foodCalories,
+        foodCarbs: event.foodCarbs,
+        foodProtein: event.foodProtein,
+        foodFat: event.foodFat,
+        foodSodium: event.foodSodium,
+        volume: event.volume,
+        image: event.image,
+      );
+      emit(AddPremiumFoodButtonPressedLoadedState(
+          addPremiumFood: addPremiumFood));
+    } catch (e) {
+      emit(AddPremiumFoodButtonPressedErrorState(message: e.toString()));
+    }
+  }
+
+  FutureOr<void> _onDeletePremiumFoodEvent(
+    DeletePremiumFoodEvent event,
+    Emitter<AddFoodState> emit,
+  ) async {
+    try {
+      AddFoodRepository addFoodRepository = AddFoodRepository();
+
+      await addFoodRepository.deletePremiumFood(foodId: event.foodId);
+      Fluttertoast.showToast(msg: 'Premium meal deleted');
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

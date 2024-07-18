@@ -5,10 +5,12 @@ import 'package:final_project/controller/apis/api.dart';
 class AllProductRepository {
   API api = API();
 
-  Future<dynamic> fetchAllProduct() async {
+  Future<dynamic> fetchAllProduct({
+    required String url,
+  }) async {
     try {
       // Use the correct IP for your local server
-      Response response = await api.sendRequest.get('$baseUrl/api/meals');
+      Response response = await api.sendRequest.get(url);
       // log('Response status: ${response.statusCode}');
       // log('Response data: ${response.data}');
 
@@ -27,10 +29,12 @@ class AllProductRepository {
     }
   }
 
-  Future<dynamic> fetchPremiumProducts() async {
+  Future<dynamic> fetchPremiumProducts({
+    required String url,
+  }) async {
     try {
       // Use the correct IP for your local server
-      Response response = await api.sendRequest.get('$baseUrl/api/customs');
+      Response response = await api.sendRequest.get(url);
       // log('Response status: ${response.statusCode}');
       // log('Response data: ${response.data}');
 

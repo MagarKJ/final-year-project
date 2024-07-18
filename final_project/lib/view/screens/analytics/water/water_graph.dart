@@ -1,134 +1,89 @@
 import 'package:final_project/utils/constants.dart';
-import 'package:final_project/view/screens/analytics/water/bar_data.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../../../model/analtics_model.dart';
 
 class WaterGraph extends StatefulWidget {
-  const WaterGraph({super.key});
+  final List<AnalticsModel> analytics;
+  const WaterGraph({Key? key, required this.analytics}) : super(key: key);
 
   @override
-  State<WaterGraph> createState() => _GraphState();
+  _StepDataPageState createState() => _StepDataPageState();
 }
 
-class _GraphState extends State<WaterGraph> {
-  List<double> weeklySummary = [
-    2000,
-    1500,
-    3000,
-    4000,
-    2300,
-    2900,
-    3500,
-  ];
+class _StepDataPageState extends State<WaterGraph> {
+  // late List<Map<String, dynamic>> _stepData = [
+
+  // ];
+
+  bool _dataLoaded = true; // Add a flag to track data loading
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchStepData();
+  }
+
+  // Future<void> fetchStepData() async {
+  //   // final stepData = await SQLHelper.getAllStepTrackerData();
+  //   setState(() {
+  //     _stepData = stepData;
+  //     _dataLoaded = true; // Set the flag to true when data is loaded
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    BarData myBarData = BarData(
-      sunAmmount: weeklySummary[0],
-      monAmmount: weeklySummary[1],
-      tusAmmount: weeklySummary[2],
-      wedAmmount: weeklySummary[3],
-      thurAmmount: weeklySummary[4],
-      friAmmount: weeklySummary[5],
-      satAmmount: weeklySummary[6],
-    );
-    myBarData.initializeBarData();
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: greenWithOpasity,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: BarChart(
-            BarChartData(
-              maxY: 5000,
-              minY: 0,
-              gridData: const FlGridData(
-                show: false,
-              ),
-              borderData: FlBorderData(show: false),
-              titlesData: const FlTitlesData(
-                show: true,
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 1000,
-                    reservedSize: 25,
-                  ),
-                ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false,
-                  ),
-                ),
-                rightTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                  showTitles: false,
-                )),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: getBottomTitles,
-                  ),
-                ),
-              ),
-              barGroups: myBarData.barData
-                  .map(
-                    (data) => BarChartGroupData(
-                      x: data.x,
-                      barRods: [
-                        BarChartRodData(
-                          toY: data.y,
-                          color: myBlue,
-                          width: 30,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList(),
+    return SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 300,
+        child:
+            // _dataLoaded // Check the flag to determine whether to show the chart or not
+            //     ?
+            SfCartesianChart(
+          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Water')),
+          // series: <ChartSeries<Map<String, dynamic>, String>>[
+          //   LineSeries<Map<String, dynamic>, String>(
+          //     dataSource: _stepData,
+          //     xValueMapper: (datum, _) =>
+          //         (datum['id'] ?? '').toString(),
+          //     yValueMapper: (datum, _) => datum['steps'] as int,
+          //   ),
+          // ],
+
+          series: [
+            // widget.analytics,
+            LineSeries<AnalticsModel, String>(
+              dataSource: widget.analytics,
+              xValueMapper: (AnalticsModel data, _) =>
+                  extractMonthAndDay(data.date),
+              yValueMapper: (AnalticsModel data, _) =>
+                  double.parse(data.volume),
+              name: 'Volume',
+              // Enable data label
+              // dataLabelSettings: DataLabelSettings(isVisible: true),
             ),
+          ],
+          crosshairBehavior: CrosshairBehavior(
+            enable: true, // Set to true to enable crosshair
+            lineType: CrosshairLineType
+                .both, // You can customize the line type as needed
+            lineColor: Colors.grey, // Customize the line color
+            lineWidth: 0.5, // Customize the line width
+            shouldAlwaysShow:
+                true, // Set to true if you want the crosshair to always show
+            activationMode:
+                ActivationMode.singleTap, // Set the activation mode as needed
           ),
-        ),
-      ),
-    );
+        )
+        // : const Center(
+        //     child: Text(
+        //       'No step data available',
+        //       style: TextStyle(fontSize: 16),
+        //     ),
+        //   ),
+        );
   }
-}
-
-Widget getBottomTitles(double value, TitleMeta meta) {
-  const style = TextStyle(
-    color: Colors.black,
-    fontSize: 14,
-    fontWeight: FontWeight.bold,
-  );
-
-  Widget text;
-  switch (value.toInt()) {
-    case 0:
-      text = const Text('Sun', style: style);
-      break;
-    case 1:
-      text = const Text('Mon', style: style);
-      break;
-    case 2:
-      text = const Text('Tus', style: style);
-      break;
-    case 3:
-      text = const Text('Wed', style: style);
-      break;
-    case 4:
-      text = const Text('Thur', style: style);
-      break;
-    case 5:
-      text = const Text('Fri', style: style);
-      break;
-    case 6:
-      text = const Text('Sat', style: style);
-      break;
-    default:
-      text = const Text('');
-  }
-  return SideTitleWidget(axisSide: meta.axisSide, child: text);
 }
