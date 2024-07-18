@@ -118,7 +118,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Create an account to log you daily activities.",
+                      "Create an account to log your daily activities.",
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: myDarkGrey,
@@ -277,12 +277,13 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
+                          padding: const EdgeInsets.only(left: 10.0),
                           child: Column(
                             children: [
                               Row(
                                 children: [
                                   // Text(
+
                                   Text(
                                     "Age: ",
                                     style: GoogleFonts.inter(
@@ -309,7 +310,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     }).toList(),
                                   ),
 
-                                  SizedBox(width: 8),
+                                  SizedBox(width: 35),
                                   Text(
                                     "Gender: ",
                                     style: GoogleFonts.inter(
@@ -319,7 +320,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: 8,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
