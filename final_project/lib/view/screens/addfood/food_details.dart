@@ -1,5 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/controller/bloc/addFood/add_food_bloc.dart';
+import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -20,6 +26,7 @@ class FoodDesc extends StatefulWidget {
   final String fat;
   final String sodium;
   final bool isToRemove;
+  final bool isPremiumFood;
   const FoodDesc({
     super.key,
     required this.foodId,
@@ -33,6 +40,7 @@ class FoodDesc extends StatefulWidget {
     required this.fat,
     required this.sodium,
     required this.isToRemove,
+    required this.isPremiumFood,
   });
 
   @override
@@ -41,6 +49,15 @@ class FoodDesc extends StatefulWidget {
 
 class _FoodDescState extends State<FoodDesc> {
   int counter = 1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // log('$imageBaseUrl/meal-photos/${widget.image}');
+    log(widget.image);
+    log(widget.foodId.toString());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +71,39 @@ class _FoodDescState extends State<FoodDesc> {
             width: Get.width * 0.8,
             child: Column(
               children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: const BoxDecoration(
-                      color: Colors.green, shape: BoxShape.circle),
-                  child: Center(
-                    child: Text(
-                      getFirstandLastNameInitals(
-                          widget.name.toString().toUpperCase()),
-                      style: const TextStyle(color: Colors.white, fontSize: 30),
-                    ),
-                  ),
-                ),
+                widget.image == 'null'
+                    ? Container(
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                            color: Colors.green, shape: BoxShape.circle),
+                        child: Center(
+                          child: Text(
+                            getFirstandLastNameInitals(
+                                widget.name.toString().toUpperCase()),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30),
+                          ),
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: widget.isPremiumFood
+                            ? '$imageBaseUrl/custom-photos/${widget.image}'
+                            : '$imageBaseUrl/meal-photos/${widget.image}',
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            height: Get.height * 0.2,
+                            decoration: BoxDecoration(
+                              // color: Colors.amber,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -213,6 +250,39 @@ class _FoodDescState extends State<FoodDesc> {
           const SizedBox(
             height: 25,
           ),
+          widget.isPremiumFood == true
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: Get.height * 0.05,
+                    // width: Get.width * 0.3,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        BlocProvider.of<AddFoodBloc>(context).add(
+                            DeletePremiumFoodEvent(
+                                foodId: widget.foodId.toString()));
+                        BlocProvider.of<AddFoodBloc>(context).add(
+                            AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'DELETE FOOD',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+          const SizedBox(height: 10),
           widget.isToRemove == false
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -279,16 +349,17 @@ class _FoodDescState extends State<FoodDesc> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          BlocProvider.of<AddFoodBloc>(context)
-                              .add(AddFoodButtonPressedEvent(
-                            foodName: widget.name,
-                            foodCalories: widget.calories,
-                            foodCarbs: widget.carbs,
-                            foodProtein: widget.protein,
-                            foodFat: widget.fat,
-                            foodSodium: widget.sodium,
-                          ));
-
+                          for (int i = 0; i < counter; i++) {
+                            BlocProvider.of<AddFoodBloc>(context)
+                                .add(AddFoodButtonPressedEvent(
+                              foodName: widget.name,
+                              foodCalories: widget.calories,
+                              foodCarbs: widget.carbs,
+                              foodProtein: widget.protein,
+                              foodFat: widget.fat,
+                              foodSodium: widget.sodium,
+                            ));
+                          }
                           BlocProvider.of<AddFoodBloc>(context)
                               .add(AddFoodLoadedEvent(url: '/api/meals'));
 
@@ -320,8 +391,8 @@ class _FoodDescState extends State<FoodDesc> {
                             .add(RemoveSpecificFoodEvent(
                           foodID: widget.foodId,
                         ));
-                        BlocProvider.of<AddFoodBloc>(context)
-                            .add(AddFoodLoadedEvent(url: '/api/meals'));
+                        BlocProvider.of<HomePageBloc>(context)
+                            .add(HomePageLoadEvent());
 
                         Navigator.pop(context);
                       },
@@ -335,7 +406,7 @@ class _FoodDescState extends State<FoodDesc> {
                       ),
                     ),
                   ),
-                ),
+                )
         ],
       ),
     );
@@ -355,6 +426,7 @@ void showFoodDesc({
   required String fat,
   required String sodium,
   bool isToRemove = false,
+  bool isPremiumFood = false,
 }) {
   showDialog(
     context: context,
@@ -371,7 +443,185 @@ void showFoodDesc({
         fat: fat,
         sodium: sodium,
         isToRemove: isToRemove,
+        isPremiumFood: isPremiumFood,
       );
     },
   );
+}
+
+class AddPremiumFood extends StatefulWidget {
+  const AddPremiumFood({super.key});
+
+  @override
+  State<AddPremiumFood> createState() => _AddPremiumFoodState();
+}
+
+class _AddPremiumFoodState extends State<AddPremiumFood> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController caloriesController = TextEditingController();
+  TextEditingController carbsController = TextEditingController();
+  TextEditingController proteinController = TextEditingController();
+  TextEditingController fatController = TextEditingController();
+  TextEditingController sodiumController = TextEditingController();
+  TextEditingController volumeController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Stack(
+          children: [
+            Text(
+              'Add Premium Food',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Positioned(
+              right: -15,
+              top: -15,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Container(
+          width: Get.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Name',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: nameController,
+                hintText: 'Food Name',
+              ),
+              Text('Description',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: descriptionController,
+                hintText: 'Food Description',
+              ),
+              Text('Calories',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: caloriesController,
+                hintText: 'Food Calories',
+              ),
+              Text('Carbohydrates',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: carbsController,
+                hintText: 'Food Carbs',
+              ),
+              Text('Protein',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: proteinController,
+                hintText: 'Food Protein',
+              ),
+              Text('Fats',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: fatController,
+                hintText: 'Food Fats',
+              ),
+              Text('Sodium',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: sodiumController,
+                hintText: 'Food Sodium',
+              ),
+              Text('Volume',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+              CustomTextField(
+                controller: volumeController,
+                hintText: 'Food Volume',
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      BlocProvider.of<AddFoodBloc>(context).add(
+                        AddPremiumFoodButtonPressedEvent(
+                          foodName: nameController.text,
+                          description: descriptionController.text,
+                          foodCalories: caloriesController.text,
+                          foodCarbs: carbsController.text,
+                          foodProtein: proteinController.text,
+                          foodFat: fatController.text,
+                          foodSodium: sodiumController.text,
+                          volume: volumeController.text,
+                          image: '',
+                        ),
+                      );
+
+                      BlocProvider.of<AddFoodBloc>(context).add(
+                          AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'ADD FOOD',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

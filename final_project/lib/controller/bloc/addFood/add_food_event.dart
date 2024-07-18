@@ -29,3 +29,32 @@ class AddFoodButtonPressedEvent extends AddFoodEvent {
     required this.foodSodium,
   });
 }
+
+class AddPremiumFoodButtonPressedEvent extends AddFoodEvent {
+  final dynamic foodName;
+  final dynamic description;
+  final dynamic foodCalories;
+  final dynamic foodCarbs;
+  final dynamic foodProtein;
+  final dynamic foodFat;
+  final dynamic foodSodium;
+  final dynamic volume;
+  final dynamic image;
+  AddPremiumFoodButtonPressedEvent({
+    required this.foodName,
+    required this.description,
+    required this.foodCalories,
+    required this.foodCarbs,
+    required this.foodProtein,
+    required this.foodFat,
+    required this.foodSodium,
+    required this.volume,
+    required this.image,
+  });
+}
+
+class DeletePremiumFoodEvent extends AddFoodEvent {
+  final String foodId;
+
+  DeletePremiumFoodEvent({required this.foodId});
+}

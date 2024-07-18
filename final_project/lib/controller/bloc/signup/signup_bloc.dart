@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:final_project/controller/apis/register_response.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../view/bottom_navigtion_bar.dart';
 import '../../apis/user_data_repository.dart';
@@ -29,6 +28,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   ) async {
     RegisterRepository registerRepository = RegisterRepository();
     GetUserData getUserData = GetUserData();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     emit(SignupLoadingstate());
     try {
       dynamic registerResponse = await registerRepository.register(
@@ -48,12 +48,17 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
       dynamic userdata = await getUserData.getUserData(token: token);
       name = userdata['name'];
+      prefs.setString('name', name);
       userId = userdata['user_id'];
+      prefs.setInt('userId', userId);
       email1 = userdata['email'];
+      prefs.setString('email', email1);
+      image = userdata['photo_name'];
+      prefs.setString('photo_name', image);
 
       log(name);
       log(email1);
-      Get.to(() => MyBottomNavigationBar());
+      Get.offAll(() => MyBottomNavigationBar());
 
       //if any of these three is entered no need to check for the other two
       // if (email.isEmpty && name.isEmpty && phoneno.isEmpty) {

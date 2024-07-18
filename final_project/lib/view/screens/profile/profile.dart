@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/profile/profile_editor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -139,8 +141,8 @@ class _CustomDrawerState extends State<ProfilePage> {
                         ListTile(
                           onTap: () {
                             // Navigate to the Learning Dashboard
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (context) => const Profile()));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const EditYourProfile()));
                           },
                           title: const Text('My Information'),
                           leading: Icon(
@@ -501,12 +503,12 @@ class _CustomDrawerState extends State<ProfilePage> {
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                         image: imageProvider,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.fitHeight,
                                       ),
                                     ),
                                   );
                                 },
-                                imageUrl: 'assets/others/no-image.png',
+                                imageUrl: '$imageBaseUrl/user-photos/$image',
                                 placeholder: (context, url) => Image.asset(
                                   'assets/others/no-image.png',
                                   fit: BoxFit.cover,
@@ -516,7 +518,7 @@ class _CustomDrawerState extends State<ProfilePage> {
                                   'assets/others/no-image.png',
                                   fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
+                                fit: BoxFit.scaleDown,
                               ),
                       ),
                     ),

@@ -1,13 +1,15 @@
-import 'dart:async';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/addfood/addfood_shimmer.dart';
 import 'package:final_project/view/screens/addfood/food_details.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../controller/apis/api.dart';
 import '../../../controller/bloc/addFood/add_food_bloc.dart';
 import '../../../widgets/custom_titile.dart';
 
@@ -21,35 +23,28 @@ class AddFood extends StatefulWidget {
 class _AddFoodState extends State<AddFood> {
   int selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
-  Timer? _searchTimer;
+
   int? groupVal;
 
   @override
   void initState() {
     super.initState();
-
-    BlocProvider.of<AddFoodBloc>(context)
-        .add(AddFoodLoadedEvent(url: '/api/meals'));
-    // BlocProvider.of<AddFoodBloc>(context)
-    //     .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-
-    // TODO: implement dispose
-    super.dispose();
+    selectedIndex == 0
+        ? BlocProvider.of<AddFoodBloc>(context)
+            .add(AddFoodLoadedEvent(url: '/api/meals'))
+        : BlocProvider.of<AddFoodBloc>(context)
+            .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        BlocProvider.of<AddFoodBloc>(context)
-            .add(AddFoodLoadedEvent(url: '/api/meals'));
-        // BlocProvider.of<AddFoodBloc>(context)
-        //     .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+        selectedIndex == 0
+            ? BlocProvider.of<AddFoodBloc>(context)
+                .add(AddFoodLoadedEvent(url: '/api/meals'))
+            : BlocProvider.of<AddFoodBloc>(context)
+                .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
       },
       child: GestureDetector(
         onTap: () {
@@ -71,33 +66,27 @@ class _AddFoodState extends State<AddFood> {
                     autofocus: false,
                     controller: _searchController,
                     onChanged: (val) {
-                      if (_searchTimer != null) {
-                        _searchTimer!.cancel();
+                      if (val.isEmpty) {
+                        _searchController.clear();
+                        selectedIndex == 0
+                            ? BlocProvider.of<AddFoodBloc>(context)
+                                .add(AddFoodLoadedEvent(url: '/api/meals'))
+                            : BlocProvider.of<AddFoodBloc>(context).add(
+                                AddFoodLoadedEvent(
+                                    url1: '/api/customs/$userId'));
+                      } else {
+                        selectedIndex == 0
+                            ? BlocProvider.of<AddFoodBloc>(context).add(
+                                AddFoodLoadedEvent(
+                                  url: '/api/meals?searchKey=$val',
+                                ),
+                              )
+                            : BlocProvider.of<AddFoodBloc>(context).add(
+                                AddFoodLoadedEvent(
+                                  url1: '/api/customs/$userId?searchKey=$val',
+                                ),
+                              );
                       }
-
-                      // Set a new timer to hit the API after a delay (e.g., 2 seconds)
-                      _searchTimer = Timer(const Duration(seconds: 1), () {
-                        if (val.isEmpty) {
-                          _searchController.clear();
-                          selectedIndex == 0
-                              ? BlocProvider.of<AddFoodBloc>(context)
-                                  .add(AddFoodLoadedEvent(url: '/api/meals'))
-                              : BlocProvider.of<AddFoodBloc>(context).add(
-                                  AddFoodLoadedEvent(url1: '/api/customs/0'));
-                        } else {
-                          selectedIndex == 0
-                              ? BlocProvider.of<AddFoodBloc>(context).add(
-                                  AddFoodLoadedEvent(
-                                    url: '/api/meals?searchKey=$val',
-                                  ),
-                                )
-                              : BlocProvider.of<AddFoodBloc>(context).add(
-                                  AddFoodLoadedEvent(
-                                    url1: '/api/customs/0?searchKey=$val',
-                                  ),
-                                );
-                        }
-                      });
                     },
                     onFieldSubmitted: (val) {
                       val == ''
@@ -132,7 +121,7 @@ class _AddFoodState extends State<AddFood> {
                         Icons.search,
                         color: secondaryColor,
                       ),
-                      hintText: 'Search Courses By Title',
+                      hintText: 'Search Food By Title',
                       hintStyle: TextStyle(
                         color: myGrey,
                         fontSize: 14,
@@ -159,8 +148,12 @@ class _AddFoodState extends State<AddFood> {
                           vertical: 4, horizontal: 20),
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          BlocProvider.of<AddFoodBloc>(context)
-                              .add(AddFoodLoadedEvent(url: '/api/meals'));
+                          selectedIndex == 0
+                              ? BlocProvider.of<AddFoodBloc>(context)
+                                  .add(AddFoodLoadedEvent(url: '/api/meals'))
+                              : BlocProvider.of<AddFoodBloc>(context).add(
+                                  AddFoodLoadedEvent(
+                                      url1: 'api/customs/$userId'));
                           _searchController.clear();
                         },
                         child: _searchController.text.isNotEmpty &&
@@ -175,19 +168,32 @@ class _AddFoodState extends State<AddFood> {
                     ),
                   )),
             ),
+            actions: [
+              selectedIndex == 1
+                  ? IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const AddPremiumFood();
+                            });
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ],
           ),
           body: BlocBuilder<AddFoodBloc, AddFoodState>(
             builder: (context, state) {
               if (state is AddFoodInitial) {
+                selectedIndex == 0
+                    ? BlocProvider.of<AddFoodBloc>(context)
+                        .add(AddFoodLoadedEvent(url: '/api/meals'))
+                    : BlocProvider.of<AddFoodBloc>(context)
+                        .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+              } else if (state is AddFoodLoadingState) {
                 log('$state');
-                BlocProvider.of<AddFoodBloc>(context)
-                    .add(AddFoodLoadedEvent(url: '/api/meals'));
-                // BlocProvider.of<AddFoodBloc>(context)
-                //     .add(AddFoodLoadedEvent(url1: '/api/customs/$userId'));
-
-                // } else if (state is AddFoodLoadingState) {
-                //   log('$state');
-                //   return const AddFoodShimmer();
+                return const AddFoodShimmer();
               } else if (state is AddFoodErrorState) {
                 log('$state');
                 return Center(
@@ -237,6 +243,9 @@ class _AddFoodState extends State<AddFood> {
                                 selectedIndex = 1;
                                 log('Selected Index: $selectedIndex');
                               });
+                              BlocProvider.of<AddFoodBloc>(context).add(
+                                  AddFoodLoadedEvent(
+                                      url1: '/api/customs/$userId'));
                             },
                             child: Container(
                               decoration: selectedIndex == 1
@@ -271,12 +280,15 @@ class _AddFoodState extends State<AddFood> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+                                        // log('$imageBaseUrl/meal-photos/${state.allProduct[index].imageUrl}');
                                         showFoodDesc(
                                           context: context,
                                           foodId: int.tryParse(state
                                               .allProduct[index].id
                                               .toString())!,
-                                          image: 'image',
+                                          image: state
+                                                  .allProduct[index].imageUrl ??
+                                              '',
                                           name: state.allProduct[index].name,
                                           ammount: 'per 100 grams',
                                           description: state
@@ -292,17 +304,44 @@ class _AddFoodState extends State<AddFood> {
                                         );
                                       },
                                       child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.green,
-                                          child: Text(
-                                            getFirstandLastNameInitals(state
-                                                .allProduct[index].name
-                                                .toString()
-                                                .toUpperCase()),
-                                            style: TextStyle(
-                                                color: whiteColor,
-                                                fontSize: 16),
-                                          ),
+                                        leading: SizedBox(
+                                          height: 60,
+                                          width: 60,
+                                          child: state.allProduct[index]
+                                                      .imageUrl ==
+                                                  'null'
+                                              ? CircleAvatar(
+                                                  backgroundColor: Colors.green,
+                                                  child: Text(
+                                                    getFirstandLastNameInitals(
+                                                        state.allProduct[index]
+                                                            .name
+                                                            .toString()
+                                                            .toUpperCase()),
+                                                    style: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 16),
+                                                  ),
+                                                )
+                                              : CachedNetworkImage(
+                                                  imageUrl:
+                                                      '$imageBaseUrl/meal-photos/${state.allProduct[index].imageUrl}',
+                                                  imageBuilder:
+                                                      (context, imageProvider) {
+                                                    return Container(
+                                                      height: 60,
+                                                      width: 60,
+                                                      decoration: BoxDecoration(
+                                                        // color: Colors.amber,
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fitHeight,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                         ),
                                         title: Text(
                                           state.allProduct[index].name,
@@ -333,12 +372,15 @@ class _AddFoodState extends State<AddFood> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+                                        // log('$imageBaseUrl/custom-photos/${state.premiumFood[index].imageUrl}');
                                         showFoodDesc(
                                           context: context,
                                           foodId: int.tryParse(state
-                                              .allProduct[index].id
+                                              .premiumFood[index].id
                                               .toString())!,
-                                          image: 'image',
+                                          image: state.premiumFood[index]
+                                                  .imageUrl ??
+                                              '',
                                           name: state.premiumFood[index].name,
                                           ammount: 'per 100 grams',
                                           description: state
@@ -351,20 +393,48 @@ class _AddFoodState extends State<AddFood> {
                                           fat: state.premiumFood[index].fats,
                                           sodium:
                                               state.premiumFood[index].sodium,
+                                          isPremiumFood: true,
                                         );
                                       },
                                       child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.green,
-                                          child: Text(
-                                            getFirstandLastNameInitals(state
-                                                .allProduct[index].name
-                                                .toString()
-                                                .toUpperCase()),
-                                            style: TextStyle(
-                                                color: whiteColor,
-                                                fontSize: 16),
-                                          ),
+                                        leading: SizedBox(
+                                          height: 60,
+                                          width: 60,
+                                          child: state.premiumFood[index]
+                                                      .imageUrl ==
+                                                  'null'
+                                              ? CircleAvatar(
+                                                  backgroundColor: Colors.green,
+                                                  child: Text(
+                                                    getFirstandLastNameInitals(
+                                                        state.premiumFood[index]
+                                                            .name
+                                                            .toString()
+                                                            .toUpperCase()),
+                                                    style: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 16),
+                                                  ),
+                                                )
+                                              : CachedNetworkImage(
+                                                  imageUrl:
+                                                      '$imageBaseUrl/custom-photos/${state.premiumFood[index].imageUrl}',
+                                                  imageBuilder:
+                                                      (context, imageProvider) {
+                                                    return Container(
+                                                      height: 60,
+                                                      width: 60,
+                                                      decoration: BoxDecoration(
+                                                        // color: Colors.amber,
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fitHeight,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                         ),
                                         title: Text(
                                           state.premiumFood[index].name,

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:final_project/controller/bloc/signup/signup_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';

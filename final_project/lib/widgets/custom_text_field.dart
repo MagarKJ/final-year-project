@@ -5,21 +5,23 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final String hintText;
   final bool obscureText;
   final bool? showPassword;
   final ValueChanged<bool>? onTogglePassword;
   final TextInputType keyboardType;
+  final FormFieldValidator<String>? validator;
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.prefixIcon,
+    this.prefixIcon,
     required this.hintText,
     this.obscureText = false,
     this.showPassword,
     this.onTogglePassword,
     this.keyboardType = TextInputType.text,
+    this.validator,
   });
 
   @override
@@ -30,6 +32,7 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         controller: controller,
         obscureText: obscureText && !(showPassword ?? false),
+        validator: validator,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: primaryColor),
@@ -39,7 +42,8 @@ class CustomTextField extends StatelessWidget {
             borderSide: BorderSide(color: myGrey),
             borderRadius: BorderRadius.circular(3),
           ),
-          prefixIcon: Icon(prefixIcon, color: myGrey),
+          prefixIcon:
+              prefixIcon != null ? Icon(prefixIcon, color: myGrey) : null,
           suffixIcon: obscureText
               ? IconButton(
                   onPressed: () {

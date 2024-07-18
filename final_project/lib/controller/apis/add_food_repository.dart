@@ -34,6 +34,39 @@ class AddFoodRepository {
     }
   }
 
+  Future<dynamic> addPremiumFood({
+    required dynamic foodName,
+    required dynamic description,
+    required dynamic foodCalories,
+    required dynamic foodCarbs,
+    required dynamic foodProtein,
+    required dynamic foodFat,
+    required dynamic foodSodium,
+    required dynamic volume,
+    required dynamic image,
+  }) async {
+    var value = {
+      "user_id": userId,
+      "name": foodName,
+      "description": description,
+      "calories": foodCalories,
+      "carbohydrate": foodCarbs,
+      "protein": foodProtein,
+      "fat": foodFat,
+      "sodium": foodSodium,
+      "volume": volume,
+      "photo": image,
+    };
+
+    try {
+      Response response =
+          await api.sendRequest.post('/api/customs', data: value);
+      return response.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> fetchAddedFood() async {
     try {
       Response response = await api.sendRequest.get('/api/everydays/$userId');
@@ -68,6 +101,17 @@ class AddFoodRepository {
       Response response =
           await api.sendRequest.delete('/api/everydays/destroy/$userId');
       log('/api/everydays/destroy/$userId');
+      return response.data;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<dynamic> deletePremiumFood({required String foodId}) async {
+    try {
+      Response response =
+          await api.sendRequest.delete('/api/customs/$foodId?_method=DELETE');
+      log('delete bhop');
       return response.data;
     } catch (e) {
       log(e.toString());

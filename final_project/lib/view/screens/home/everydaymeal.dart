@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/controller/bloc/home/home_page_bloc.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/addfood/addfood_shimmer.dart';
 import 'package:final_project/view/screens/addfood/food_details.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../controller/apis/api.dart';
 
 class Everydaymeal extends StatefulWidget {
   const Everydaymeal({super.key});
@@ -32,28 +36,41 @@ class _AddFoodState extends State<Everydaymeal> {
         titleSpacing: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.to(() => MyBottomNavigationBar(
+                currentIndex: 0,
+              )),
         ),
         actions: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: primaryColor.withOpacity(0.8),
-            ),
-            child: TextButton(
-              onPressed: () {
+          DropdownButton(
+              icon: const Icon(
+                Icons.more_vert,
+              ),
+              items: const [
+                DropdownMenuItem(
+                  value: 'Delete All',
+                  child: Text('Delete All'),
+                ),
+              ],
+              onChanged: (value) {
                 BlocProvider.of<HomePageBloc>(context)
                     .add(RemoveAllMealsEvent());
                 Fluttertoast.showToast(msg: 'All Your Daily Meal Is Deleted');
                 BlocProvider.of<HomePageBloc>(context).add(HomePageLoadEvent());
-              },
-              child: Text(
-                'Delete All',
-                style: GoogleFonts.inter(color: Colors.white),
-              ),
-            ),
-          ),
+              }),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15),
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(10),
+          //     color: primaryColor.withOpacity(0.8),
+          //   ),
+          //   child: TextButton(
+          //     onPressed: () {},
+          //     child: Text(
+          //       'Delete All',
+          //       style: GoogleFonts.inter(color: Colors.white),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(
             width: 10,
           )
@@ -92,32 +109,61 @@ class _AddFoodState extends State<Everydaymeal> {
                               return GestureDetector(
                                 onTap: () {
                                   showFoodDesc(
-                                    context: context,
-                                    foodId: int.tryParse(
-                                        state.allProduct[index].id.toString())!,
-                                    image: 'image',
-                                    name: state.allProduct[index].name,
-                                    ammount: 'per 100 grams',
-                                    description:
-                                        state.allProduct[index].description,
-                                    calories: state.allProduct[index].calories,
-                                    carbs: state.allProduct[index].carbs,
-                                    protein: state.allProduct[index].protein,
-                                    fat: state.allProduct[index].fats,
-                                    sodium: state.allProduct[index].sodium,
-                                  );
+                                      context: context,
+                                      foodId: int.tryParse(state
+                                          .allProduct[index].id
+                                          .toString())!,
+                                      image: state.allProduct[index].imageUrl ??
+                                          '',
+                                      name: state.allProduct[index].name,
+                                      ammount: 'per 100 grams',
+                                      description:
+                                          state.allProduct[index].description,
+                                      calories:
+                                          state.allProduct[index].calories,
+                                      carbs: state.allProduct[index].carbs,
+                                      protein: state.allProduct[index].protein,
+                                      fat: state.allProduct[index].fats,
+                                      sodium: state.allProduct[index].sodium,
+                                      isToRemove: true);
                                 },
                                 child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Colors.green,
-                                    child: Text(
-                                      getFirstandLastNameInitals(state
-                                          .allProduct[index].name
-                                          .toString()
-                                          .toUpperCase()),
-                                      style: TextStyle(
-                                          color: whiteColor, fontSize: 16),
-                                    ),
+                                  leading: SizedBox(
+                                    height: 60,
+                                    width: 60,
+                                    child: state.allProduct[index].imageUrl ==
+                                            'null'
+                                        ? CircleAvatar(
+                                            backgroundColor: Colors.green,
+                                            child: Text(
+                                              getFirstandLastNameInitals(state
+                                                  .allProduct[index].name
+                                                  .toString()
+                                                  .toUpperCase()),
+                                              style: TextStyle(
+                                                  color: whiteColor,
+                                                  fontSize: 16),
+                                            ),
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl:
+                                                '$imageBaseUrl/custom-photos/${state.allProduct[index].imageUrl}',
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                height: 60,
+                                                width: 60,
+                                                decoration: BoxDecoration(
+                                                  // color: Colors.amber,
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
                                   ),
                                   title: Text(
                                     state.allProduct[index].name,

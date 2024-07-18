@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:final_project/view/screens/home/note_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../../controller/bloc/notification/notification_bloc.dart';
 
@@ -33,6 +35,14 @@ class _NotificationsState extends State<Notifications> {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.alarm),
+            onPressed: () {
+              Get.to(() => PillReminder());
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {

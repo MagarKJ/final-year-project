@@ -28,7 +28,7 @@ final class AddFoodErrorState extends AddFoodState {
 final class AddFoodButtonPressedLoadingState extends AddFoodState {}
 
 final class AddFoodButtonPressedLoadedState extends AddFoodState {
-  List<ProductDataModel> addFood;
+  final List<ProductDataModel> addFood;
   AddFoodButtonPressedLoadedState({
     required this.addFood,
   });
@@ -38,6 +38,23 @@ final class AddFoodButtonPressedErrorState extends AddFoodState {
   final String message;
 
   AddFoodButtonPressedErrorState({
+    required this.message,
+  });
+}
+
+final class AddPremiumFoodButtonPressedLoadingState extends AddFoodState {}
+
+final class AddPremiumFoodButtonPressedLoadedState extends AddFoodState {
+  final List<ProductDataModel> addPremiumFood;
+  AddPremiumFoodButtonPressedLoadedState({
+    required this.addPremiumFood,
+  });
+}
+
+final class AddPremiumFoodButtonPressedErrorState extends AddFoodState {
+  final String message;
+
+  AddPremiumFoodButtonPressedErrorState({
     required this.message,
   });
 }

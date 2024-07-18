@@ -294,7 +294,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefs.setString('email', emailController.text.trim());
                         prefs.setString(
                             'password', passwordController.text.trim());
-                        Get.offAll(() => MyBottomNavigationBar());
                       }
                       if (state is GoogleLoginFailurestate) {
                         Get.snackbar('Login Failed', state.error);

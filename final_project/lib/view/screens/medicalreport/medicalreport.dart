@@ -1,4 +1,6 @@
+import 'package:final_project/view/screens/home/note_list.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../widgets/custom_titile.dart';
 
@@ -14,6 +16,17 @@ class MedicalReport extends StatelessWidget {
           isAppbar: true,
           title: "Medical Report",
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(() => PillReminder());
+            },
+            icon: const Icon(Icons.alarm),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+        ],
         leading: null,
       ),
       body: const Center(

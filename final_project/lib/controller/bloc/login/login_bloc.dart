@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:final_project/controller/apis/login_repository.dart';
 import 'package:final_project/controller/apis/user_data_repository.dart';
 import 'package:final_project/model/global_variables.dart';
@@ -52,9 +50,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       prefs.setInt('userId', userId);
       email1 = user['email'];
       prefs.setString('email', email1);
+      image = user['photo_name'];
+      prefs.setString('photo_name', image);
 
       log('aba navigate garna lageko');
-      Get.to(() => MyBottomNavigationBar());
+      Get.offAll(() => MyBottomNavigationBar());
       // if (EmailValidator.validate(email) == false) {
       //   emit(LoginFailurestate('Email is not a valid email'));
       //   return;

@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/model/global_variables.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/home/everydaymeal.dart';
+import 'package:final_project/view/screens/home/note_list.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
 import 'package:final_project/view/screens/home/step_counter2.dart';
@@ -12,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../controller/apis/api.dart';
 import '../../../controller/apis/firebase_api.dart';
 import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
@@ -36,11 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
     log('$token');
     super.initState();
 
-    fireBaseAPi.requestNotificationPermission();
-    fireBaseAPi.getDeviceToken();
-    fireBaseAPi.isTokenRefresh();
-    fireBaseAPi.firebaseInit(context);
-    fireBaseAPi.setupInteractMessage(context);
+    // fireBaseAPi.requestNotificationPermission();
+    // fireBaseAPi.getDeviceToken();
+    // fireBaseAPi.isTokenRefresh();
+    // fireBaseAPi.firebaseInit(context);
+    // fireBaseAPi.setupInteractMessage(context);
     // _loadUserName();
     // _loadUserNameFromGoogle();
   }
@@ -113,7 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Scaffold(
               backgroundColor: whiteColor,
               appBar: AppBar(
-                leadingWidth: 200,
+                titleSpacing: 0,
+                leadingWidth: 70,
                 backgroundColor: whiteColor,
                 surfaceTintColor: whiteColor,
                 actions: [
@@ -125,32 +129,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(width: 10),
                 ],
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Row(
+                title: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      LottieBuilder.asset(
-                        greetingAnimation,
-                        // repeat: false,
+                      Text(
+                        greeting,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            greeting,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            name ?? 'User',
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      Text(
+                        name ?? 'User',
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                     ],
+                  ),
+                ),
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: LottieBuilder.asset(
+                    greetingAnimation,
+                    // repeat: false,
                   ),
                 ),
               ),
@@ -179,8 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           TextButton.icon(
                             onPressed: () {
+                              log('add food');
                               Get.to(() => MyBottomNavigationBar(
-                                    currentIndex: 2,
+                                    currentIndex: 1,
                                   ));
                             },
                             icon: const Icon(Icons.add),
@@ -206,7 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       foodId: int.tryParse(state
                                           .allProduct[index].id
                                           .toString())!,
-                                      image: 'image',
+                                      image: state.allProduct[index].imageUrl ??
+                                          '',
                                       name: state.allProduct[index].name,
                                       ammount: 'per 100 grams',
                                       description:
@@ -221,16 +225,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   },
                                   child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      child: Text(
-                                        getFirstandLastNameInitals(state
-                                            .allProduct[index].name
-                                            .toString()
-                                            .toUpperCase()),
-                                        style: TextStyle(
-                                            color: whiteColor, fontSize: 16),
-                                      ),
+                                    leading: SizedBox(
+                                      height: 60,
+                                      width: 60,
+                                      child: state.allProduct[index].imageUrl ==
+                                              'null'
+                                          ? CircleAvatar(
+                                              backgroundColor: Colors.green,
+                                              child: Text(
+                                                getFirstandLastNameInitals(state
+                                                    .allProduct[index].name
+                                                    .toString()
+                                                    .toUpperCase()),
+                                                style: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 16),
+                                              ),
+                                            )
+                                          : CachedNetworkImage(
+                                              imageUrl:
+                                                  '$imageBaseUrl/custom-photos/${state.allProduct[index].imageUrl}',
+                                              imageBuilder:
+                                                  (context, imageProvider) {
+                                                return Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  decoration: BoxDecoration(
+                                                    // color: Colors.amber,
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.fitHeight,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                     ),
                                     title: Text(
                                       state.allProduct[index].name,
@@ -268,7 +298,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // color: primaryColor,
                                 width: Get.width * 0.25,
                                 child: GestureDetector(
-                                  onTap: () => Get.to(() => Everydaymeal()),
+                                  onTap: () =>
+                                      Get.offAll(() => const Everydaymeal()),
                                   child: Row(
                                     children: [
                                       Text(
