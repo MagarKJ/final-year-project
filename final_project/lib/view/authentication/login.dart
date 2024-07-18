@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:final_project/controller/bloc/login/login_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/forgotpas.dart';
@@ -14,6 +16,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/custom_text_field.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -21,14 +25,26 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _isRememberMe = false;
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
-  bool _isRememberMe = false;
+  // bool _isRememberMe = false;
+  void toggleRememberMe() {
+    setState(() {
+      _isRememberMe = !_isRememberMe;
+    });
+  }
 
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  final String _text = 'Welcome Back!';
+  final String _text1 = 'Always Keep Yourself Healthy.';
+
+  final int _durationPerLetter = 100;
   String email = '';
   String password = '';
 
@@ -37,6 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
     loadPreferences();
     // TODO: implement initState
     super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: _text1.length * _durationPerLetter),
+      vsync: this,
+    )..forward();
+    _animation = Tween<double>(begin: 0, end: _text1.length.toDouble())
+        .animate(_controller);
   }
 
   void loadPreferences() async {
@@ -107,25 +129,55 @@ class _LoginScreenState extends State<LoginScreen> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Image.asset("assets/logo/splashscreen.png"),
                   ),
-                  Text(
-                    "Welcome Back!",
-                    style: GoogleFonts.inter(
-                        fontSize: 26,
-                        color: black,
-                        fontWeight: FontWeight.w600),
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      int currentLength = _animation.value.round();
+                      String currentText =
+                          _text.substring(0, min(_text.length, currentLength));
+
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            currentText,
+                            style: GoogleFonts.inter(
+                                fontSize: 26,
+                                color: black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  Text(
-                    "Always Keep Yourself Healthy.",
-                    style: GoogleFonts.inter(
-                        fontSize: 26,
-                        color: myDarkGrey,
-                        fontWeight: FontWeight.w400),
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      int currentLength = _animation.value.round();
+                      String currentText1 = _text1.substring(
+                          0, min(currentLength, _text1.length));
+
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            currentText1,
+                            style: GoogleFonts.inter(
+                                fontSize: 18,
+                                color: myDarkGrey,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
-                    height: Get.height * 0.03,
+                    height: Get.height * 0.02,
                   ),
                   Form(
                     key: formKey,
