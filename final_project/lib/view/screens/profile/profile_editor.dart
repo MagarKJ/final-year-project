@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:final_project/controller/apis/user_data_repository.dart';
 import 'package:final_project/utils/constants.dart';
@@ -8,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../controller/bloc/profile/profile_bloc.dart';
-import '../../../model/global_variables.dart';
+import '../../../utils/global_variables.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/dropdownfield.dart';
@@ -39,6 +41,23 @@ class _EditYourProfileState extends State<EditYourProfile> {
   void initState() {
     getUserData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phonenoController.dispose();
+    ageController.dispose();
+    weightController.dispose();
+    ethnicityController.dispose();
+    bodyTypeController.dispose();
+    bodyGoalController.dispose();
+    bpController.dispose();
+    sugarController.dispose();
+    sexController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void getUserData() async {
@@ -260,6 +279,7 @@ class _EditYourProfileState extends State<EditYourProfile> {
                   CustomButton(
                     buttonText: 'Edit',
                     onPressed: () {
+                      log('message');
                       BlocProvider.of<ProfileBloc>(context).add(
                         UpdateUserData(
                           name: nameController.text.trim(),
@@ -273,9 +293,9 @@ class _EditYourProfileState extends State<EditYourProfile> {
                           bodygoal: bodyGoalController.text.trim(),
                           bloodPressue: bpController.text.trim(),
                           bloodSugar: sugarController.text.trim(),
-                       
                         ),
                       );
+                      log('message2');
                     },
                     width: Get.width * 0.3,
                     height: Get.height * 0.06,

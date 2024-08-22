@@ -1,15 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/controller/bloc/addFood/add_food_bloc.dart';
-import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
@@ -39,8 +41,8 @@ class FoodDesc extends StatefulWidget {
     required this.protein,
     required this.fat,
     required this.sodium,
-    required this.isToRemove,
-    required this.isPremiumFood,
+    this.isToRemove = false,
+    this.isPremiumFood = false,
   });
 
   @override
@@ -353,11 +355,13 @@ class _FoodDescState extends State<FoodDesc> {
                             BlocProvider.of<AddFoodBloc>(context)
                                 .add(AddFoodButtonPressedEvent(
                               foodName: widget.name,
+                              foodDescription: widget.description,
                               foodCalories: widget.calories,
                               foodCarbs: widget.carbs,
                               foodProtein: widget.protein,
                               foodFat: widget.fat,
                               foodSodium: widget.sodium,
+                              image: widget.image,
                             ));
                           }
                           BlocProvider.of<AddFoodBloc>(context)
@@ -457,6 +461,7 @@ class AddPremiumFood extends StatefulWidget {
 }
 
 class _AddPremiumFoodState extends State<AddPremiumFood> {
+  XFile? file;
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController caloriesController = TextEditingController();
@@ -465,6 +470,20 @@ class _AddPremiumFoodState extends State<AddPremiumFood> {
   TextEditingController fatController = TextEditingController();
   TextEditingController sodiumController = TextEditingController();
   TextEditingController volumeController = TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    nameController.dispose();
+    descriptionController.dispose();
+    caloriesController.dispose();
+    carbsController.dispose();
+    proteinController.dispose();
+    fatController.dispose();
+    sodiumController.dispose();
+    volumeController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -574,6 +593,43 @@ class _AddPremiumFoodState extends State<AddPremiumFood> {
                 controller: volumeController,
                 hintText: 'Food Volume',
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      ),
+                      onPressed: () async {
+                        final picker = ImagePicker();
+                        final pickedFile = await picker.pickImage(
+                          source: ImageSource.gallery,
+                          imageQuality: 100,
+                        );
+                        setState(() {
+                          file = pickedFile;
+                        });
+                      },
+                      child: Text(
+                        'Pick An Image',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    if (file != null)
+                      Image.file(
+                        File(file!.path),
+                        height: 80,
+                        width: 80,
+                      ),
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -598,7 +654,7 @@ class _AddPremiumFoodState extends State<AddPremiumFood> {
                           foodFat: fatController.text,
                           foodSodium: sodiumController.text,
                           volume: volumeController.text,
-                          image: '',
+                          image: file,
                         ),
                       );
 

@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../controller/apis/api.dart';
+import '../addfood/food_desc.dart';
 
 class Everydaymeal extends StatefulWidget {
   const Everydaymeal({super.key});
@@ -108,8 +109,8 @@ class _AddFoodState extends State<Everydaymeal> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  showFoodDesc(
-                                      context: context,
+                                  Get.to(
+                                    () => FoodDescription(
                                       foodId: int.tryParse(state
                                           .allProduct[index].id
                                           .toString())!,
@@ -125,7 +126,9 @@ class _AddFoodState extends State<Everydaymeal> {
                                       protein: state.allProduct[index].protein,
                                       fat: state.allProduct[index].fats,
                                       sodium: state.allProduct[index].sodium,
-                                      isToRemove: true);
+                                      isToRemove: true,
+                                    ),
+                                  );
                                 },
                                 child: ListTile(
                                   leading: SizedBox(

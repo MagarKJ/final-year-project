@@ -15,18 +15,22 @@ class AddFoodLoadedEvent extends AddFoodEvent {
 
 class AddFoodButtonPressedEvent extends AddFoodEvent {
   final dynamic foodName;
+  final dynamic foodDescription;
   final dynamic foodCalories;
   final dynamic foodCarbs;
   final dynamic foodProtein;
   final dynamic foodFat;
   final dynamic foodSodium;
+  final dynamic image;
   AddFoodButtonPressedEvent({
     required this.foodName,
+    required this.foodDescription,
     required this.foodCalories,
     required this.foodCarbs,
     required this.foodProtein,
     required this.foodFat,
     required this.foodSodium,
+    required this.image,
   });
 }
 

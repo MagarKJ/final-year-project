@@ -24,6 +24,12 @@ class _NotesPageState extends State<PillReminder> {
     loadNotes();
   }
 
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
+
   void loadNotes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -367,6 +373,13 @@ class _AddNotesPageState extends State<AddNotesPage> {
   void initState() {
     super.initState();
     loadNotes();
+  }
+
+  @override
+  void dispose() {
+    noteController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void showNotificationAndSchedule() async {

@@ -9,10 +9,13 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
 
     <application
         android:label="Get Fit"
         android:name="androidx.multidex.MultiDexApplication"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar" 
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

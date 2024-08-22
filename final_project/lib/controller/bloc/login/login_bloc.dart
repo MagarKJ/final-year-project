@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:final_project/controller/apis/login_repository.dart';
 import 'package:final_project/controller/apis/user_data_repository.dart';
-import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,6 +52,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       prefs.setString('email', email1);
       image = user['photo_name'];
       prefs.setString('photo_name', image);
+      bloodPressure = user['bloodPressure'];
+      prefs.setString('bloodPressure', bloodPressure);
+      bloodSugar = user['bloodSugar'];
+      prefs.setString('bloodSugar', bloodSugar);
+      isPremium = user['isPremium'];
+      prefs.setInt('isPremium', isPremium);
+      // isGoogleLogin = user['google_id'];
+      // prefs.setInt('google_id', isGoogleLogin);
+      age = user['age'];
+      prefs.setInt('age', age);
+      phoneno = user['phone'];
+      prefs.setString('phone', phoneno);
+      sex = user['sex'];
+      prefs.setString('sex', sex);
+      weight = user['weight'];
+      prefs.setString('weight', weight);
+      ethnicity = user['ethnicity'];
+      prefs.setString('ethnicity', ethnicity);
+      bodytype = user['bodyType'];
+      prefs.setString('bodyType', bodytype);
+      bodygoal = user['bodyGoal'];
+      prefs.setString('bodyGoal', bodygoal);
 
       log('aba navigate garna lageko');
       Get.offAll(() => MyBottomNavigationBar());

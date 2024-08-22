@@ -60,12 +60,19 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       emit(AddFoodButtonPressedLoadingState());
       dynamic addFood = await addFoodRepository.addFood(
         foodName: event.foodName,
+        foodDescription: event.foodDescription,
         foodCalories: event.foodCalories,
         foodCarbs: event.foodCarbs,
         foodProtein: event.foodProtein,
         foodFat: event.foodFat,
         foodSodium: event.foodSodium,
+        image: event.image,
       );
+      Fluttertoast.showToast(
+          msg: addFood['message'],
+          backgroundColor: addFood['message'] == 'New Meal Added'
+              ? Colors.green
+              : Colors.red);
 
       emit(
         AddFoodButtonPressedLoadedState(addFood: addFood),

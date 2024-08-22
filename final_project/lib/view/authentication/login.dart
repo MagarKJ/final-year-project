@@ -281,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen>
                       }
                       return CustomButton(
                         buttonText: 'Log In',
-                        onPressed: () {
+                        onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             context.read<LoginBloc>().add(
                                   LoginRequestedEvent(
@@ -289,6 +289,9 @@ class _LoginScreenState extends State<LoginScreen>
                                     password: passwordController.text.trim(),
                                   ),
                                 );
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setBool("Login", true);
                           }
                         },
                         width: Get.width * 0.8,

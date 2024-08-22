@@ -5,6 +5,14 @@ sealed class ProfileEvent {}
 
 final class LogoutButtonPressedEvent extends ProfileEvent {}
 
+final class UpdateUserPhoto extends ProfileEvent {
+  final XFile image;
+
+  UpdateUserPhoto({
+    required this.image,
+  });
+}
+
 final class UpdateUserData extends ProfileEvent {
   final String name;
   final String age;
@@ -18,7 +26,6 @@ final class UpdateUserData extends ProfileEvent {
   final String bloodPressue;
   final String bloodSugar;
 
-
   UpdateUserData({
     required this.email,
     required this.name,
@@ -31,6 +38,7 @@ final class UpdateUserData extends ProfileEvent {
     required this.bodygoal,
     required this.bodytype,
     required this.ethnicity,
-  
   });
 }
+
+final class GoPremium extends ProfileEvent {}

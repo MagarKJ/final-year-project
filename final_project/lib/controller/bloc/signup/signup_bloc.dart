@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:final_project/controller/apis/register_response.dart';
-import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +55,28 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       prefs.setString('email', email1);
       image = userdata['photo_name'];
       prefs.setString('photo_name', image);
+      bloodPressure = userdata['bloodPressure'];
+      prefs.setString('bloodPressure', bloodPressure);
+      bloodSugar = userdata['bloodSugar'];
+      prefs.setString('bloodSugar', bloodSugar);
+      isPremium = userdata['isPremium'];
+      prefs.setInt('isPremium', isPremium);
+      isGoogleLogin = userdata['isGoogle'];
+      prefs.setInt('isGoogle', isGoogleLogin);
+      age = userdata['age'];
+      prefs.setInt('age', age);
+      phoneno = userdata['phone'];
+      prefs.setString('phone', phoneno);
+      sex = userdata['sex'];
+      prefs.setString('sex', sex);
+      weight = userdata['weight'];
+      prefs.setString('weight', weight);
+      ethnicity = userdata['ethnicity'];
+      prefs.setString('ethnicity', ethnicity);
+      bodytype = userdata['bodyType'];
+      prefs.setString('bodyType', bodytype);
+      bodygoal = userdata['bodyGoal'];
+      prefs.setString('bodyGoal', bodygoal);
 
       log(name);
       log(email1);

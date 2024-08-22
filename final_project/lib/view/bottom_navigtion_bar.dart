@@ -10,6 +10,7 @@ import 'package:final_project/view/screens/analytics/analytics.dart';
 import 'package:final_project/view/screens/home/homescreen.dart';
 import 'package:final_project/view/screens/medicalreport/medicalreport.dart';
 import 'package:final_project/view/screens/profile/profile.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
@@ -41,6 +42,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     final status = await Permission.storage.request();
     if (!status.isGranted) {
       await Permission.storage.request();
+      await Permission.notification.request();
     } else {
       print('no permission');
     }

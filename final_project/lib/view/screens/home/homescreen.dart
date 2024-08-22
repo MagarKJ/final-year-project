@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:final_project/model/global_variables.dart';
-import 'package:final_project/view/bottom_navigtion_bar.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/view/screens/home/everydaymeal.dart';
 import 'package:final_project/view/screens/home/notification.dart';
 import 'package:final_project/view/screens/home/nutrition.dart';
@@ -10,7 +9,6 @@ import 'package:final_project/view/screens/home/step_counter2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../controller/apis/api.dart';
@@ -18,6 +16,7 @@ import '../../../controller/apis/firebase_api.dart';
 import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_titile.dart';
+import '../addfood/food_desc.dart';
 import '../addfood/food_details.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,45 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     log('$userId');
     log('$token');
     super.initState();
-
-    // fireBaseAPi.requestNotificationPermission();
-    // fireBaseAPi.getDeviceToken();
-    // fireBaseAPi.isTokenRefresh();
-    // fireBaseAPi.firebaseInit(context);
-    // fireBaseAPi.setupInteractMessage(context);
-    // _loadUserName();
-    // _loadUserNameFromGoogle();
   }
-
-  // Future<void> _loadUserName() async {
-  //   User? currenyUser = FirebaseAuth.instance.currentUser;
-  //   if (currenyUser != null) {
-  //     DocumentSnapshot userName = await FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(currenyUser.uid)
-  //         .get();
-  //     if (userName.exists) {
-  //       setState(() {
-  //         name = userName['name'];
-  //       });
-  //     } else {
-  //       name = '';
-  //     }
-  //   }
-  // }
-
-  // Future<void> _loadUserNameFromGoogle() async {
-  //   User? currentUser = FirebaseAuth.instance.currentUser;
-  //   if (currentUser != null) {
-  //     if (currentUser.displayName != null) {
-  //       setState(() {
-  //         name = currentUser.displayName!;
-  //       });
-  //     } else {
-  //       name = '';
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -166,11 +127,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 25,
                       ),
                       Nutritions(nutrients: state.nutrients[0]),
-                      const CustomTitle(
-                        title: 'Step Counter',
-                        fontSize: 25,
-                      ),
-                      const StepCounter2(),
+                      isPremium == 1
+                          ? const CustomTitle(
+                              title: 'Step Counter',
+                              fontSize: 25,
+                            )
+                          : const SizedBox.shrink(),
+                      isPremium == 1
+                          ? const StepCounter2()
+                          : const SizedBox.shrink(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -202,24 +167,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    showFoodDesc(
-                                      context: context,
-                                      foodId: int.tryParse(state
-                                          .allProduct[index].id
-                                          .toString())!,
-                                      image: state.allProduct[index].imageUrl ??
-                                          '',
-                                      name: state.allProduct[index].name,
-                                      ammount: 'per 100 grams',
-                                      description:
-                                          state.allProduct[index].description,
-                                      calories:
-                                          state.allProduct[index].calories,
-                                      carbs: state.allProduct[index].carbs,
-                                      protein: state.allProduct[index].protein,
-                                      fat: state.allProduct[index].fats,
-                                      sodium: state.allProduct[index].sodium,
-                                      isToRemove: true,
+                                    Get.to(
+                                      () => FoodDescription(
+                                        foodId: int.tryParse(state
+                                            .allProduct[index].id
+                                            .toString())!,
+                                        image:
+                                            state.allProduct[index].imageUrl ??
+                                                '',
+                                        name: state.allProduct[index].name,
+                                        ammount: 'per 100 grams',
+                                        description:
+                                            state.allProduct[index].description,
+                                        calories:
+                                            state.allProduct[index].calories,
+                                        carbs: state.allProduct[index].carbs,
+                                        protein:
+                                            state.allProduct[index].protein,
+                                        fat: state.allProduct[index].fats,
+                                        sodium: state.allProduct[index].sodium,
+                                        isToRemove: true,
+                                      ),
                                     );
                                   },
                                   child: ListTile(
@@ -242,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             )
                                           : CachedNetworkImage(
                                               imageUrl:
-                                                  '$imageBaseUrl/custom-photos/${state.allProduct[index].imageUrl}',
+                                                  '$imageBaseUrl/meal-photos/${state.allProduct[index].imageUrl}',
                                               imageBuilder:
                                                   (context, imageProvider) {
                                                 return Container(

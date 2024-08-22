@@ -1,15 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:developer';
-import 'dart:typed_data';
 import 'package:final_project/controller/apis/user_data_repository.dart';
+import 'package:final_project/controller/bloc/profile/profile_bloc.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../model/global_variables.dart';
 import '../../../utils/constants.dart';
 
 class ProfileImage extends StatefulWidget {
@@ -21,8 +19,7 @@ class ProfileImage extends StatefulWidget {
 
 class _ProfileImageState extends State<ProfileImage> {
   int selectedTab = 0;
-  dynamic file = '';
-  bool isLoading = false;
+  XFile? file;
 
   GetUserData user = GetUserData();
 
@@ -37,7 +34,9 @@ class _ProfileImageState extends State<ProfileImage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
             onPressed: () {
-              Get.back();
+              Get.offAll(() => MyBottomNavigationBar(
+                    currentIndex: 4,
+                  ));
             },
           )),
       body: Padding(
@@ -71,23 +70,20 @@ class _ProfileImageState extends State<ProfileImage> {
                                   source: ImageSource.gallery,
                                   imageQuality: 100,
                                 );
-                                // print("Picked Filed: $pickedFile");
-                                Uint8List imagebytes =
-                                    await pickedFile!.readAsBytes();
-                                // File(pickedFile!.path).readAsBytesSync();
-                                String imageBase64 = base64Encode(imagebytes);
-                                log(imageBase64);
                                 setState(() {
-                                  file = imageBase64;
+                                  file = pickedFile;
                                 });
                               },
                               icon: const Icon(Icons.upload_file),
                               label: const Text('Pick a file')),
                         ],
                       ),
-                      if (file != '')
-                        Image.memory(base64Decode(file),
-                            height: 200, width: 200),
+                      if (file != null)
+                        Image.file(
+                          File(file!.path),
+                          height: 200,
+                          width: 200,
+                        ),
                     ],
                   ),
                   Align(
@@ -107,56 +103,57 @@ class _ProfileImageState extends State<ProfileImage> {
               child: MaterialButton(
                 color: primaryColor,
                 onPressed: () {
-                  setState(() {
-                    isLoading = true;
-                  });
                   (file != '')
-                      ? user.updateUserData(image: file).then((value) {
-                          value['status'] == true
-                              ? {
-                                  setState(() {
-                                    isLoading = false;
-                                  }),
-                                  showDialog(
-                                      context: context,
-                                      builder: (ctx) {
-                                        value['imageFile'] != null
-                                            ? {
-                                                saveImage(value['imageFile']),
-                                                image = value['imageFile']
-                                              }
-                                            : null;
-                                        return AlertDialog(
-                                          title: const Text('Image Updated'),
-                                          content: const Text(
-                                              'Image successfully updated'),
-                                          actions: [
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Get.offAll(() =>
-                                                      MyBottomNavigationBar(
-                                                        currentIndex: 4,
-                                                      ));
-                                                },
-                                                child: const Text('Ok'))
-                                          ],
-                                        );
-                                      })
-                                }
-                              : {
-                                  setState(() {
-                                    isLoading = false;
-                                  }),
-                                  Get.snackbar(
-                                    'Error',
-                                    'Something went wrong',
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    backgroundColor: Colors.red,
-                                    colorText: Colors.white,
-                                    duration: const Duration(seconds: 2),
-                                  ),
-                                };
-                        })
+                      ? BlocProvider.of<ProfileBloc>(context).add(
+                          UpdateUserPhoto(
+                            image: file!,
+                          ),
+                        )
+                      //     value['status'] == true
+                      //         ? {
+                      //             setState(() {
+                      //               isLoading = false;
+                      //             }),
+                      //             showDialog(
+                      //                 context: context,
+                      //                 builder: (ctx) {
+                      //                   value['imageFile'] != null
+                      //                       ? {
+                      //                           saveImage(value['imageFile']),
+                      //                           image = value['imageFile']
+                      //                         }
+                      //                       : null;
+                      //                   return AlertDialog(
+                      //                     title: const Text('Image Updated'),
+                      //                     content: const Text(
+                      //                         'Image successfully updated'),
+                      //                     actions: [
+                      //                       ElevatedButton(
+                      //                           onPressed: () {
+                      //                             Get.offAll(() =>
+                      //                                 MyBottomNavigationBar(
+                      //                                   currentIndex: 4,
+                      //                                 ));
+                      //                           },
+                      //                           child: const Text('Ok'))
+                      //                     ],
+                      //                   );
+                      //                 })
+                      //           }
+                      //         : {
+                      //             setState(() {
+                      //               isLoading = false;
+                      //             }),
+                      //             Get.snackbar(
+                      //               'Error',
+                      //               'Something went wrong',
+                      //               snackPosition: SnackPosition.BOTTOM,
+                      //               backgroundColor: Colors.red,
+                      //               colorText: Colors.white,
+                      //               duration: const Duration(seconds: 2),
+                      //             ),
+                      //           };
+                      //   })
                       : showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -170,19 +167,11 @@ class _ProfileImageState extends State<ProfileImage> {
                                 ],
                               ));
                 },
-                child: isLoading
-                    ? SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: Center(
-                            child: CupertinoActivityIndicator(
-                          color: whiteColor,
-                        )))
-                    : Text(
-                        'Update Image',
-                        style: TextStyle(
-                            color: whiteColor, fontWeight: FontWeight.bold),
-                      ),
+                child: Text(
+                  'Update Image',
+                  style:
+                      TextStyle(color: whiteColor, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],

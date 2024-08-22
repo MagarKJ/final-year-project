@@ -324,7 +324,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
+                                        horizontal: 0.0),
                                     child: DropdownButton<String>(
                                       borderRadius: BorderRadius.circular(15),
                                       hint: Text(

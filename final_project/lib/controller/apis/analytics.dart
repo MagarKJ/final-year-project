@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:final_project/controller/apis/api.dart';
-import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/utils/global_variables.dart';
 
 class AnalyticsRepository {
   API api = API();

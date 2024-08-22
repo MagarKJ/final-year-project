@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:final_project/view/screens/home/note_list.dart';
+import 'package:final_project/view/screens/medicalreport/pill_reminder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

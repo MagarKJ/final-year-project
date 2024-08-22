@@ -35,6 +35,11 @@ const goodMorning = "assets/animation/goodmorning.json";
 const goodAfternoon = "assets/animation/goodafternoon.json";
 const goodEvening = "assets/animation/goodevening.json";
 
+const String CLIENT_ID = "JB0BBQ4aD0UqIThFJwAKBgAXEUkEGQUBBAwdOgABHD4DChwUAB0R";
+const String SECRET_KEY = "BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ==";
+
+
+
 // class Utils {
 //   static final messengerKey =
 //       GlobalKey<ScaffoldMessengerState>();
@@ -71,7 +76,6 @@ String extractMonthAndDay(String createdAt) {
   return '$month-$day';
 }
 
-
 OutlineInputBorder customFocusBorder() {
   return OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -81,6 +85,7 @@ OutlineInputBorder customFocusBorder() {
 TextStyle floatingLabelTextStyle() {
   return TextStyle(color: secondaryColor, fontSize: 13);
 }
+
 Future<void> saveImage(String image) async {
   var prefs = await SharedPreferences.getInstance();
   prefs.setString('image', image);

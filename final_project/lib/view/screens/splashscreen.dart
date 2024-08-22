@@ -1,11 +1,9 @@
 import 'dart:developer';
 
-import 'package:final_project/model/global_variables.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/onboardingscreen/on_boarding.dart';
-import 'package:final_project/view/screens/onboardingscreen/page1.dart';
-import 'package:final_project/view/screens/onboardingscreen/page2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,10 +32,34 @@ class _SplashScreenState extends State<SplashScreen> {
     userId = prefs.getInt('userId') ?? '';
     token = prefs.getString('token') ?? '';
     image = prefs.getString('photo_name') ?? '';
+    bloodPressure = prefs.getString('bloodPressure') ?? '';
+    bloodSugar = prefs.getString('bloodSugar') ?? '';
+    isPremium = prefs.getInt('isPremium') ?? 0;
+    isGoogleLogin = prefs.getInt('isGoogleLogin') ?? 0;
+    age = prefs.getInt('age') ?? 0;
+    phoneno = prefs.getString('phone') ?? '';
+    sex = prefs.getString('sex') ?? '';
+    weight = prefs.getString('weight') ?? '';
+    ethnicity = prefs.getString('ethnicity') ?? '';
+    bodytype = prefs.getString('bodyType') ?? '';
+    bodygoal = prefs.getString('bodyGoal') ?? '';
+
     log(name);
     log(email1);
     log(userId.toString());
     log(token);
+    log(image);
+    log(bloodPressure);
+    log(bloodSugar);
+    log(isPremium.toString());
+    log(isGoogleLogin.toString());
+    log(age.toString());
+    log(phoneno);
+    log(sex);
+    log(weight);
+    log(ethnicity);
+    log(bodytype);
+    log(bodygoal);
   }
 
   @override

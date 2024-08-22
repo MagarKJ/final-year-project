@@ -122,8 +122,10 @@ class _StepCounterState extends State<StepCounter2> {
             radius: 80.0,
             lineWidth: 20,
             backgroundColor: Colors.black,
+            // percent: 0.1,
             percent: (_stepCount / maxSteps).clamp(0.0, 1.0),
             center: Text(
+              // '1000',
               _stepCount < maxSteps ? ' $_stepCount' : 'Goal Achieved! 🎉',
               style: TextStyle(
                 fontFamily: GoogleFonts.montserrat().fontFamily,

@@ -1,6 +1,6 @@
 import 'package:final_project/controller/bloc/analytics/analytics_bloc.dart';
 import 'package:final_project/utils/constants.dart';
-import 'package:final_project/view/screens/analytics/calorie/calorie_graph.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/view/screens/analytics/calorie/calorie_graphhh.dart';
 import 'package:final_project/view/screens/analytics/carbs.dart';
 import 'package:final_project/view/screens/analytics/fat.dart';
@@ -48,6 +48,11 @@ class Analytics extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      isPremium == 1
+                          ? StepDataPage(
+                              analytics: state.weeklySummary,
+                            )
+                          : const SizedBox.shrink(),
                       CalorieGraphhh(analytics: state.weeklySummary),
                       CarbsGraph(analytics: state.weeklySummary),
                       ProteinGraph(analytics: state.weeklySummary),
@@ -56,9 +61,6 @@ class Analytics extends StatelessWidget {
                       WaterGraph(
                         analytics: state.weeklySummary,
                       ),
-                      StepDataPage(
-                        analytics: state.weeklySummary,
-                      )
                     ],
                   ),
                 ),
