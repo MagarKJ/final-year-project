@@ -24,8 +24,8 @@ class _StepDataPageState extends State<CarbsGraph> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 350,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Carbs')),
+          primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis:  NumericAxis(title: AxisTitle(text: 'Carbs')),
           series: [
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
@@ -35,7 +35,7 @@ class _StepDataPageState extends State<CarbsGraph> {
               name: 'Carbohydates',
             ),
           ],
-          title: const ChartTitle(
+          title:  ChartTitle(
               text: 'Carbohydrates Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair

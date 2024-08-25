@@ -13,4 +13,3 @@ dynamic image;
 dynamic bloodPressure;
 dynamic bloodSugar;
 int isPremium = 0;
-int isGoogleLogin = 0;

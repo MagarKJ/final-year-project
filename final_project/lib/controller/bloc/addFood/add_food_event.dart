@@ -44,6 +44,8 @@ class AddPremiumFoodButtonPressedEvent extends AddFoodEvent {
   final dynamic foodSodium;
   final dynamic volume;
   final dynamic image;
+  final dynamic quality;
+  final dynamic type;
   AddPremiumFoodButtonPressedEvent({
     required this.foodName,
     required this.description,
@@ -54,6 +56,8 @@ class AddPremiumFoodButtonPressedEvent extends AddFoodEvent {
     required this.foodSodium,
     required this.volume,
     required this.image,
+    required this.quality,
+    required this.type,
   });
 }
 

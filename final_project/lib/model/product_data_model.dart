@@ -1,15 +1,18 @@
+import 'package:get/get.dart';
+
 class ProductDataModel {
   final String id;
   final String userId;
   final String name;
   final String description;
+  final String ammount;
   final String calories;
   final String fats;
   final String protein;
   final String carbs;
   final String sodium;
   final String? volume;
-  // final double price;
+  final int drink;
   final String? imageUrl;
 
   ProductDataModel({
@@ -17,11 +20,13 @@ class ProductDataModel {
     required this.name,
     required this.description,
     required this.userId,
+    required this.ammount,
     required this.calories,
     required this.fats,
     required this.protein,
     required this.carbs,
     required this.sodium,
+    required this.drink,
     this.volume,
     this.imageUrl,
   });
@@ -38,8 +43,9 @@ class ProductDataModel {
       carbs: json['carbohydrate'].toString(),
       sodium: json['sodium'].toString(),
       volume: json['volume'].toString(),
-      // price: (json['price'] as num).toDouble(),
+      ammount: json['quantity'].toString(),
       imageUrl: json['photo_name'].toString(),
+      drink: json['drink'],
     );
   }
 
@@ -54,7 +60,8 @@ class ProductDataModel {
         'carbohydrate': carbs,
         'sodium': sodium,
         'volume': volume,
-        // 'price': price,
+        'quantity': ammount,
         'photo_name': imageUrl,
+        'drink': drink,
       };
 }

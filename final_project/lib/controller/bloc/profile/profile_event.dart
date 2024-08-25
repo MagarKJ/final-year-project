@@ -42,3 +42,5 @@ final class UpdateUserData extends ProfileEvent {
 }
 
 final class GoPremium extends ProfileEvent {}
+
+final class PurchaseHistoryLoad extends ProfileEvent {}

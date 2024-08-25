@@ -16,6 +16,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<HomePageLoadEvent>(_onHomePageLoaded);
     on<RemoveSpecificFoodEvent>(_onRemoveSpecificFoodEvent);
     on<RemoveAllMealsEvent>(onRemoveAllMealsEvent);
+    on<SendStepDataEvent>(_onSendStepDataEvent);
   }
 
   void _onHomePageLoaded(
@@ -69,6 +70,21 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       emit(RemoveAllMealsState(message: removeFood['message']));
     } catch (e) {
       emit(RemoveAllMealsErrorState(message: e.toString()));
+    }
+  }
+
+  FutureOr<void> _onSendStepDataEvent(
+    SendStepDataEvent event,
+    Emitter<HomePageState> emit,
+  ) async {
+    DailyNutrients dailyNutrients = DailyNutrients();
+    emit(HomePageLoadingState());
+    try {
+      dynamic response = await dailyNutrients.postNutrients(event.steps);
+      emit(SendStepDataState(message: response['message']));
+    } catch (e) {
+      log(e.toString());
+      emit(SendStepDataErrorState(message: e.toString()));
     }
   }
 }

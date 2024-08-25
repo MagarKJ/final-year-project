@@ -99,10 +99,13 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
         foodSodium: event.foodSodium,
         volume: event.volume,
         image: event.image,
+        quality: event.quality,
+        type: event.type,
       );
       emit(AddPremiumFoodButtonPressedLoadedState(
           addPremiumFood: addPremiumFood));
     } catch (e) {
+      log(e.toString());
       emit(AddPremiumFoodButtonPressedErrorState(message: e.toString()));
     }
   }

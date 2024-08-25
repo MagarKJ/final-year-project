@@ -4,7 +4,6 @@ import 'dart:developer' as developer;
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:final_project/utils/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -14,7 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../../view/screens/home/notification.dart';
+import 'view/screens/home/notification.dart';
 
 // Future<void> handlerBackgroundMessage(RemoteMessage message) async {
 //   print('Title: ${message.notification?.title}');
@@ -161,9 +160,9 @@ class FireBaseAPi {
 
 //show notification
   Future<void> showNotification(RemoteMessage message) async {
-    AndroidNotificationChannel channel = AndroidNotificationChannel(
-      message.notification?.android?.channelId.toString() ?? 'default_channel',
-      message.notification?.android?.channelId.toString() ?? 'Default Channel',
+    AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'default_channel',
+      'Default Channel',
       importance: Importance.max,
       showBadge: true,
       playSound: true,
@@ -178,7 +177,7 @@ class FireBaseAPi {
       priority: Priority.max,
       playSound: true,
       ticker: 'ticker',
-      sound: channel.sound,
+      sound: const RawResourceAndroidNotificationSound('audio'),
       enableVibration: true,
       enableLights: true,
     );
@@ -188,7 +187,7 @@ class FireBaseAPi {
     );
 
     await _flutterLocalNotificationsPlugin.show(
-      Random().nextInt(100),
+      Random().nextInt(1000),
       message.notification?.title.toString() ?? 'No Title',
       message.notification?.body.toString() ?? 'No Body',
       notificationDetails,
@@ -224,8 +223,8 @@ class FireBaseAPi {
           : null,
     });
     if (message.data['type'] == 'notification') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Notifications()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const Notifications()));
     }
   }
 
@@ -244,14 +243,14 @@ class FireBaseAPi {
     tz.setLocalLocation(tz.getLocation('Asia/Kathmandu'));
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
-      importance: Importance.max,
-      priority: Priority.max,
-      ticker: 'ticker',
-      playSound: true,
-    );
+        AndroidNotificationDetails('your_channel_id', 'your_channel_name',
+            importance: Importance.max,
+            priority: Priority.max,
+            ticker: 'ticker',
+            playSound: true,
+            enableLights: true,
+            enableVibration: true,
+            sound: RawResourceAndroidNotificationSound('audio'));
 
     const DarwinNotificationDetails iOSPlatformChannelSpecifics =
         DarwinNotificationDetails(

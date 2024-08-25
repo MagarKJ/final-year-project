@@ -24,8 +24,8 @@ class _StepDataPageState extends State<ProteinGraph> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 350,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Protein')),
+          primaryXAxis:  CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis:  NumericAxis(title: AxisTitle(text: 'Protein')),
           series: [
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
@@ -36,7 +36,7 @@ class _StepDataPageState extends State<ProteinGraph> {
               name: 'Protein',
             ),
           ],
-          title: const ChartTitle(
+          title:  ChartTitle(
               text: 'Protein Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair

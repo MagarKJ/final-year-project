@@ -1,17 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/medicalreport/pill_reminder.dart';
 import 'package:final_project/view/screens/profile/image.dart';
 import 'package:final_project/view/screens/profile/payemnt/esewa.dart';
-import 'package:final_project/view/screens/profile/payemnt/payment.dart';
 import 'package:final_project/view/screens/profile/profile_editor.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:final_project/view/screens/profile/purchasehistory.dart';
+import 'package:final_project/widgets/test.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -22,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../widgets/custom_alert_dialog_box.dart';
 import '../../../widgets/custom_titile.dart';
+import '../../../widgets/terms_and_conditions.dart';
 import '../../authentication/login.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -52,8 +53,7 @@ class _CustomDrawerState extends State<ProfilePage> {
 
   Future<void> clearData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email =
-        prefs.getString('email_address'); // Get the current contact value
+    String? email = prefs.getString('email'); // Get the current contact value
     bool? isRememberme = prefs.getBool('rememberMe');
     String? password = prefs.getString('password');
     int? boardingCount = prefs.getInt('boardingCount');
@@ -71,7 +71,7 @@ class _CustomDrawerState extends State<ProfilePage> {
     // await GoogleSignIn().disconnect();
 
     prefs.setBool('rememberMe', isRememberme ?? false);
-    prefs.setString('email_address', email ?? '');
+    prefs.setString('email', email ?? '');
     prefs.setString('password', password ?? '');
     prefs.setInt('boardingCount', boardingCount ?? 0);
     // log('boarding count $boardingCount');
@@ -91,6 +91,7 @@ class _CustomDrawerState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         surfaceTintColor: whiteColor,
+        automaticallyImplyLeading: false,
         title: const CustomTitle(
           fontSize: 25,
           isAppbar: true,
@@ -154,19 +155,6 @@ class _CustomDrawerState extends State<ProfilePage> {
                             Icons.person,
                             color: secondaryColor,
                           ), // Customize the icon
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: secondaryColor,
-                          ),
-                        ),
-                        const Divider(
-                          height: 0,
-                        ),
-                        ListTile(
-                          onTap: () {},
-                          title: const Text('Premium Meals'),
-                          leading: Icon(Icons.restaurant,
-                              color: secondaryColor), // Customize the icon
                           trailing: Icon(
                             Icons.arrow_forward_ios,
                             color: secondaryColor,
@@ -387,7 +375,9 @@ class _CustomDrawerState extends State<ProfilePage> {
                           height: 0,
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(() => PillReminder());
+                          },
                           title: const Text('Reminders'),
                           leading: Icon(
                             Icons.alarm,
@@ -401,26 +391,10 @@ class _CustomDrawerState extends State<ProfilePage> {
                         const Divider(
                           height: 0,
                         ),
-                        Visibility(
-                          visible: Platform.isAndroid,
-                          child: ListTile(
-                            onTap: () {},
-                            title: const Text('Change Password'),
-                            leading: Icon(
-                              Icons.lock,
-                              color: secondaryColor,
-                            ), // Customize the icon
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ),
-                        const Divider(
-                          height: 0,
-                        ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(() => const TermsandCondition());
+                          },
                           title: const Text(
                             'Terms and conditions',
                           ),
@@ -437,10 +411,12 @@ class _CustomDrawerState extends State<ProfilePage> {
                           height: 0,
                         ),
                         ListTile(
-                          onTap: () {},
-                          title: const Text('Feedback'),
+                          onTap: () {
+                            Get.to(() => const Purchasehistory());
+                          },
+                          title: const Text('Purchase History'),
                           leading: Icon(
-                            Icons.feed,
+                            Icons.history,
                             color: secondaryColor,
                           ), // Customize the icon
                           trailing: Icon(

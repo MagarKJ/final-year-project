@@ -1,5 +1,6 @@
-import 'dart:math';
+import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:final_project/controller/apis/api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -50,6 +51,21 @@ class RegisterRepository {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<dynamic> loginWithGoogle() async {
+    try {
+      Response response = await api.sendRequest.get('/api/auth/google');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = response.data;
+        String token = data['access_token'];
+        return token;
+      } else {
+        Fluttertoast.showToast(msg: 'Failed to login with google');
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

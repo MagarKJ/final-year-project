@@ -11,7 +11,6 @@ final class HomePageLoadedState extends HomePageState {
   List<ProductDataModel> allProduct;
   List<NutrientsModel> nutrients;
 
-
   HomePageLoadedState({
     required this.allProduct,
     required this.nutrients,
@@ -54,6 +53,22 @@ final class RemoveAllMealsErrorState extends HomePageState {
   final String message;
 
   RemoveAllMealsErrorState({
+    required this.message,
+  });
+}
+
+final class SendStepDataState extends HomePageState {
+  final String message;
+
+  SendStepDataState({
+    required this.message,
+  });
+}
+
+final class SendStepDataErrorState extends HomePageState {
+  final String message;
+
+  SendStepDataErrorState({
     required this.message,
   });
 }

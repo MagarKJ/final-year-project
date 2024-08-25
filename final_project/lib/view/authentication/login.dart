@@ -1,14 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:math';
+import 'dart:developer' as developer;
 
+import 'package:final_project/controller/apis/register_response.dart';
 import 'package:final_project/controller/bloc/login/login_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/authentication/forgotpas.dart';
+import 'package:final_project/view/authentication/login-api.dart';
 import 'package:final_project/view/authentication/signup.dart';
-import 'package:final_project/view/bottom_navigtion_bar.dart';
 
 import 'package:final_project/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,12 +35,6 @@ class _LoginScreenState extends State<LoginScreen>
   bool _isRememberMe = false;
   final formKey = GlobalKey<FormState>();
   bool _showPassword = false;
-  // bool _isRememberMe = false;
-  void toggleRememberMe() {
-    setState(() {
-      _isRememberMe = !_isRememberMe;
-    });
-  }
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -59,6 +56,29 @@ class _LoginScreenState extends State<LoginScreen>
     )..forward();
     _animation = Tween<double>(begin: 0, end: _text1.length.toDouble())
         .animate(_controller);
+  }
+
+  googleLogin() async {
+    RegisterRepository registerRepository = RegisterRepository();
+    try {
+      developer.log('Google Sign In Clicked');
+      UserCredential? user = await signInWithGoogle();
+      developer.log('Sign In with Google completed, UserCredential: $user');
+
+      try {
+        if (user != null) {
+          developer.log("User is not null, proceeding with registration");
+
+          await registerRepository.loginWithGoogle();
+        } else {
+          developer.log("User is null after Google Sign In");
+        }
+      } catch (e) {
+        developer.log("Exception during registration process: $e");
+      }
+    } catch (e) {
+      developer.log("Exception during Google Sign In: $e");
+    }
   }
 
   void loadPreferences() async {
@@ -90,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<String?> getEmail1() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString('email_address') ?? '';
+    email = prefs.getString('email') ?? '';
     // log('email is ${prefs.getString('email_address')}');
     return email;
   }
@@ -217,9 +237,8 @@ class _LoginScreenState extends State<LoginScreen>
                             value: _isRememberMe,
                             onChanged: (value) {
                               setState(() {
-                                _isRememberMe = !value!;
+                                _isRememberMe = !_isRememberMe;
                               });
-                              toggleRememberMe();
                             },
                           ),
                           Text("Remember Me",
@@ -249,39 +268,19 @@ class _LoginScreenState extends State<LoginScreen>
                   SizedBox(
                     height: Get.height * 0.01,
                   ),
-                  BlocConsumer<LoginBloc, LoginState>(
-                    //Consumer use gareko kina ki listen ni garna xa rw build ni garna xa
-                    //blocConsumer is BlocListener + BlocBuilder
-                    //BlocListener used for functionality that needs to occur once per state change such as navigation, showing a snackbarr, shpowing a dialog, etc.a dialog etc.
-                    //BlocBuilder used for functionality that needs to occur for every state change such as showing a loading indicator, updating a widget with new data, etc.
-
-                    listener: (context, state) async {
-                      if (state is LoginSuccessstate) {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
-                        prefs.setBool('Login', true);
-                        prefs.setString('email', emailController.text.trim());
-                        prefs.setString(
-                            'password', passwordController.text.trim());
-
-                        //offAll use gareko kina ki login vaye paxi login page ma janu pardaina
-                        //Get.to use garyo vane pheri yei screen ma farkina milxa ani offAll use gareko vane login
-                        //vaye paxi login page ma janu paudaina kina ki sab baki lai remove gardinxa
-                        Get.offAll(() => MyBottomNavigationBar());
-                        //auth bloc mai xaaa
-                      }
-                      if (state is LoginFailurestate) {
-                        Get.snackbar('Login Failed', state.error);
-                      }
-                    },
+                  BlocBuilder<LoginBloc, LoginState>(
                     builder: (context, state) {
-                      if (state is LoginLoadingstate) {
-                        return const CircularProgressIndicator();
-                      }
                       return CustomButton(
                         buttonText: 'Log In',
                         onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
+
+                          prefs.setString('email', emailController.text.trim());
+                          prefs.setString(
+                              'password', passwordController.text.trim());
+                          prefs.setBool('rememberMe', _isRememberMe);
                           if (formKey.currentState!.validate()) {
                             context.read<LoginBloc>().add(
                                   LoginRequestedEvent(
@@ -289,9 +288,6 @@ class _LoginScreenState extends State<LoginScreen>
                                     password: passwordController.text.trim(),
                                   ),
                                 );
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setBool("Login", true);
                           }
                         },
                         width: Get.width * 0.8,
@@ -306,97 +302,81 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                   Column(
                     children: [
-                      Container(
-                        width: Get.width * 0.9,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: primaryColor,
-                                thickness: 1,
-                                endIndent: 5,
-                              ),
-                            ),
-                            Text(
-                              'OR',
-                              style: GoogleFonts.inter(
-                                color: black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: primaryColor,
-                                thickness: 1,
-                                indent: 5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      BlocConsumer<LoginBloc, LoginState>(
-                        listener: (context, state) async {
-                          if (state is GoogleLoginSuccessstate) {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setBool('Login', true);
-                            prefs.setString(
-                                'email', emailController.text.trim());
-                            prefs.setString(
-                                'password', passwordController.text.trim());
-                            Get.offAll(() => MyBottomNavigationBar());
-                          }
-                          if (state is GoogleLoginFailurestate) {
-                            Get.snackbar('Login Failed', state.error);
-                          }
-                        },
-                        builder: (context, state) {
-                          if (state is GoogleLoginLoadingstate) {
-                            return const CircularProgressIndicator();
-                          }
-                          return GestureDetector(
-                            child: Container(
-                              width: Get.width * 0.8,
-                              height: Get.height * 0.06,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black.withOpacity(0.06),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    googleLogo,
-                                    width: 40,
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    'Continue with Google',
-                                    style: GoogleFonts.inter(
-                                      color: black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () {},
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
+                      // Container(
+                      //   width: Get.width * 0.9,
+                      //   child: Row(
+                      //     children: [
+                      //       Expanded(
+                      //         child: Divider(
+                      //           color: primaryColor,
+                      //           thickness: 1,
+                      //           endIndent: 5,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'OR',
+                      //         style: GoogleFonts.inter(
+                      //           color: black,
+                      //           fontSize: 14,
+                      //           fontWeight: FontWeight.w400,
+                      //         ),
+                      //       ),
+                      //       Expanded(
+                      //         child: Divider(
+                      //           color: primaryColor,
+                      //           thickness: 1,
+                      //           indent: 5,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: Get.height * 0.02,
+                      // ),
+                      // BlocBuilder<LoginBloc, LoginState>(
+                      //   builder: (context, state) {
+                      //     return GestureDetector(
+                      //       onTap: () {
+                      //         googleLogin();
+                      //       },
+                      //       child: Container(
+                      //         width: Get.width * 0.8,
+                      //         height: Get.height * 0.06,
+                      //         decoration: BoxDecoration(
+                      //           border: Border.all(
+                      //             color: Colors.black.withOpacity(0.06),
+                      //             width: 2,
+                      //           ),
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Image.asset(
+                      //               googleLogo,
+                      //               width: 40,
+                      //             ),
+                      //             const SizedBox(
+                      //               width: 15,
+                      //             ),
+                      //             Text(
+                      //               'Continue with Google',
+                      //               style: GoogleFonts.inter(
+                      //                 color: black,
+                      //                 fontSize: 16,
+                      //                 fontWeight: FontWeight.w600,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
+                      // SizedBox(
+                      //   height: Get.height * 0.02,
+                      // ),
                       RichText(
                         text: TextSpan(
                           text: "Don't Have an Account? ",

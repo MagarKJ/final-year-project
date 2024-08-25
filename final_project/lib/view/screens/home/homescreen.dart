@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cron/cron.dart';
 import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/view/screens/home/everydaymeal.dart';
 import 'package:final_project/view/screens/home/notification.dart';
@@ -10,14 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/apis/api.dart';
-import '../../../controller/apis/firebase_api.dart';
+import '../../../firebase_api.dart';
 import '../../../controller/bloc/home/home_page_bloc.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_titile.dart';
 import '../addfood/food_desc.dart';
-import '../addfood/food_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   FireBaseAPi fireBaseAPi = FireBaseAPi();
+  int stepCount = 0;
 
   @override
   void initState() {
@@ -35,7 +37,25 @@ class _HomeScreenState extends State<HomeScreen> {
     log('$token');
     log('$userId');
     log('$token');
+    callApi();
     super.initState();
+  }
+
+  void callApi() async {
+    final cron = Cron();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    stepCount = prefs.getInt('stepCount') ?? 0;
+
+    // Schedule to run every 24 hours at midnight (00:00)
+    cron.schedule(Schedule.parse('0 0 * * *'), () async {
+      print('Running task every 24 hours at midnight');
+      BlocProvider.of<HomePageBloc>(context)
+          .add(SendStepDataEvent(steps: stepCount));
+      BlocProvider.of<HomePageBloc>(context).add(HomePageLoadEvent());
+      prefs.remove('stepCount');
+      log('dataSent');
+      // Add your API call here
+    });
   }
 
   @override
@@ -80,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 leadingWidth: 70,
                 backgroundColor: whiteColor,
                 surfaceTintColor: whiteColor,
+                automaticallyImplyLeading: false,
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.notifications_active_outlined),
@@ -176,7 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             state.allProduct[index].imageUrl ??
                                                 '',
                                         name: state.allProduct[index].name,
-                                        ammount: 'per 100 grams',
+                                        ammount:
+                                            state.allProduct[index].ammount,
                                         description:
                                             state.allProduct[index].description,
                                         calories:
@@ -186,6 +208,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             state.allProduct[index].protein,
                                         fat: state.allProduct[index].fats,
                                         sodium: state.allProduct[index].sodium,
+                                        volume:
+                                            state.allProduct[index].volume ??
+                                                '',
+                                        isDrink: state.allProduct[index].drink,
                                         isToRemove: true,
                                       ),
                                     );
@@ -252,9 +278,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontSize: 14, color: calorieColor),
                                     ),
                                     trailing: IconButton(
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.remove_circle_outline,
-                                          color: myBlue,
+                                          color: Colors.red,
                                         ),
                                         onPressed: () {
                                           BlocProvider.of<HomePageBloc>(context)

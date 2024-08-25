@@ -23,6 +23,7 @@ class Analytics extends StatelessWidget {
         appBar: AppBar(
           surfaceTintColor: whiteColor,
           backgroundColor: whiteColor,
+          automaticallyImplyLeading: false,
           title: const CustomTitle(
             fontSize: 25,
             isAppbar: true,

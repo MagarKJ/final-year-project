@@ -1,4 +1,4 @@
-import 'package:final_project/controller/apis/firebase_api.dart';
+import 'package:final_project/firebase_api.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

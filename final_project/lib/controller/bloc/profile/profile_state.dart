@@ -30,3 +30,9 @@ final class ProfileEditorErrorState extends ProfileState {
   final String error;
   ProfileEditorErrorState({required this.error});
 }
+
+final class PaymentDetailLoadedstate extends ProfileState {
+  final List<PaymentDetails> payemnt;
+
+  PaymentDetailLoadedstate({required this.payemnt});
+}

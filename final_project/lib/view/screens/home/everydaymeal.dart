@@ -5,12 +5,10 @@ import 'package:final_project/controller/bloc/home/home_page_bloc.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:final_project/view/bottom_navigtion_bar.dart';
 import 'package:final_project/view/screens/addfood/addfood_shimmer.dart';
-import 'package:final_project/view/screens/addfood/food_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../controller/apis/api.dart';
 import '../addfood/food_desc.dart';
@@ -32,7 +30,10 @@ class _AddFoodState extends State<Everydaymeal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
+        backgroundColor: whiteColor,
+        surfaceTintColor: whiteColor,
         title: const Text('Your Daily Meals'),
         titleSpacing: 0,
         leading: IconButton(
@@ -117,7 +118,7 @@ class _AddFoodState extends State<Everydaymeal> {
                                       image: state.allProduct[index].imageUrl ??
                                           '',
                                       name: state.allProduct[index].name,
-                                      ammount: 'per 100 grams',
+                                      ammount: state.allProduct[index].ammount,
                                       description:
                                           state.allProduct[index].description,
                                       calories:
@@ -126,6 +127,9 @@ class _AddFoodState extends State<Everydaymeal> {
                                       protein: state.allProduct[index].protein,
                                       fat: state.allProduct[index].fats,
                                       sodium: state.allProduct[index].sodium,
+                                      volume:
+                                          state.allProduct[index].volume ?? '',
+                                      isDrink: state.allProduct[index].drink,
                                       isToRemove: true,
                                     ),
                                   );
@@ -150,7 +154,7 @@ class _AddFoodState extends State<Everydaymeal> {
                                           )
                                         : CachedNetworkImage(
                                             imageUrl:
-                                                '$imageBaseUrl/custom-photos/${state.allProduct[index].imageUrl}',
+                                                '$imageBaseUrl/meal-photos/${state.allProduct[index].imageUrl}',
                                             imageBuilder:
                                                 (context, imageProvider) {
                                               return Container(
@@ -203,7 +207,7 @@ class _AddFoodState extends State<Everydaymeal> {
                                         BlocProvider.of<HomePageBloc>(context)
                                             .add(HomePageLoadEvent());
                                       },
-                                      color: myBlue),
+                                      color: Colors.red),
                                 ),
                               );
                             },

@@ -10,13 +10,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:label="Get Fit"
         android:name="androidx.multidex.MultiDexApplication"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" 
         android:icon="@mipmap/ic_launcher">
+        
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_sound"
+            android:resource="@raw/audio" />
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -49,6 +58,21 @@
         <meta-data
            android:name="com.google.firebase.messaging.default_notification_channel_id"
            android:value="high_importance_channel" />
+        <service
+           android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
+           android:permission="android.permission.BIND_JOB_SERVICE"
+           android:exported="false"/>
+        <receiver
+           android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmBroadcastReceiver"
+           android:exported="false"/>
+        <receiver
+           android:name="dev.fluttercommunity.plus.androidalarmmanager.RebootBroadcastReceiver"
+           android:enabled="false"
+           android:exported="false">
+           <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+           </intent-filter>
+        </receiver>
     </application>
     <queries>
         <intent>

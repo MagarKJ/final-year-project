@@ -74,16 +74,12 @@ class GetUserData {
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
-            "Content-Type": "multipart/form-data",
           },
         ),
         data: value,
       );
-
-      return ApiResponse(
-        statusCode: response.statusCode!,
-        data: response.data,
-      );
+      // log(response.data);
+      return response.data;
     } on DioError catch (dioError) {
       // Handle Dio specific errors
       log('Dio error: ${dioError.message}');
@@ -138,23 +134,17 @@ class GetUserData {
     }
   }
 
-  Future<dynamic> goPremium() async {
+  Future<dynamic> goPremium({String? refId}) async {
     FormData value = FormData.fromMap({
-      "isPremium": 1,
+      "user_id": userId,
+      "ref_id": refId,
     });
-
     try {
       Response response = await api.sendRequest.post(
-        '/api/update',
-        options: Options(
-          headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "multipart/form-data",
-          },
-        ),
+        '/api/payments',
         data: value,
       );
-      response.data['message'] == 'User updated successfully'
+      response.data['message'] == 'New Payment Added'
           ? {
               Fluttertoast.showToast(
                   msg: 'You Are now a premium Member',
@@ -165,6 +155,20 @@ class GetUserData {
               msg: 'Something Went Wrong Please try Again',
               backgroundColor: Colors.red,
             );
+      return response.data;
+    } catch (e) {
+      // Handle other types of errors
+      log('Unexpected error: $e');
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPaymentDetails() async {
+    try {
+      Response response = await api.sendRequest.get(
+        '/api/payments/$userId',
+      );
+
       return response.data;
     } catch (e) {
       // Handle other types of errors

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/view/screens/medicalreport/pill_reminder.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,25 @@ class _MedicalReportState extends State<MedicalReport> {
   bool isPhotoUploaded = false;
   final TextEditingController _bloodPressureController =
       TextEditingController();
+
+  final TextEditingController _sugarLevelController = TextEditingController();
+
+  @override
+  void initState() {
+    setState(() {
+      _bloodPressureController.text = bloodPressure;
+      _sugarLevelController.text = bloodSugar;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloodPressureController.dispose();
+    _sugarLevelController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +51,7 @@ class _MedicalReportState extends State<MedicalReport> {
       appBar: AppBar(
         surfaceTintColor: whiteColor,
         backgroundColor: whiteColor,
+        automaticallyImplyLeading: false,
         title: const CustomTitle(
           fontSize: 25,
           isAppbar: true,
@@ -63,7 +84,6 @@ class _MedicalReportState extends State<MedicalReport> {
                 width: Get.width,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -78,7 +98,8 @@ class _MedicalReportState extends State<MedicalReport> {
                     CustomTextField(
                       controller: _bloodPressureController,
                       prefixIcon: Icons.bloodtype,
-                      hintText: "Blood Pressure",
+                      hintText: "",
+                      readOnly: true,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -97,9 +118,10 @@ class _MedicalReportState extends State<MedicalReport> {
                       ),
                     ),
                     CustomTextField(
-                      controller: _bloodPressureController,
+                      controller: _sugarLevelController,
                       prefixIcon: Icons.bloodtype,
-                      hintText: "Sugar level",
+                      hintText: "",
+                      readOnly: true,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -120,7 +142,20 @@ class _MedicalReportState extends State<MedicalReport> {
                 ),
                 child: ListTile(
                   onTap: () {
+                    // const RemoteMessage dummyMessage = RemoteMessage(
+                    //   notification: RemoteNotification(
+                    //     title: 'Test Notification',
+                    //     body: 'This is a test notification body',
+                    //     android: AndroidNotification(
+                    //       channelId: 'default_channel',
+                    //     ),
+                    //   ),
+                    //   data: {'key1': 'value1', 'key2': 'value2'},
+                    // );
+
                     Get.to(() => PillReminder());
+                    // FireBaseAPi firebase = FireBaseAPi();
+                    // firebase.showNotification(dummyMessage);
                   },
                   leading: const Icon(
                     Icons.alarm,

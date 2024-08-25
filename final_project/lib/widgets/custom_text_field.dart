@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final bool? showPassword;
+  final bool readOnly;
   final ValueChanged<bool>? onTogglePassword;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     required this.hintText,
     this.obscureText = false,
+    this.readOnly = false,
     this.showPassword,
     this.onTogglePassword,
     this.keyboardType = TextInputType.text,
@@ -33,6 +35,7 @@ class CustomTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText && !(showPassword ?? false),
         validator: validator,
+        readOnly: readOnly,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: primaryColor),

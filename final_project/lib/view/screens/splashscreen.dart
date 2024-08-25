@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bloodPressure = prefs.getString('bloodPressure') ?? '';
     bloodSugar = prefs.getString('bloodSugar') ?? '';
     isPremium = prefs.getInt('isPremium') ?? 0;
-    isGoogleLogin = prefs.getInt('isGoogleLogin') ?? 0;
+
     age = prefs.getInt('age') ?? 0;
     phoneno = prefs.getString('phone') ?? '';
     sex = prefs.getString('sex') ?? '';
@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
     log(bloodPressure);
     log(bloodSugar);
     log(isPremium.toString());
-    log(isGoogleLogin.toString());
+
     log(age.toString());
     log(phoneno);
     log(sex);

@@ -15,3 +15,11 @@ class RemoveSpecificFoodEvent extends HomePageEvent {
 class RemoveAllMealsEvent extends HomePageEvent {
   
 }
+
+class SendStepDataEvent extends HomePageEvent {
+  final int steps;
+
+  SendStepDataEvent({
+    required this.steps,
+  });
+}

@@ -19,8 +19,8 @@ class _StepDataPageState extends State<SodiumGraph> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 350,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Sodium')),
+          primaryXAxis:  CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis:  NumericAxis(title: AxisTitle(text: 'Sodium')),
           series: [
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,
@@ -31,7 +31,7 @@ class _StepDataPageState extends State<SodiumGraph> {
               name: 'Sodium',
             ),
           ],
-          title: const ChartTitle(
+          title:  ChartTitle(
               text: 'Sodium Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/utils/global_variables.dart';
 import 'package:final_project/utils/constants.dart';
+import 'package:final_project/view/screens/addfood/add_premium_food.dart';
 import 'package:final_project/view/screens/addfood/addfood_shimmer.dart';
 import 'package:final_project/view/screens/addfood/food_desc.dart';
 import 'package:final_project/view/screens/addfood/food_details.dart';
@@ -40,7 +41,7 @@ class _AddFoodState extends State<AddFood> {
     // Define thresholds for blood pressure and sugar levels
     const double highSystolicBP = 130.0;
     const double highDiastolicBP = 80.0;
-    const double highSugarLevel = 130.0;
+    const double highSugarLevel = 120.0;
 
     // Define nutrient thresholds
 
@@ -151,6 +152,7 @@ class _AddFoodState extends State<AddFood> {
           backgroundColor: whiteColor,
           appBar: AppBar(
             surfaceTintColor: whiteColor,
+            automaticallyImplyLeading: false,
             backgroundColor: whiteColor,
             title: const CustomTitle(
               fontSize: 25,
@@ -273,14 +275,13 @@ class _AddFoodState extends State<AddFood> {
                   ? IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const AddPremiumFood();
-                            });
+                        Get.to(() => AddPremiumFood());
                       },
                     )
                   : const SizedBox.shrink(),
+              SizedBox(
+                width: 10,
+              )
             ],
           ),
           body: BlocBuilder<AddFoodBloc, AddFoodState>(
@@ -392,7 +393,8 @@ class _AddFoodState extends State<AddFood> {
                                   itemBuilder: (context, index) {
                                     Map<String, double> perGramValues =
                                         convertToPerGram(
-                                      amount: 100,
+                                      amount: double.parse(
+                                          state.allProduct[index].ammount),
                                       calories: double.parse(
                                           state.allProduct[index].calories),
                                       carbs: double.parse(
@@ -426,7 +428,8 @@ class _AddFoodState extends State<AddFood> {
                                                     .imageUrl ??
                                                 '',
                                             name: state.allProduct[index].name,
-                                            ammount: 'per 100 grams',
+                                            ammount:
+                                                state.allProduct[index].ammount,
                                             description: state
                                                 .allProduct[index].description,
                                             calories: state
@@ -438,30 +441,13 @@ class _AddFoodState extends State<AddFood> {
                                             fat: state.allProduct[index].fats,
                                             sodium:
                                                 state.allProduct[index].sodium,
+                                            volume: state
+                                                    .allProduct[index].volume ??
+                                                '',
+                                            isDrink:
+                                                state.allProduct[index].drink,
                                           ),
                                         );
-                                        // log('$imageBaseUrl/meal-photos/${state.allProduct[index].imageUrl}');
-                                        // showFoodDesc(
-                                        //   context: context,
-                                        //   foodId: int.tryParse(state
-                                        //       .allProduct[index].id
-                                        //       .toString())!,
-                                        //   image: state
-                                        //           .allProduct[index].imageUrl ??
-                                        //       '',
-                                        //   name: state.allProduct[index].name,
-                                        //   ammount: 'per 100 grams',
-                                        //   description: state
-                                        //       .allProduct[index].description,
-                                        //   calories:
-                                        //       state.allProduct[index].calories,
-                                        //   carbs: state.allProduct[index].carbs,
-                                        //   protein:
-                                        //       state.allProduct[index].protein,
-                                        //   fat: state.allProduct[index].fats,
-                                        //   sodium:
-                                        //       state.allProduct[index].sodium,
-                                        // );
                                       },
                                       child: ListTile(
                                           leading: SizedBox(
@@ -562,30 +548,63 @@ class _AddFoodState extends State<AddFood> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: state.premiumFood.length,
                                   itemBuilder: (context, index) {
+                                    Map<String, double> perGramValues =
+                                        convertToPerGram(
+                                      amount: double.parse(
+                                          state.premiumFood[index].ammount),
+                                      calories: double.parse(
+                                          state.allProduct[index].calories),
+                                      carbs: double.parse(
+                                          state.allProduct[index].carbs),
+                                      protein: double.parse(
+                                          state.allProduct[index].protein),
+                                      fat: double.parse(
+                                          state.allProduct[index].fats),
+                                      sodium: double.parse(
+                                          state.allProduct[index].sodium),
+                                    );
+
+                                    bool recommended = isFoodRecommended(
+                                      calorieContent:
+                                          perGramValues['caloriesPerGram'] ?? 0,
+                                      carbContent:
+                                          perGramValues['carbsPerGram'] ?? 0,
+                                      sodiumContent:
+                                          perGramValues['proteinPerGram'] ?? 0,
+                                      fatContent:
+                                          perGramValues['fatPerGram'] ?? 0,
+                                    );
                                     return GestureDetector(
                                       onTap: () {
-                                        // log('$imageBaseUrl/custom-photos/${state.premiumFood[index].imageUrl}');
-                                        showFoodDesc(
-                                          context: context,
-                                          foodId: int.tryParse(state
-                                              .premiumFood[index].id
-                                              .toString())!,
-                                          image: state.premiumFood[index]
-                                                  .imageUrl ??
-                                              '',
-                                          name: state.premiumFood[index].name,
-                                          ammount: 'per 100 grams',
-                                          description: state
-                                              .premiumFood[index].description,
-                                          calories:
-                                              state.premiumFood[index].calories,
-                                          carbs: state.premiumFood[index].carbs,
-                                          protein:
-                                              state.premiumFood[index].protein,
-                                          fat: state.premiumFood[index].fats,
-                                          sodium:
-                                              state.premiumFood[index].sodium,
-                                          isPremiumFood: true,
+                                        Get.to(
+                                          () => FoodDescription(
+                                            foodId: int.tryParse(state
+                                                .premiumFood[index].id
+                                                .toString())!,
+                                            image: state.premiumFood[index]
+                                                    .imageUrl ??
+                                                '',
+                                            name: state.premiumFood[index].name,
+                                            ammount: state
+                                                .premiumFood[index].ammount,
+                                            description: state
+                                                .premiumFood[index].description,
+                                            calories: state
+                                                .premiumFood[index].calories,
+                                            carbs:
+                                                state.premiumFood[index].carbs,
+                                            protein: state
+                                                .premiumFood[index].protein,
+                                            fat: state.premiumFood[index].fats,
+                                            sodium:
+                                                state.premiumFood[index].sodium,
+                                            volume: state.premiumFood[index]
+                                                    .volume ??
+                                                '',
+                                            isPremiumFood: true,
+                                            isDrink:
+                                                state.premiumFood[index].drink,
+                                          ),
                                         );
                                       },
                                       child: ListTile(
@@ -595,19 +614,20 @@ class _AddFoodState extends State<AddFood> {
                                           child: state.premiumFood[index]
                                                       .imageUrl ==
                                                   'null'
-                                              ? CircleAvatar(
-                                                  backgroundColor: Colors.green,
-                                                  child: Text(
-                                                    getFirstandLastNameInitals(
-                                                        state.premiumFood[index]
-                                                            .name
-                                                            .toString()
-                                                            .toUpperCase()),
-                                                    style: TextStyle(
-                                                        color: whiteColor,
-                                                        fontSize: 16),
-                                                  ),
-                                                )
+                                              ? Text('data')
+                                              // ? CircleAvatar(
+                                              //     backgroundColor: Colors.green,
+                                              //     child: Text(
+                                              //       getFirstandLastNameInitals(
+                                              //           state.premiumFood[index]
+                                              //               .name
+                                              //               .toString()
+                                              //               .toUpperCase()),
+                                              //       style: TextStyle(
+                                              //           color: whiteColor,
+                                              //           fontSize: 16),
+                                              //     ),
+                                              //   )
                                               : CachedNetworkImage(
                                                   imageUrl:
                                                       '$imageBaseUrl/custom-photos/${state.premiumFood[index].imageUrl}',
@@ -652,8 +672,15 @@ class _AddFoodState extends State<AddFood> {
                                               fontSize: 14,
                                               color: calorieColor),
                                         ),
-                                        trailing: Icon(Icons.add_circle_outline,
-                                            color: myBlue),
+                                        trailing: recommended == true
+                                            ? const Icon(
+                                                Icons.thumb_up,
+                                                color: Colors.green,
+                                              )
+                                            : const Icon(
+                                                Icons.thumb_down,
+                                                color: Colors.red,
+                                              ),
                                       ),
                                     );
                                   },

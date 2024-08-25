@@ -19,8 +19,8 @@ class _StepDataPageState extends State<WaterGraph> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 350,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Water')),
+          primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis: NumericAxis(title: AxisTitle(text: 'Water')),
           series: [
             // widget.analytics,
             LineSeries<AnalticsModel, String>(
@@ -32,7 +32,7 @@ class _StepDataPageState extends State<WaterGraph> {
               name: 'Water',
             ),
           ],
-          title: const ChartTitle(
+          title: ChartTitle(
               text: 'Water Consumed', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair

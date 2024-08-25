@@ -49,7 +49,7 @@ class Esewa {
     print("The Response Status Code Is: ${response.statusCode}");
 
     if (response.statusCode.toString() == "200") {
-      await getUserData.goPremium();
+      await getUserData.goPremium(refId: data['refId']);
     } else {
       log("Error");
     }

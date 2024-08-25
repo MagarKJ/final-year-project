@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:email_validator/email_validator.dart';
 import 'package:final_project/view/authentication/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -7,13 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/bloc/signup/signup_bloc.dart';
 import '../../utils/constants.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
-import '../bottom_navigtion_bar.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
@@ -36,7 +35,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool _showPassword = false;
-  bool _showConfirmPassword = false;
+
   int selectedAge = 1;
 
   String? selectedGender;
@@ -140,8 +139,11 @@ class _CreateAccountState extends State<CreateAccount> {
                           prefixIcon: Icons.person,
                           hintText: "Full Name",
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
+                            if (value!.isEmpty) {
                               return 'Please enter your name';
+                            } else if (!RegExp(r'^[a-zA-Z ]+$')
+                                .hasMatch(value)) {
+                              return 'Name must contain at least one alphabets';
                             }
                             return null;
                           },
@@ -153,10 +155,10 @@ class _CreateAccountState extends State<CreateAccount> {
                           hintText: "Email",
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter an email';
-                            }
-                            if (!value.contains('@')) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email';
+                            } else if (EmailValidator.validate(value) ==
+                                false) {
                               return 'Please enter a valid email';
                             }
                             return null;
@@ -169,8 +171,12 @@ class _CreateAccountState extends State<CreateAccount> {
                           hintText: "Phone No",
                           keyboardType: TextInputType.phone,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
+                            if (value!.isEmpty) {
                               return 'Please enter your phone number';
+                            } else if (value.length < 10) {
+                              return 'Phone number must be 10 digits';
+                            } else if (value.length > 10) {
+                              return 'Phone number must be 10 digits';
                             }
                             return null;
                           },
@@ -219,29 +225,19 @@ class _CreateAccountState extends State<CreateAccount> {
                           controller: passwordController,
                           prefixIcon: Icons.lock,
                           hintText: "Password",
-                          obscureText: !_showPassword,
+                          obscureText: true,
+                          showPassword: _showPassword,
+                          onTogglePassword: (bool show) {
+                            setState(() {
+                              _showPassword = show;
+                            });
+                          },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a password';
                             }
                             if (value.length < 6) {
                               return 'Password must be at least 6 characters long';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: Get.height * 0.01),
-                        CustomTextField(
-                          controller: confirmPasswordController,
-                          prefixIcon: Icons.lock,
-                          hintText: "Confirm Password",
-                          obscureText: !_showConfirmPassword,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please confirm your password';
-                            }
-                            if (value != passwordController.text) {
-                              return 'Passwords do not match';
                             }
                             return null;
                           },
@@ -497,24 +493,8 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ),
                 SizedBox(height: Get.height * 0.03),
-                BlocConsumer<SignupBloc, SignupState>(
-                  listener: (context, state) async {
-                    if (state is SignupSuccessstate) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setBool('Login', true);
-                      Get.offAll(() => MyBottomNavigationBar());
-                    }
-                    if (state is SignupFailurestate) {
-                      Get.snackbar('Signup Failed', state.error);
-                    }
-                  },
+                BlocBuilder<SignupBloc, SignupState>(
                   builder: (context, state) {
-                    if (state is SignupLoadingstate) {
-                      return Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
                     return CustomButton(
                       buttonText: 'Create An Account',
                       onPressed: () {

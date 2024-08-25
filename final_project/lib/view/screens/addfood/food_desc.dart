@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:final_project/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../controller/apis/api.dart';
 import '../../../controller/bloc/addFood/add_food_bloc.dart';
@@ -21,8 +25,10 @@ class FoodDescription extends StatefulWidget {
   final String protein;
   final String fat;
   final String sodium;
+  final String volume;
   final bool isToRemove;
   final bool isPremiumFood;
+  final int isDrink;
   const FoodDescription(
       {super.key,
       required this.image,
@@ -35,6 +41,8 @@ class FoodDescription extends StatefulWidget {
       required this.protein,
       required this.fat,
       required this.sodium,
+      required this.volume,
+      required this.isDrink,
       this.isToRemove = false,
       this.isPremiumFood = false});
 
@@ -53,6 +61,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
   double proteinPerGram = 0.0;
   double fatPerGram = 0.0;
   double sodiumPerGram = 0.0;
+  double volumePerGram = 0.0;
   String recomendation = '';
 
   Map<String, double> convertToPerGram({
@@ -62,6 +71,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
     required double protein, // total protein for the given amount (in grams)
     required double fat, // total fat for the given amount (in grams)
     required double sodium, // total sodium for the given amount (in mg)
+    required double volume,
   }) {
     // Calculate values per 1 gram of food
     double caloriesPerGram = calories / amount;
@@ -69,6 +79,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
     double proteinPerGram = protein / amount;
     double fatPerGram = fat / amount;
     double sodiumPerGram = sodium / amount;
+    double volumePerGram = volume / amount;
 
     // Return a map containing all the values per 1 gram
     return {
@@ -77,6 +88,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
       'proteinPerGram': proteinPerGram,
       'fatPerGram': fatPerGram,
       'sodiumPerGram': sodiumPerGram,
+      'volumePerGram': volumePerGram,
     };
   }
 
@@ -102,7 +114,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
     // Define thresholds for blood pressure and sugar levels
     const double highSystolicBP = 130.0;
     const double highDiastolicBP = 80.0;
-    const double highSugarLevel = 130.0;
+    const double highSugarLevel = 120.0;
 
     // Define nutrient thresholds
 
@@ -147,13 +159,15 @@ class _FoodDescriptionState extends State<FoodDescription> {
 
     print('Systolic: ${values[0]}');
     print('Diastolic: ${values[1]}');
+    log('ammlount ${widget.ammount}');
     Map<String, double> perGramValues = convertToPerGram(
-      amount: 100,
+      amount: double.parse(widget.ammount),
       calories: double.parse(widget.calories),
       carbs: double.parse(widget.carbs),
       protein: double.parse(widget.protein),
       fat: double.parse(widget.fat),
       sodium: double.parse(widget.sodium),
+      volume: double.parse(widget.volume),
     );
 
     recomendation = isFoodRecommended(
@@ -176,18 +190,56 @@ class _FoodDescriptionState extends State<FoodDescription> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-          surfaceTintColor: whiteColor,
-          backgroundColor: whiteColor,
-          title: const Text(
-            'Food Description',
-          ),
-          titleSpacing: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
+        surfaceTintColor: whiteColor,
+        backgroundColor: whiteColor,
+        title: const Text(
+          'Food Description',
+        ),
+        titleSpacing: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          widget.isPremiumFood == true
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 8.0, right: 8),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      height: Get.height * 0.05,
+                      // width: Get.width * 0.3,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          BlocProvider.of<AddFoodBloc>(context).add(
+                              DeletePremiumFoodEvent(
+                                  foodId: widget.foodId.toString()));
+                          BlocProvider.of<AddFoodBloc>(context).add(
+                              AddFoodLoadedEvent(url1: '/api/customs/$userId'));
+
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'DELETE',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ],
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -263,7 +315,7 @@ class _FoodDescriptionState extends State<FoodDescription> {
                   ),
                 ),
                 Text(
-                  'Ammount ${widget.ammount}',
+                  'Ammount ${widget.ammount} ${widget.isDrink == 1 ? 'ml' : 'gram'}',
                   style: GoogleFonts.inter(
                     fontSize: 18,
                   ),
@@ -282,8 +334,8 @@ class _FoodDescriptionState extends State<FoodDescription> {
                         ),
                         Text(
                           okPressed == false
-                              ? widget.calories
-                              : caloriesPerGram.toStringAsFixed(2),
+                              ? ' ${widget.calories} kcal'
+                              : ' ${caloriesPerGram.toStringAsFixed(2)} kcal',
                           style: GoogleFonts.inter(
                             fontSize: 18,
                           ),
@@ -304,8 +356,8 @@ class _FoodDescriptionState extends State<FoodDescription> {
                         ),
                         Text(
                           okPressed == false
-                              ? widget.carbs
-                              : carbsPerGram.toStringAsFixed(2),
+                              ? ' ${widget.carbs} gram'
+                              : ' ${carbsPerGram.toStringAsFixed(2)} gram',
                           style: GoogleFonts.inter(
                             fontSize: 18,
                           ),
@@ -323,8 +375,8 @@ class _FoodDescriptionState extends State<FoodDescription> {
                         ),
                         Text(
                           okPressed == false
-                              ? widget.protein
-                              : proteinPerGram.toStringAsFixed(2),
+                              ? ' ${widget.protein} gram'
+                              : ' ${proteinPerGram.toStringAsFixed(2)} gram',
                           style: GoogleFonts.inter(
                             fontSize: 18,
                           ),
@@ -342,8 +394,8 @@ class _FoodDescriptionState extends State<FoodDescription> {
                         ),
                         Text(
                           okPressed == false
-                              ? widget.fat
-                              : fatPerGram.toStringAsFixed(2),
+                              ? ' ${widget.fat} gram'
+                              : ' ${fatPerGram.toStringAsFixed(2)} gram',
                           style: GoogleFonts.inter(
                             fontSize: 18,
                           ),
@@ -361,8 +413,27 @@ class _FoodDescriptionState extends State<FoodDescription> {
                         ),
                         Text(
                           okPressed == false
-                              ? widget.sodium
-                              : sodiumPerGram.toStringAsFixed(2),
+                              ? ' ${widget.sodium} milg'
+                              : ' ${sodiumPerGram.toStringAsFixed(2)} milg',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Text(
+                          '  Volume',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          okPressed == false
+                              ? ' ${widget.volume} ltr'
+                              : ' ${volumePerGram.toStringAsFixed(2)} ltr',
                           style: GoogleFonts.inter(
                             fontSize: 18,
                           ),
@@ -399,47 +470,12 @@ class _FoodDescriptionState extends State<FoodDescription> {
                   height: 20,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green),
-                      ),
-                      child: const Text('50 gm'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green),
-                      ),
-                      child: const Text('100 gm'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green),
-                      ),
-                      child: const Text('200 gm'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green),
-                      ),
-                      child: const Text('300 gm'),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
                   children: [
                     Expanded(
                       child: CustomTextField(
                         controller: quantityController,
-                        hintText: 'Enter the quantity',
+                        hintText:
+                            'Enter the quantity in ${widget.isDrink == 1 ? 'ml' : 'gram'}',
                         keyboardType: TextInputType.number,
                       ),
                     ),
@@ -454,12 +490,13 @@ class _FoodDescriptionState extends State<FoodDescription> {
                       child: TextButton(
                         onPressed: () {
                           Map<String, double> perGramValues = convertToPerGram(
-                            amount: 100,
+                            amount: double.parse(widget.ammount),
                             calories: double.parse(widget.calories),
                             carbs: double.parse(widget.carbs),
                             protein: double.parse(widget.protein),
                             fat: double.parse(widget.fat),
                             sodium: double.parse(widget.sodium),
+                            volume: double.parse(widget.volume),
                           );
                           caloriesPerGram =
                               double.parse(quantityController.text) *
@@ -474,6 +511,9 @@ class _FoodDescriptionState extends State<FoodDescription> {
                           sodiumPerGram =
                               double.parse(quantityController.text) *
                                   perGramValues['sodiumPerGram']!;
+                          volumePerGram =
+                              double.parse(quantityController.text) *
+                                  perGramValues['volumePerGram']!;
                           setState(() {
                             okPressed = true;
                           });
@@ -491,145 +531,120 @@ class _FoodDescriptionState extends State<FoodDescription> {
                 const SizedBox(
                   height: 25,
                 ),
-                widget.isPremiumFood == true
-                    ? Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          height: Get.height * 0.05,
-                          // width: Get.width * 0.3,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              BlocProvider.of<AddFoodBloc>(context).add(
-                                  DeletePremiumFoodEvent(
-                                      foodId: widget.foodId.toString()));
-                              BlocProvider.of<AddFoodBloc>(context).add(
-                                  AddFoodLoadedEvent(
-                                      url1: '/api/customs/$userId'));
-
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              'DELETE FOOD',
-                              style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
                 const SizedBox(height: 10),
                 widget.isToRemove == false
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Colors.green),
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (counter > 1) {
-                                        counter--;
-                                      }
-                                    });
-                                  },
-                                  icon: const Icon(
-                                    Icons.remove,
-                                    color: Colors.white,
-                                    size: 20,
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.green),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (counter > 1) {
+                                          counter--;
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.remove,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              Text(
-                                '$counter',
-                                style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 27),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Colors.green),
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      counter++;
-                                    });
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 20,
+                                SizedBox(
+                                  width: Get.width * 0.02,
+                                ),
+                                Text(
+                                  '$counter',
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 27),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.02,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.green),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        counter++;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            height: Get.height * 0.05,
-                            width: Get.width * 0.3,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(10),
+                              ],
                             ),
-                            child: TextButton(
-                              onPressed: () {
-                                for (int i = 0; i < counter; i++) {
-                                  BlocProvider.of<AddFoodBloc>(context)
-                                      .add(AddFoodButtonPressedEvent(
-                                    foodName: widget.name,
-                                    foodDescription: widget.description,
-                                    foodCalories: okPressed == false
-                                        ? widget.calories
-                                        : caloriesPerGram.toStringAsFixed(2),
-                                    foodCarbs: okPressed == false
-                                        ? widget.carbs
-                                        : carbsPerGram.toStringAsFixed(2),
-                                    foodProtein: okPressed == false
-                                        ? widget.protein
-                                        : proteinPerGram.toStringAsFixed(2),
-                                    foodFat: okPressed == false
-                                        ? widget.fat
-                                        : fatPerGram.toStringAsFixed(2),
-                                    foodSodium: okPressed == false
-                                        ? widget.sodium
-                                        : sodiumPerGram.toStringAsFixed(2),
-                                    image: widget.image,
-                                  ));
-                                }
-                                BlocProvider.of<AddFoodBloc>(context)
-                                    .add(AddFoodLoadedEvent(url: '/api/meals'));
+                            Container(
+                              height: Get.height * 0.05,
+                              width: Get.width * 0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  for (int i = 0; i < counter; i++) {
+                                    BlocProvider.of<AddFoodBloc>(context)
+                                        .add(AddFoodButtonPressedEvent(
+                                      foodName: widget.name,
+                                      foodDescription: widget.description,
+                                      foodCalories: okPressed == false
+                                          ? widget.calories
+                                          : caloriesPerGram.toStringAsFixed(2),
+                                      foodCarbs: okPressed == false
+                                          ? widget.carbs
+                                          : carbsPerGram.toStringAsFixed(2),
+                                      foodProtein: okPressed == false
+                                          ? widget.protein
+                                          : proteinPerGram.toStringAsFixed(2),
+                                      foodFat: okPressed == false
+                                          ? widget.fat
+                                          : fatPerGram.toStringAsFixed(2),
+                                      foodSodium: okPressed == false
+                                          ? widget.sodium
+                                          : sodiumPerGram.toStringAsFixed(2),
+                                      image: widget.image,
+                                    ));
+                                  }
+                                  widget.isPremiumFood == true
+                                      ? BlocProvider.of<AddFoodBloc>(context)
+                                          .add(AddFoodLoadedEvent(
+                                              url1: '/api/customs/$userId'))
+                                      : BlocProvider.of<AddFoodBloc>(context)
+                                          .add(AddFoodLoadedEvent(
+                                              url: '/api/meals'));
 
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'ADD FOOD',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'ADD FOOD',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     : Center(
                         child: Container(

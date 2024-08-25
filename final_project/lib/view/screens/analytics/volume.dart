@@ -24,8 +24,8 @@ class _StepDataPageState extends State<FatsGraph> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 300,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Fats')),
+          primaryXAxis:  CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis:  NumericAxis(title: AxisTitle(text: 'Fats')),
           series: [
             LineSeries<AnalticsModel, String>(
               dataSource: widget.analytics,

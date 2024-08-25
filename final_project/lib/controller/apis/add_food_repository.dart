@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:final_project/controller/apis/api.dart';
 import 'package:final_project/utils/global_variables.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AddFoodRepository {
@@ -50,6 +51,8 @@ class AddFoodRepository {
     required dynamic foodSodium,
     required dynamic volume,
     required dynamic image,
+    required dynamic quality,
+    required dynamic type,
   }) async {
     String fileName = image!.path.split('/').last;
     FormData value = FormData.fromMap({
@@ -62,6 +65,8 @@ class AddFoodRepository {
       "fat": foodFat,
       "sodium": foodSodium,
       "volume": volume,
+      "drink": type,
+      "quantity": quality,
       "photo": await MultipartFile.fromFile(image.path, filename: fileName),
     });
 
@@ -70,8 +75,14 @@ class AddFoodRepository {
         '/api/customs',
         data: value,
       );
+      response.data['message'] == 'New Meal Added'
+          ? Fluttertoast.showToast(
+              msg: 'New Meal Added', backgroundColor: Colors.green)
+          : Fluttertoast.showToast(
+              msg: 'Error Adding Food', backgroundColor: Colors.red);
       return response.data;
     } catch (e) {
+      log(e.toString());
       rethrow;
     }
   }

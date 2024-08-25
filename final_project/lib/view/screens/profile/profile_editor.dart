@@ -1,19 +1,15 @@
 import 'dart:developer';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:final_project/controller/apis/user_data_repository.dart';
 import 'package:final_project/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../controller/bloc/profile/profile_bloc.dart';
 import '../../../utils/global_variables.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../../../widgets/dropdownfield.dart';
 
 class EditYourProfile extends StatefulWidget {
   const EditYourProfile({super.key});
@@ -26,16 +22,36 @@ class _EditYourProfileState extends State<EditYourProfile> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phonenoController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
+
   TextEditingController weightController = TextEditingController();
-  TextEditingController ethnicityController = TextEditingController();
-  TextEditingController bodyTypeController = TextEditingController();
-  TextEditingController bodyGoalController = TextEditingController();
+
   TextEditingController bpController = TextEditingController();
   TextEditingController sugarController = TextEditingController();
-  TextEditingController sexController = TextEditingController();
+
   GetUserData user = GetUserData();
   final formKey = GlobalKey<FormState>();
+  int selectedAge = 1;
+  String? selectedGender;
+  String? selectedEthnicity;
+  String? selectedBodyType;
+  String? selectedBodyGoal;
+
+  final List<String> genders = ["Male", "Female", "Other"];
+  final List<String> ethnicities = [
+    "Asian",
+    "African",
+    "Caucasian",
+    "Hispanic",
+    "Others"
+  ];
+  final List<String> bodyTypes = [
+    "Morbidly Obese",
+    "Obese",
+    "Over Weight",
+    "Average",
+    "Lean"
+  ];
+  final List<String> bodyGoals = ["Lean", "Muscular", "Slim", "Fatloss"];
 
   @override
   void initState() {
@@ -48,14 +64,12 @@ class _EditYourProfileState extends State<EditYourProfile> {
     nameController.dispose();
     emailController.dispose();
     phonenoController.dispose();
-    ageController.dispose();
+
     weightController.dispose();
-    ethnicityController.dispose();
-    bodyTypeController.dispose();
-    bodyGoalController.dispose();
+
     bpController.dispose();
     sugarController.dispose();
-    sexController.dispose();
+
     // TODO: implement dispose
     super.dispose();
   }
@@ -66,12 +80,12 @@ class _EditYourProfileState extends State<EditYourProfile> {
       nameController.text = res['user']['name'] ?? '';
       emailController.text = res['user']['email'] ?? '';
       phonenoController.text = res['user']['phone'] ?? '';
-      ageController.text = res['user']['age'].toString() ?? '';
-      sexController.text = res['user']['sex'] ?? '';
+      selectedAge = res['user']['age'] ?? '';
+      selectedGender = res['user']['sex'] ?? '';
       weightController.text = res['user']['weight'] ?? '';
-      ethnicityController.text = res['user']['ethnicity'] ?? "";
-      bodyTypeController.text = res['user']['bodyType'] ?? '';
-      bodyGoalController.text = res['user']['bodyGoal'] ?? '';
+      selectedEthnicity = res['user']['ethnicity'] ?? "";
+      selectedBodyType = res['user']['bodyType'] ?? '';
+      selectedBodyGoal = res['user']['bodyGoal'] ?? '';
       bpController.text = res['user']['bloodPressure'] ?? '';
       sugarController.text = res['user']['bloodSugar'] ?? '';
     });
@@ -83,11 +97,10 @@ class _EditYourProfileState extends State<EditYourProfile> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
-            color: myBrownColor,
           ),
           onPressed: () {
             Get.back();
@@ -96,7 +109,6 @@ class _EditYourProfileState extends State<EditYourProfile> {
         title: Text(
           'Edit Your Profile',
           style: GoogleFonts.jost(
-            color: myBrownColor,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -135,10 +147,10 @@ class _EditYourProfileState extends State<EditYourProfile> {
                                 }
                                 return null;
                               }),
-                          SizedBox(height: Get.height * 0.02),
+                          SizedBox(height: Get.height * 0.01),
                           CustomTextField(
                             controller: emailController,
-                            prefixIcon: Icons.call,
+                            prefixIcon: Icons.mail,
                             hintText: "Email",
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -149,9 +161,9 @@ class _EditYourProfileState extends State<EditYourProfile> {
                               }
                               return null;
                             },
-                            keyboardType: TextInputType.phone,
+                            keyboardType: TextInputType.emailAddress,
                           ),
-                          SizedBox(height: Get.height * 0.02),
+                          SizedBox(height: Get.height * 0.01),
                           CustomTextField(
                             controller: phonenoController,
                             prefixIcon: Icons.call,
@@ -168,20 +180,33 @@ class _EditYourProfileState extends State<EditYourProfile> {
                             },
                             keyboardType: TextInputType.phone,
                           ),
-                          SizedBox(height: Get.height * 0.02),
+                          SizedBox(height: Get.height * 0.01),
                           CustomTextField(
-                            controller: ageController,
-                            prefixIcon: Icons.person,
-                            hintText: "Age",
+                            controller: bpController,
+                            prefixIcon: Icons.bloodtype,
+                            hintText: "Blood Pressure",
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your age';
+                                return 'Please enter your blood pressure';
                               }
                               return null;
                             },
                             keyboardType: TextInputType.number,
                           ),
-                          SizedBox(height: Get.height * 0.02),
+                          SizedBox(height: Get.height * 0.01),
+                          CustomTextField(
+                            controller: sugarController,
+                            prefixIcon: Icons.bloodtype,
+                            hintText: "Sugar Level",
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your sugar level';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: Get.height * 0.01),
                           CustomTextField(
                             controller: weightController,
                             prefixIcon: Icons.monitor_weight,
@@ -195,78 +220,215 @@ class _EditYourProfileState extends State<EditYourProfile> {
                             keyboardType: TextInputType.number,
                           ),
                           SizedBox(height: Get.height * 0.02),
-                          CustomDropDownField(
-                            controller: sexController,
-                            hintText: 'Sex',
-                            prefixIcon: Icons.safety_check,
-                            selectSomething: 'Select Your Sex',
-                            option1: 'Male',
-                            option2: 'Female',
-                            option3: 'Others',
-                            option4: null,
-                            option5: null,
+                          Container(
+                            width: Get.width * 0.9,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: primaryColor,
+                                    thickness: 1,
+                                    endIndent: 5,
+                                  ),
+                                ),
+                                Text(
+                                  'More Details about yourself',
+                                  style: GoogleFonts.inter(
+                                    color: myDarkGrey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: primaryColor,
+                                    thickness: 1,
+                                    indent: 5,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(height: Get.height * 0.02),
-                          CustomDropDownField(
-                            controller: ethnicityController,
-                            hintText: 'Ethnicity',
-                            prefixIcon: Icons.safety_check,
-                            selectSomething: 'Select Your Ethnicity',
-                            option1: 'Asian',
-                            option2: 'African',
-                            option3: 'Caucasian',
-                            option4: 'Hispanic',
-                            option5: 'Others',
-                          ),
-                          SizedBox(height: Get.height * 0.02),
-                          CustomDropDownField(
-                            controller: bodyTypeController,
-                            hintText: 'Body Type',
-                            prefixIcon: Icons.safety_check,
-                            selectSomething: 'Select Your BodyType',
-                            option1: 'Morbidly Obese',
-                            option2: 'Obese',
-                            option3: 'Over Weight',
-                            option4: 'Average',
-                            option5: 'Lean',
-                          ),
-                          SizedBox(height: Get.height * 0.02),
-                          CustomDropDownField(
-                            controller: bodyGoalController,
-                            hintText: 'Body Goal',
-                            prefixIcon: Icons.safety_check,
-                            selectSomething: 'Select Your BodyGoal',
-                            option1: 'Lean',
-                            option2: 'Muscular',
-                            option3: 'Slim',
-                            option4: 'Fatloss',
-                            option5: null,
-                          ),
-                          SizedBox(height: Get.height * 0.02),
-                          CustomTextField(
-                            controller: bpController,
-                            prefixIcon: Icons.bloodtype,
-                            hintText: "Blood Pressure",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your blood pressure';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.number,
-                          ),
-                          SizedBox(height: Get.height * 0.02),
-                          CustomTextField(
-                            controller: sugarController,
-                            prefixIcon: Icons.bloodtype,
-                            hintText: "Sugar Level",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your sugar level';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.number,
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Age: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  DropdownButton<int>(
+                                    value: selectedAge,
+                                    dropdownColor: whiteColor,
+                                    onChanged: (int? newValue) {
+                                      setState(() {
+                                        selectedAge = newValue!;
+                                      });
+                                    },
+                                    items:
+                                        List.generate(100, (index) => index + 1)
+                                            .map<DropdownMenuItem<int>>(
+                                                (int value) {
+                                      return DropdownMenuItem<int>(
+                                        value: value,
+                                        child: Text(value.toString()),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  const SizedBox(width: 35),
+                                  Text(
+                                    "Gender: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0.0),
+                                    child: DropdownButton<String>(
+                                      dropdownColor: whiteColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                      hint: Text(
+                                        "Select Gender",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
+                                      value: selectedGender,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedGender = newValue;
+                                        });
+                                      },
+                                      autofocus: true,
+                                      items: genders.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Ethnicity: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: DropdownButton<String>(
+                                      dropdownColor: whiteColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                      hint: Text(
+                                        "Select Ethnicity",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
+                                      value: selectedEthnicity,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedEthnicity = newValue;
+                                        });
+                                      },
+                                      items: ethnicities.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 10),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Body Type: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  DropdownButton<String>(
+                                    dropdownColor: whiteColor,
+                                    borderRadius: BorderRadius.circular(15),
+                                    hint: Text(
+                                      "Select Body Type",
+                                      style: TextStyle(
+                                          fontFamily: 'inter', color: black),
+                                    ),
+                                    value: selectedBodyType,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedBodyType = newValue;
+                                      });
+                                    },
+                                    items: bodyTypes.map((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Body Goal: ",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 18,
+                                      color: myDarkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: DropdownButton<String>(
+                                      dropdownColor: whiteColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                      hint: Text(
+                                        "Select Body Goal",
+                                        style: TextStyle(
+                                            fontFamily: 'inter', color: black),
+                                      ),
+                                      value: selectedBodyGoal,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedBodyGoal = newValue;
+                                        });
+                                      },
+                                      items: bodyGoals.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           SizedBox(height: Get.height * 0.02),
                         ],
@@ -283,24 +445,24 @@ class _EditYourProfileState extends State<EditYourProfile> {
                       BlocProvider.of<ProfileBloc>(context).add(
                         UpdateUserData(
                           name: nameController.text.trim(),
-                          age: ageController.text.trim(),
+                          age: selectedAge.toString(),
                           phoneno: phonenoController.text.trim(),
                           email: emailController.text.trim(),
-                          sex: sexController.text.trim(),
+                          sex: selectedGender ?? '',
                           weight: weightController.text.trim(),
-                          ethnicity: ethnicityController.text.trim(),
-                          bodytype: bodyTypeController.text.trim(),
-                          bodygoal: bodyGoalController.text.trim(),
+                          ethnicity: selectedEthnicity ?? '',
+                          bodytype: selectedBodyType ?? '',
+                          bodygoal: selectedBodyGoal ?? '',
                           bloodPressue: bpController.text.trim(),
                           bloodSugar: sugarController.text.trim(),
                         ),
                       );
                       log('message2');
                     },
-                    width: Get.width * 0.3,
+                    width: Get.width * 0.8,
                     height: Get.height * 0.06,
-                    fontSize: 14,
-                    backGroundColor: myBrownColor,
+                    fontSize: 18,
+                    backGroundColor: primaryColor,
                   ),
                   SizedBox(
                     height: Get.height * 0.05,

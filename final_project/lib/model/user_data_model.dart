@@ -12,7 +12,6 @@ class LoginModel {
   dynamic bloodPressure;
   dynamic bloodSugar;
   dynamic isPremium;
-  dynamic isGoogleLogin;
 
   LoginModel(
       {this.userId,
@@ -24,7 +23,6 @@ class LoginModel {
       this.weight,
       this.ethnicity,
       this.bodyType,
-      this.isGoogleLogin,
       this.bodyGoal,
       this.bloodPressure,
       this.bloodSugar,
@@ -39,13 +37,12 @@ class LoginModel {
       phone: json['phone'],
       sex: json['sex'],
       weight: json['weight'],
-      ethnicity: json['ethnicity'], 
+      ethnicity: json['ethnicity'],
       bodyType: json['bodyType'],
       bodyGoal: json['bodyGoal'],
       bloodPressure: json['bloodPressure'],
       bloodSugar: json['bloodSugar'],
       isPremium: json['isPremium'],
-      isGoogleLogin: json['google_id'],
     );
   }
 }

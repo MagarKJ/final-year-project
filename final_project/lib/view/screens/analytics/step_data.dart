@@ -24,8 +24,8 @@ class _StepDataPageState extends State<StepDataPage> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 350,
         child: SfCartesianChart(
-          primaryXAxis: const CategoryAxis(title: AxisTitle(text: 'Days')),
-          primaryYAxis: const NumericAxis(title: AxisTitle(text: 'Steps')),
+          primaryXAxis:  CategoryAxis(title: AxisTitle(text: 'Days')),
+          primaryYAxis:  NumericAxis(title: AxisTitle(text: 'Steps')),
           series: [
             // widget.analytics,
             LineSeries<AnalticsModel, String>(
@@ -36,7 +36,7 @@ class _StepDataPageState extends State<StepDataPage> {
               name: 'Steps',
             ),
           ],
-          title: const ChartTitle(
+          title:  ChartTitle(
               text: 'Step Count', alignment: ChartAlignment.near),
           crosshairBehavior: CrosshairBehavior(
             enable: true, // Set to true to enable crosshair

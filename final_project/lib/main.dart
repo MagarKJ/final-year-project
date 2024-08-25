@@ -1,6 +1,8 @@
 import "dart:developer";
 
-import "package:final_project/controller/apis/firebase_api.dart";
+
+import "package:final_project/controller/bloc/paymentbloc/bloc/payment_bloc_bloc.dart";
+import "package:final_project/firebase_api.dart";
 import "package:final_project/controller/bloc/addFood/add_food_bloc.dart";
 import "package:final_project/controller/bloc/analytics/analytics_bloc.dart";
 import "package:final_project/controller/bloc/fogrotpassword/forpas_bloc.dart";
@@ -74,6 +76,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AnalyticsBloc>(
           create: (context) => AnalyticsBloc(),
+        ),
+        BlocProvider<PaymentBlocBloc>(
+          create: (context) => PaymentBlocBloc(),
         ),
       ],
       child: GetMaterialApp(

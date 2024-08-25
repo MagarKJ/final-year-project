@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:final_project/controller/apis/firebase_api.dart';
+import 'package:final_project/firebase_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';

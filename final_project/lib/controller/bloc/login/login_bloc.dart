@@ -58,10 +58,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       prefs.setString('bloodSugar', bloodSugar);
       isPremium = user['isPremium'];
       prefs.setInt('isPremium', isPremium);
-      // isGoogleLogin = user['google_id'];
-      // prefs.setInt('google_id', isGoogleLogin);
+
       age = user['age'];
-      prefs.setInt('age', age);
+      prefs.setInt('age', age ?? 0);
       phoneno = user['phone'];
       prefs.setString('phone', phoneno);
       sex = user['sex'];
@@ -76,36 +75,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       prefs.setString('bodyGoal', bodygoal);
 
       log('aba navigate garna lageko');
+      prefs.setBool('Login', true);
       Get.offAll(() => MyBottomNavigationBar());
-      // if (EmailValidator.validate(email) == false) {
-      //   emit(LoginFailurestate('Email is not a valid email'));
-      //   return;
-      // } else if (password.isEmpty) {
-      //   emit(LoginFailurestate('Password cannot be empty'));
-      //   return;
-      // } else if (password.length < 6) {
-      //   emit(LoginFailurestate('Password must be at least 6 characters long'));
-      //   return;
-      // }
-
-      //Firebase Authentication
-      // UserCredential userCredential =
-      //     await FirebaseAuth.instance.signInWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
-
-      // // Get the user data from Firestore
-      // await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(userCredential.user!.uid)
-      //     .get();
-      // await Future.delayed(const Duration(seconds: 1), () {
-      //   Get.snackbar('Login Success', 'Welcome $email');
-
-      //   emit(LoginSuccessstate(uid: '$email-$password'));
-      // });
-      // emit(LoginInitial());
     } catch (e) {
       print('Error: $e');
       String errorMessage;
