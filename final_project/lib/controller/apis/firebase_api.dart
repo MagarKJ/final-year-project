@@ -70,7 +70,8 @@ class FireBaseAPi {
         scheduledNotificationDateTime,
         tz.local,
       ),
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      // androidAllowWhileIdle: true,
       notificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -272,8 +273,8 @@ class FireBaseAPi {
       body,
       scheduledDateTime,
       platformChannelSpecifics,
-      androidAllowWhileIdle: true,
-      // androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      // androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );

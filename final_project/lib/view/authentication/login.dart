@@ -281,15 +281,21 @@ class _LoginScreenState extends State<LoginScreen>
                       }
                       return CustomButton(
                         buttonText: 'Log In',
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            context.read<LoginBloc>().add(
-                                  LoginRequestedEvent(
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text.trim(),
-                                  ),
-                                );
-                          }
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          //shared preferences ko value true gardinxa kina ki eak pali login vaye paxi login page ma janu pardaina
+                          prefs.setBool('Login', true);
+
+                          Get.offAll(() => MyBottomNavigationBar());
+                          // if (formKey.currentState!.validate()) {
+                          //   context.read<LoginBloc>().add(
+                          //         LoginRequestedEvent(
+                          //           email: emailController.text.trim(),
+                          //           password: passwordController.text.trim(),
+                          //         ),
+                          //       );
+                          // }
                         },
                         width: Get.width * 0.8,
                         height: Get.height * 0.06,

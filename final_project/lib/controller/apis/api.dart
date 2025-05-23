@@ -14,11 +14,14 @@ class API {
   Dio get sendRequest => dio;
 }
 
-// String baseUrl = "http://127.0.0.1:8000";
+String baseUrl = "http://127.0.0.1:8000";
 //home ko
 // String baseUrl = 'http://192.168.254.90:8000';
 //office ko
-String baseUrl = 'http://192.168.1.72:8000';
+// String baseUrl = 'http://192.168.1.72:8000';
+//kusal vai ko ghar ko
+// String baseUrl = 'http://192.168.1.69:8000';
+
 String imageBaseUrl = '$baseUrl/storage';
 
 
